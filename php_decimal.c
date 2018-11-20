@@ -523,6 +523,14 @@ static void php_decimal_round_mpd(mpd_t *res, mpd_t *mpd, zend_long scale, php_d
     }
 }
 
+/**
+ * Trims trailing zeroes in-place.
+ */
+static void php_decimal_trim_trailing_zeroes(php_decimal_t *obj)
+{
+    mpd_reduce(PHP_DECIMAL_MPD(obj), PHP_DECIMAL_MPD(obj), php_decimal_context());
+}
+
 
 /******************************************************************************/
 /*                                CONVERSIONS                                 */
@@ -2044,6 +2052,22 @@ PHP_DECIMAL_METHOD(shift)
 }
 
 /**
+ * Decimal::trim
+ */
+PHP_DECIMAL_ARGINFO_RETURN_DECIMAL(trim, 0)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(trim)
+{
+    php_decimal_t *obj = THIS_DECIMAL();
+    php_decimal_t *res = php_decimal_create_copy(obj);
+
+    PHP_DECIMAL_PARAMS_PARSE_NONE();
+
+    php_decimal_trim_trailing_zeroes(res);
+    RETURN_DECIMAL(res);
+}
+
+/**
  * Decimal::precision
  */
 PHP_DECIMAL_ARGINFO_RETURN_TYPE(precision, IS_LONG, 0)
@@ -2373,6 +2397,7 @@ static zend_function_entry decimal_methods[] = {
 
     PHP_DECIMAL_ME(round)
     PHP_DECIMAL_ME(shift)
+    PHP_DECIMAL_ME(trim)
     PHP_DECIMAL_ME(precision)
 
     PHP_DECIMAL_ME(signum)
