@@ -2,19 +2,19 @@
 <package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
     <name>decimal</name>
     <channel>pecl.php.net</channel>
-    <summary>Arbitrary-precision floating-point decimal</summary>
-    <description>Adds support for correctly-rounded arbitrary precision decimal floating point arithmetic in PHP 7</description>
+    <summary>Arbitrary precision floating-point decimal</summary>
+    <description>Adds support for correctly-rounded arbitrary precision decimal floating-point arithmetic in PHP 7</description>
     <lead>
         <name>Rudi Theunissen</name>
         <user>rtheunissen</user>
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2018-10-29</date>
+    <date>2018-11-20</date>
     <time>11:56:52</time>
     <version>
-        <release>1.0.1</release>
-        <api>1.0.0</api>
+        <release>1.1.0</release>
+        <api>1.1.0</api>
     </version>
     <stability>
         <release>stable</release>
@@ -22,7 +22,7 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        Package content updates, smarter .m4 @remicollet
+        Added "trim" method, to remove trailing zeroes.
     </notes>
     <contents>
         <dir name="/">
@@ -46,12 +46,12 @@
                 <file role="test" name="reflection.phpt"/>
                 <file role="test" name="serialize.phpt"/>
                 <dir name="methods">
+                    <file role="test" name="__construct.phpt"/>
                     <file role="test" name="abs.phpt"/>
                     <file role="test" name="add.phpt"/>
                     <file role="test" name="avg.phpt"/>
                     <file role="test" name="ceil.phpt"/>
                     <file role="test" name="compareTo.phpt"/>
-                    <file role="test" name="__construct.phpt"/>
                     <file role="test" name="copy.phpt"/>
                     <file role="test" name="div.phpt"/>
                     <file role="test" name="equals.phpt"/>
@@ -82,6 +82,7 @@
                     <file role="test" name="toFloat.phpt"/>
                     <file role="test" name="toInt.phpt"/>
                     <file role="test" name="toString.phpt"/>
+                    <file role="test" name="trim.phpt"/>
                     <file role="test" name="truncate.phpt"/>
                 </dir>
             </dir>
