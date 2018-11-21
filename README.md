@@ -1,4 +1,4 @@
-# PHP Decimal
+# PHP Decimal Extension
 
 [![Build Status](https://travis-ci.org/php-decimal/ext-decimal.svg?branch=master)](https://travis-ci.org/php-decimal/extension)
 [![Build status](https://ci.appveyor.com/api/projects/status/lg5nw5tqgpmv1c33?svg=true)](https://ci.appveyor.com/project/rtheunissen/php-decimal)
