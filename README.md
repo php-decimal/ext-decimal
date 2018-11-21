@@ -4,7 +4,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/lg5nw5tqgpmv1c33?svg=true)](https://ci.appveyor.com/project/rtheunissen/php-decimal)
 [![PECL](https://img.shields.io/badge/PECL-1.1.0-blue.svg)](https://pecl.php.net/package/decimal)
 
-Correctly-rounded, arbitrary precision decimal floating-point arithmetic in PHP 7.
+Correctly-rounded, arbitrary-precision decimal arithmetic for PHP 7
 
 ## Documentation
 
@@ -25,17 +25,7 @@ sudo apt-get install libmpdec-dev
 pecl install decimal
 ```
 
-### Manual
-
-```
-git clone git@github.com:php-decimal/extension ext-decimal
-cd ext-decimal
-
-phpize
-./configure
-make
-sudo make install
-```
+Windows users can find *.dll* files under [releases](https://github.com/php-decimal/ext-decimal/releases).
 
 ## Enable
 
