@@ -20,37 +20,56 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef HAVE_PHP_DECIMAL_H
-#define HAVE_PHP_DECIMAL_H
-
-#ifdef PHP_WIN32
-#   define PHP_DECIMAL_API __declspec(dllexport)
-#elif defined(__GNUC__) && __GNUC__ >= 4
-#   define PHP_DECIMAL_API __attribute__ ((visibility("default")))
-#else
-#   define PHP_DECIMAL_API
-#endif
-
-#ifdef ZTS
-#   include "TSRM.h"
-#endif
+#ifndef HAVE_PHP_DECIMAL_CONTEXT_H
+#define HAVE_PHP_DECIMAL_CONTEXT_H
 
 #include <php.h>
 #include <mpdecimal.h>
-#include "src/globals.h"
-
-#define PHP_DECIMAL_EXTNAME "decimal"
-#define PHP_DECIMAL_VERSION "2.0.0"
+#include "bool.h"
+#include "globals.h"
+#include "errors.h"
+#include "limits.h"
 
 /**
- * Module and class entry
+ *
  */
-extern zend_module_entry php_decimal_module_entry;
+#define PHP_DECIMAL_DEFAULT_PREC  34
 
-#define phpext_decimal_ptr &php_decimal_module_entry
+/**
+ *
+ */
+#define PHP_DECIMAL_CONTEXT_ROUNDING  MPD_ROUND_HALF_EVEN
 
-#if defined(ZTS) && defined(COMPILE_DL_DS)
-    ZEND_TSRMLS_CACHE_EXTERN();
-#endif
+/**
+ * Defines which conditions call the trap handler.
+ */
+#define PHP_DECIMAL_CONTEXT_TRAPS (MPD_Errors | MPD_Traps)
+
+/**
+ * Used to perform a task using a temporary precision.
+ */
+#define PHP_DECIMAL_WITH_PRECISION(p, task) do { \
+    const zend_long _prec = p; \
+    const zend_long _prev = SHARED_CONTEXT->prec; \
+    if (UNEXPECTED(_prec > PHP_DECIMAL_MAX_PREC)) { \
+        php_decimal_precision_overflow(); \
+    } \
+    SHARED_CONTEXT->prec = _prec; \
+    task; \
+    SHARED_CONTEXT->prec = _prev; \
+} while(0)
+
+/**
+ * Used to perform a task using a temporary precision.
+ */
+#define PHP_DECIMAL_WITH_ROUNDING(m, task) do { \
+    const int _mode = m; \
+    const int _prev = SHARED_CONTEXT->round; \
+    SHARED_CONTEXT->round = _mode; \
+    task; \
+    SHARED_CONTEXT->round = _prev; \
+} while(0)
+
+zend_bool php_decimal_validate_prec(const zend_long prec);
 
 #endif

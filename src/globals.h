@@ -20,37 +20,45 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef HAVE_PHP_DECIMAL_H
-#define HAVE_PHP_DECIMAL_H
+#ifndef HAVE_PHP_DECIMAL_MODULE_GLOBALS_H
+#define HAVE_PHP_DECIMAL_MODULE_GLOBALS_H
 
-#ifdef PHP_WIN32
-#   define PHP_DECIMAL_API __declspec(dllexport)
-#elif defined(__GNUC__) && __GNUC__ >= 4
-#   define PHP_DECIMAL_API __attribute__ ((visibility("default")))
-#else
-#   define PHP_DECIMAL_API
-#endif
+#include <mpdecimal.h>
 
 #ifdef ZTS
-#   include "TSRM.h"
+    #define DECIMAL_GLOBALS(v) TSRMG(decimal_globals_id, zend_decimal_globals *, v)
+#else
+    #define DECIMAL_GLOBALS(v) (decimal_globals.v)
 #endif
 
-#include <php.h>
-#include <mpdecimal.h>
-#include "src/globals.h"
-
-#define PHP_DECIMAL_EXTNAME "decimal"
-#define PHP_DECIMAL_VERSION "2.0.0"
 
 /**
- * Module and class entry
+ * The global, shared mpd context.
  */
-extern zend_module_entry php_decimal_module_entry;
+#define SHARED_CONTEXT (&DECIMAL_GLOBALS(ctx))
 
-#define phpext_decimal_ptr &php_decimal_module_entry
+/**
+ * The global, max mpd context.
+ */
+#define MAX_CONTEXT (&DECIMAL_GLOBALS(max))
 
-#if defined(ZTS) && defined(COMPILE_DL_DS)
-    ZEND_TSRMLS_CACHE_EXTERN();
-#endif
+/**
+ *
+ */
+ZEND_BEGIN_MODULE_GLOBALS(decimal)
+mpd_context_t ctx;
+mpd_context_t max;
+zval          zero;
+ZEND_END_MODULE_GLOBALS(decimal)
+
+/**
+ *
+ */
+ZEND_EXTERN_MODULE_GLOBALS(decimal)
+
+/**
+ *
+ */
+void php_decimal_init_globals(zend_decimal_globals *g);
 
 #endif

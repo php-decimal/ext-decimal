@@ -20,37 +20,33 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef HAVE_PHP_DECIMAL_H
-#define HAVE_PHP_DECIMAL_H
-
-#ifdef PHP_WIN32
-#   define PHP_DECIMAL_API __declspec(dllexport)
-#elif defined(__GNUC__) && __GNUC__ >= 4
-#   define PHP_DECIMAL_API __attribute__ ((visibility("default")))
-#else
-#   define PHP_DECIMAL_API
-#endif
-
-#ifdef ZTS
-#   include "TSRM.h"
-#endif
-
 #include <php.h>
 #include <mpdecimal.h>
-#include "src/globals.h"
-
-#define PHP_DECIMAL_EXTNAME "decimal"
-#define PHP_DECIMAL_VERSION "2.0.0"
+#include "bool.h"
+#include "context.h"
+#include "round.h"
+#include "errors.h"
+#include "limits.h"
 
 /**
- * Module and class entry
+ * Returns true if the given precision is valid, false otherwise.
  */
-extern zend_module_entry php_decimal_module_entry;
+static inline zend_bool php_decimal_prec_is_valid(const zend_long prec)
+{
+    return prec >= PHP_DECIMAL_MIN_PREC && prec <= PHP_DECIMAL_MAX_PREC;
+}
 
-#define phpext_decimal_ptr &php_decimal_module_entry
+/**
+ *
+ */
+zend_bool php_decimal_validate_prec(const zend_long prec)
+{
+    if (php_decimal_prec_is_valid(prec)) {
+        return true;
+    }
 
-#if defined(ZTS) && defined(COMPILE_DL_DS)
-    ZEND_TSRMLS_CACHE_EXTERN();
-#endif
+    /* */
+    php_decimal_precision_out_of_range(prec);
+    return false;
+}
 
-#endif

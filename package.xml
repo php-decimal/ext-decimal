@@ -13,8 +13,8 @@
     <date>2018-11-20</date>
     <time>11:56:52</time>
     <version>
-        <release>1.1.0</release>
-        <api>1.1.0</api>
+        <release>2.0.0</release>
+        <api>2.0.0</api>
     </version>
     <stability>
         <release>stable</release>
@@ -22,7 +22,10 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        Added "trim" method, to remove trailing zeroes.
+        - Default decimal precision changed from 28 to 34.
+        - Decimal operations now use the **minimum** precision of all operands.
+        - Added `Decimal\Rational` implementation for rational numbers (fractions).
+        - Added `Decimal\Number` abstract.
     </notes>
     <contents>
         <dir name="/">
@@ -35,55 +38,164 @@
 
             <file role="src" name="php_decimal.c"/>
             <file role="src" name="php_decimal.h"/>
+
+            <dir name="src">
+                <file role="src" name="arginfo.h"/>
+                <file role="src" name="bool.h"/>
+                <file role="src" name="common.c"/>
+                <file role="src" name="common.h"/>
+                <file role="src" name="compare.c"/>
+                <file role="src" name="compare.h"/>
+                <file role="src" name="context.c"/>
+                <file role="src" name="context.h"/>
+                <file role="src" name="convert.c"/>
+                <file role="src" name="convert.h"/>
+                <file role="src" name="decimal.c"/>
+                <file role="src" name="decimal.h"/>
+                <file role="src" name="errors.c"/>
+                <file role="src" name="errors.h"/>
+                <file role="src" name="fixed.l"T />
+                <file role="src" name="globals.c"/>
+                <file role="src" name="globals.h"/>
+                <file role="src" name="limits.h"/>
+                <file role="src" name="math.c"/>
+                <file role="src" name="math.h"/>
+                <file role="src" name="number.c"/>
+                <file role="src" name="number.h"/>
+                <file role="src" name="params.h"/>
+                <file role="src" name="parse.c"/>
+                <file role="src" name="parse.h"/>
+                <file role="src" name="rational.c"/>
+                <file role="src" name="rational.h"/>
+                <file role="src" name="round.c"/>
+                <file role="src" name="round.h"/>
+            </dir>
+
             <dir name="tests">
-                <file role="test" name="cast.phpt"/>
-                <file role="test" name="clone.phpt"/>
-                <file role="test" name="constants.phpt"/>
-                <file role="test" name="empty.phpt"/>
-                <file role="test" name="json.phpt"/>
-                <file role="test" name="operators.phpt"/>
-                <file role="test" name="properties.phpt"/>
-                <file role="test" name="reflection.phpt"/>
-                <file role="test" name="serialize.phpt"/>
-                <dir name="methods">
-                    <file role="test" name="__construct.phpt"/>
-                    <file role="test" name="abs.phpt"/>
-                    <file role="test" name="add.phpt"/>
-                    <file role="test" name="avg.phpt"/>
-                    <file role="test" name="ceil.phpt"/>
-                    <file role="test" name="compareTo.phpt"/>
-                    <file role="test" name="copy.phpt"/>
-                    <file role="test" name="div.phpt"/>
-                    <file role="test" name="equals.phpt"/>
-                    <file role="test" name="exp.phpt"/>
-                    <file role="test" name="floor.phpt"/>
-                    <file role="test" name="isEven.phpt"/>
-                    <file role="test" name="isInf.phpt"/>
-                    <file role="test" name="isInteger.phpt"/>
-                    <file role="test" name="isNaN.phpt"/>
-                    <file role="test" name="isOdd.phpt"/>
-                    <file role="test" name="isZero.phpt"/>
-                    <file role="test" name="ln.phpt"/>
-                    <file role="test" name="log10.phpt"/>
-                    <file role="test" name="mod.phpt"/>
-                    <file role="test" name="mul.phpt"/>
-                    <file role="test" name="negate.phpt"/>
-                    <file role="test" name="parity.phpt"/>
-                    <file role="test" name="pow.phpt"/>
-                    <file role="test" name="precision.phpt"/>
-                    <file role="test" name="rem.phpt"/>
-                    <file role="test" name="round.phpt"/>
-                    <file role="test" name="shift.phpt"/>
-                    <file role="test" name="signum.phpt"/>
-                    <file role="test" name="sqrt.phpt"/>
-                    <file role="test" name="sub.phpt"/>
-                    <file role="test" name="sum.phpt"/>
-                    <file role="test" name="toFixed.phpt"/>
-                    <file role="test" name="toFloat.phpt"/>
-                    <file role="test" name="toInt.phpt"/>
-                    <file role="test" name="toString.phpt"/>
-                    <file role="test" name="trim.phpt"/>
-                    <file role="test" name="truncate.phpt"/>
+                <dir name="Decimal">
+                    <file role="test" name="cast.phpt"/>
+                    <file role="test" name="clone.phpt"/>
+                    <file role="test" name="constants.phpt"/>
+                    <file role="test" name="empty.phpt"/>
+                    <file role="test" name="json.phpt"/>
+                    <file role="test" name="operators.phpt"/>
+                    <file role="test" name="precision.sh"/>
+                    <file role="test" name="properties.phpt"/>
+                    <file role="test" name="serialize.phpt"/>
+
+                    <dir name="methods">
+                        <file role="test" name="__construct.phpt"/>
+                        <file role="test" name="abs.phpt"/>
+                        <file role="test" name="add.phpt"/>
+                        <file role="test" name="ceil.phpt"/>
+                        <file role="test" name="compareTo.phpt"/>
+                        <file role="test" name="div.phpt"/>
+                        <file role="test" name="exp.phpt"/>
+                        <file role="test" name="floor.phpt"/>
+                        <file role="test" name="isEven.phpt"/>
+                        <file role="test" name="isInf.phpt"/>
+                        <file role="test" name="isInteger.phpt"/>
+                        <file role="test" name="isNaN.phpt"/>
+                        <file role="test" name="isOdd.phpt"/>
+                        <file role="test" name="isZero.phpt"/>
+                        <file role="test" name="ln.phpt"/>
+                        <file role="test" name="log10.phpt"/>
+                        <file role="test" name="mod.phpt"/>
+                        <file role="test" name="mul.phpt"/>
+                        <file role="test" name="negate.phpt"/>
+                        <file role="test" name="parity.phpt"/>
+                        <file role="test" name="pow.phpt"/>
+                        <file role="test" name="precision.phpt"/>
+                        <file role="test" name="reduce.phpt"/>
+                        <file role="test" name="rem.phpt"/>
+                        <file role="test" name="round.phpt"/>
+                        <file role="test" name="shiftl.phpt"/>
+                        <file role="test" name="shiftr.phpt"/>
+                        <file role="test" name="signum.phpt"/>
+                        <file role="test" name="sqrt.phpt"/>
+                        <file role="test" name="sub.phpt"/>
+                        <file role="test" name="toDecimal.phpt"/>
+                        <file role="test" name="toFixed.phpt"/>
+                        <file role="test" name="toFloat.phpt"/>
+                        <file role="test" name="toInt.phpt"/>
+                        <file role="test" name="toRational.phpt"/>
+                        <file role="test" name="toString.phpt"/>
+                        <file role="test" name="trim.phpt"/>
+                        <file role="test" name="trunc.phpt"/>
+                        <file role="test" name="valueOf.phpt"/>
+                    </dir>
+                </dir>
+
+                <dir name="Number">
+                    <file role="test" name="cast.phpt"/>
+                    <file role="test" name="clone.phpt"/>
+                    <file role="test" name="constants.phpt"/>
+                    <file role="test" name="empty.phpt"/>
+                    <file role="test" name="json.phpt"/>
+                    <file role="test" name="operators.phpt"/>
+                    <file role="test" name="properties.phpt"/>
+                    <file role="test" name="serialize.phpt"/>
+
+                    <dir name="methods">
+                        <file role="test" name="add.phpt"/>
+                        <file role="test" name="compareTo.phpt"/>
+                        <file role="test" name="div.phpt"/>
+                        <file role="test" name="mod.phpt"/>
+                        <file role="test" name="mul.phpt"/>
+                        <file role="test" name="pow.phpt"/>
+                        <file role="test" name="shiftl.phpt"/>
+                        <file role="test" name="shiftr.phpt"/>
+                        <file role="test" name="sub.phpt"/>
+                        <file role="test" name="toString.phpt"/>
+                        <file role="test" name="valueOf.phpt"/>
+                    </dir>
+                </dir>
+
+                <dir name="Rational">
+                    <file role="test" name="cast.phpt"/>
+                    <file role="test" name="clone.phpt"/>
+                    <file role="test" name="constants.phpt"/>
+                    <file role="test" name="empty.phpt"/>
+                    <file role="test" name="extend.phpt"/>
+                    <file role="test" name="json.phpt"/>
+                    <file role="test" name="operators.phpt"/>
+                    <file role="test" name="precision.sh"/>
+                    <file role="test" name="properties.phpt"/>
+                    <file role="test" name="serialize.phpt"/>
+
+                    <dir name="methods">
+                        <file role="test" name="__construct.phpt"/>
+                        <file role="test" name="abs.phpt"/>
+                        <file role="test" name="add.phpt"/>
+                        <file role="test" name="ceil.phpt"/>
+                        <file role="test" name="compareTo.phpt"/>
+                        <file role="test" name="div.phpt"/>
+                        <file role="test" name="floor.phpt"/>
+                        <file role="test" name="isEven.phpt"/>
+                        <file role="test" name="isInf.phpt"/>
+                        <file role="test" name="isInteger.phpt"/>
+                        <file role="test" name="isNaN.phpt"/>
+                        <file role="test" name="isOdd.phpt"/>
+                        <file role="test" name="isZero.phpt"/>
+                        <file role="test" name="mod.phpt"/>
+                        <file role="test" name="mul.phpt"/>
+                        <file role="test" name="negate.phpt"/>
+                        <file role="test" name="parity.phpt"/>
+                        <file role="test" name="pow.phpt"/>
+                        <file role="test" name="rem.phpt"/>
+                        <file role="test" name="round.phpt"/>
+                        <file role="test" name="shiftl.phpt"/>
+                        <file role="test" name="shiftr.phpt"/>
+                        <file role="test" name="signum.phpt"/>
+                        <file role="test" name="sub.phpt"/>
+                        <file role="test" name="toDecimal.phpt"/>
+                        <file role="test" name="toFixed.phpt"/>
+                        <file role="test" name="toFloat.phpt"/>
+                        <file role="test" name="toInt.phpt"/>
+                        <file role="test" name="toRational.phpt"/>
+                        <file role="test" name="toString.phpt"/>
+                        <file role="test" name="valueOf.phpt"/>
+                    </dir>
                 </dir>
             </dir>
         </dir>

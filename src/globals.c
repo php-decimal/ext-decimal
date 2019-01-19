@@ -20,37 +20,29 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef HAVE_PHP_DECIMAL_H
-#define HAVE_PHP_DECIMAL_H
-
-#ifdef PHP_WIN32
-#   define PHP_DECIMAL_API __declspec(dllexport)
-#elif defined(__GNUC__) && __GNUC__ >= 4
-#   define PHP_DECIMAL_API __attribute__ ((visibility("default")))
-#else
-#   define PHP_DECIMAL_API
-#endif
-
-#ifdef ZTS
-#   include "TSRM.h"
-#endif
-
 #include <php.h>
-#include <mpdecimal.h>
-#include "src/globals.h"
-
-#define PHP_DECIMAL_EXTNAME "decimal"
-#define PHP_DECIMAL_VERSION "2.0.0"
+#include "globals.h"
+#include "context.h"
 
 /**
- * Module and class entry
+ *
  */
-extern zend_module_entry php_decimal_module_entry;
+ZEND_DECLARE_MODULE_GLOBALS(decimal)
 
-#define phpext_decimal_ptr &php_decimal_module_entry
+/**
+ *
+ */
+void php_decimal_init_globals(zend_decimal_globals *g)
+{
+    memset(g, 0, sizeof(zend_decimal_globals));
 
-#if defined(ZTS) && defined(COMPILE_DL_DS)
-    ZEND_TSRMLS_CACHE_EXTERN();
-#endif
+    /* Initialize the default shared context (and min alloc) */
+    mpd_init(SHARED_CONTEXT, PHP_DECIMAL_DEFAULT_PREC);
+    mpd_qsettraps(SHARED_CONTEXT, PHP_DECIMAL_CONTEXT_TRAPS);
+    mpd_qsetround(SHARED_CONTEXT, PHP_DECIMAL_CONTEXT_ROUNDING);
 
-#endif
+    /* Initialize the maximum precision context (for rationals) */
+    mpd_maxcontext(MAX_CONTEXT);
+    mpd_qsettraps(MAX_CONTEXT, PHP_DECIMAL_CONTEXT_TRAPS);
+    mpd_qsetround(MAX_CONTEXT, PHP_DECIMAL_CONTEXT_ROUNDING);
+}
