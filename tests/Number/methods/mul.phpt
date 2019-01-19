@@ -48,29 +48,29 @@ var_dump(Rational::valueOf(4) * Number::valueOf("2.5"));
 var_dump(Rational::valueOf(4)->mul(Number::valueOf("2.5")));
 
 ?>
---EXPECT--
+--EXPECTF--
 Number::mul
-object(Number)#2 (1) {
+object(Number)#%d (1) {
   ["value":protected]=>
   float(10)
 }
 Number::mul
-object(Number)#3 (1) {
+object(Number)#%d (1) {
   ["value":protected]=>
   float(10)
 }
 Number::mul
-object(Number)#1 (1) {
+object(Number)#%d (1) {
   ["value":protected]=>
   float(10)
 }
 Number::mul
-object(Number)#3 (1) {
+object(Number)#%d (1) {
   ["value":protected]=>
   float(10)
 }
 Number::mul
-object(Number)#2 (1) {
+object(Number)#%d (1) {
   ["value":protected]=>
   object(Decimal\Decimal)#4 (2) {
     ["value"]=>
@@ -80,9 +80,9 @@ object(Number)#2 (1) {
   }
 }
 Number::mul
-object(Number)#1 (1) {
+object(Number)#%d (1) {
   ["value":protected]=>
-  object(Decimal\Decimal)#3 (2) {
+  object(Decimal\Decimal)#%d (2) {
     ["value"]=>
     string(4) "10.0"
     ["precision"]=>
@@ -90,7 +90,7 @@ object(Number)#1 (1) {
   }
 }
 Number::mul
-object(Number)#2 (1) {
+object(Number)#%d (1) {
   ["value":protected]=>
   object(Decimal\Rational)#4 (2) {
     ["num"]=>
@@ -100,9 +100,9 @@ object(Number)#2 (1) {
   }
 }
 Number::mul
-object(Number)#3 (1) {
+object(Number)#%d (1) {
   ["value":protected]=>
-  object(Decimal\Rational)#1 (2) {
+  object(Decimal\Rational)#%d (2) {
     ["num"]=>
     string(2) "10"
     ["den"]=>
@@ -110,28 +110,28 @@ object(Number)#3 (1) {
   }
 }
 Number::toDecimal
-object(Decimal\Decimal)#2 (2) {
+object(Decimal\Decimal)#%d (2) {
   ["value"]=>
   string(4) "10.0"
   ["precision"]=>
   int(34)
 }
 Number::toDecimal
-object(Decimal\Decimal)#3 (2) {
+object(Decimal\Decimal)#%d (2) {
   ["value"]=>
   string(4) "10.0"
   ["precision"]=>
   int(34)
 }
 Number::toRational
-object(Decimal\Rational)#1 (2) {
+object(Decimal\Rational)#%d (2) {
   ["num"]=>
   string(2) "10"
   ["den"]=>
   string(1) "1"
 }
 Number::toRational
-object(Decimal\Rational)#3 (2) {
+object(Decimal\Rational)#%d (2) {
   ["num"]=>
   string(2) "10"
   ["den"]=>

@@ -97,7 +97,7 @@ class Number extends \Decimal\Number
         // No need to implement this.
     }
 
-    public function round(?int $places = NULL, ?int $mode = NULL): \Decimal\Number
+    public function round(int $places = NULL, int $mode = NULL): \Decimal\Number
     {
         // No need to implement this.
     }
@@ -142,7 +142,7 @@ class Number extends \Decimal\Number
         // No need to implement this.
     }
 
-    public function toFixed(?int $places = NULL, ?bool $commas = NULL, ?int $mode = NULL): string
+    public function toFixed(int $places = NULL, bool $commas = NULL, int $mode = NULL): string
     {
         // No need to implement this.
     }

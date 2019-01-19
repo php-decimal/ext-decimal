@@ -48,7 +48,7 @@ var_dump(Rational::valueOf(4) ** Number::valueOf("2.5"));
 var_dump(Rational::valueOf(4)->pow(Number::valueOf("2.5")));
 
 ?>
---EXPECT--
+--EXPECTF--
 Number::pow
 object(Number)#2 (1) {
   ["value":protected]=>
@@ -91,7 +91,7 @@ object(Number)#1 (1) {
 }
 Number::pow
 
-Warning: Decimal arithmetic operand truncated to integer in /home/rudi/Projects/php-decimal/ext-decimal/tests/Number/helpers/Number.php on line 61
+Warning: Decimal arithmetic operand truncated to integer in %s on line %d
 object(Number)#2 (1) {
   ["value":protected]=>
   object(Decimal\Rational)#4 (2) {
@@ -103,7 +103,7 @@ object(Number)#2 (1) {
 }
 Number::pow
 
-Warning: Decimal arithmetic operand truncated to integer in /home/rudi/Projects/php-decimal/ext-decimal/tests/Number/helpers/Number.php on line 61
+Warning: Decimal arithmetic operand truncated to integer in %s on line %d
 object(Number)#3 (1) {
   ["value":protected]=>
   object(Decimal\Rational)#1 (2) {
@@ -129,7 +129,7 @@ object(Decimal\Decimal)#3 (2) {
 }
 Number::toRational
 
-Warning: Decimal arithmetic operand truncated to integer in /home/rudi/Projects/php-decimal/ext-decimal/tests/Number/methods/pow.php on line 38
+Warning: Decimal arithmetic operand truncated to integer in %s on line %d
 object(Decimal\Rational)#1 (2) {
   ["num"]=>
   string(2) "16"
@@ -138,7 +138,7 @@ object(Decimal\Rational)#1 (2) {
 }
 Number::toRational
 
-Warning: Decimal arithmetic operand truncated to integer in /home/rudi/Projects/php-decimal/ext-decimal/tests/Number/methods/pow.php on line 41
+Warning: Decimal arithmetic operand truncated to integer in %s on line %d
 object(Decimal\Rational)#3 (2) {
   ["num"]=>
   string(2) "16"

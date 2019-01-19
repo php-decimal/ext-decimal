@@ -351,7 +351,7 @@ try {
 try {
     Decimal::valueOf("0.1234")->round("a");
 } catch (TypeError $e) {
-    printf("C %s\n", $e->getMessage());
+    printf("C %s\n", get_class($e));
 }
 
 /**
@@ -360,13 +360,13 @@ try {
 try {
     Decimal::valueOf("0.1234")->round(2, "a");
 } catch (TypeError $e) {
-    printf("D %s\n", $e->getMessage());
+    printf("D %s\n", get_class($e));
 }
 
 
 ?>
---EXPECT--
+--EXPECTF--
 A Unsupported rounding mode
 B Failed to round decimal - exponent out of range
-C Argument 1 passed to Decimal\Decimal::round() must be of the type integer or null, string given
-D Argument 2 passed to Decimal\Decimal::round() must be of the type integer or null, string given
+C TypeError
+D TypeError

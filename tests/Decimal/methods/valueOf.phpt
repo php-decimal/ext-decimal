@@ -143,7 +143,7 @@ A Failed to parse string as decimal: " 1"
 B Failed to parse string as decimal: "1 "
 C Decimal\Decimal::valueOf() expected parameter 1 to be a decimal number, string, or integer
 D Decimal\Decimal::valueOf() expected parameter 1 to be a decimal number, string, or integer
-E Argument 2 passed to Decimal\Decimal::valueOf() must be of the type integer or null, string given
+E Argument 2 passed to Decimal\Decimal::valueOf() must be of the type in%s or null, string given
 F Decimal precision out of range
 G Decimal precision out of range
 H Decimal precision out of range
