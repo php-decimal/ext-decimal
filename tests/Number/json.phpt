@@ -6,7 +6,7 @@ if (!extension_loaded("decimal")) echo "skip";
 ?>
 --FILE--
 <?php
-require __DIR__ . "/include/Number.php";
+require __DIR__ . "/helpers/Number.php";
 
 var_dump(json_encode(Number::valueOf("0.3")));
 

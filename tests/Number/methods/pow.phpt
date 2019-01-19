@@ -6,7 +6,7 @@ if (!extension_loaded("decimal")) echo "skip";
 ?>
 --FILE--
 <?php
-require __DIR__ . "/../include/Number.php";
+require __DIR__ . "/../helpers/Number.php";
 
 use \Decimal\Decimal;
 use \Decimal\Rational;
@@ -91,7 +91,7 @@ object(Number)#1 (1) {
 }
 Number::pow
 
-Warning: Decimal arithmetic operand truncated to integer in /home/rudi/Projects/php-decimal/ext-decimal/tests/Number/include/Number.php on line 61
+Warning: Decimal arithmetic operand truncated to integer in /home/rudi/Projects/php-decimal/ext-decimal/tests/Number/helpers/Number.php on line 61
 object(Number)#2 (1) {
   ["value":protected]=>
   object(Decimal\Rational)#4 (2) {
@@ -103,7 +103,7 @@ object(Number)#2 (1) {
 }
 Number::pow
 
-Warning: Decimal arithmetic operand truncated to integer in /home/rudi/Projects/php-decimal/ext-decimal/tests/Number/include/Number.php on line 61
+Warning: Decimal arithmetic operand truncated to integer in /home/rudi/Projects/php-decimal/ext-decimal/tests/Number/helpers/Number.php on line 61
 object(Number)#3 (1) {
   ["value":protected]=>
   object(Decimal\Rational)#1 (2) {

@@ -6,7 +6,7 @@ if (!extension_loaded("decimal")) echo "skip";
 ?>
 --FILE--
 <?php
-require __DIR__ . "/include/Number.php";
+require __DIR__ . "/helpers/Number.php";
 
 var_dump((string) Number::valueOf(4));
 var_dump((bool)   Number::valueOf(0));     // Should always be true

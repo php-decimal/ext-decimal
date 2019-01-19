@@ -6,7 +6,7 @@ if (!extension_loaded("decimal")) echo "skip";
 ?>
 --FILE--
 <?php
-require __DIR__ . "/../include/Number.php";
+require __DIR__ . "/../helpers/Number.php";
 
 use \Decimal\Decimal;
 use \Decimal\Rational;

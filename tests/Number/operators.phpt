@@ -10,9 +10,7 @@ if (!extension_loaded("decimal")) echo 'skip';
  * Arithmetic and comparison operators are tested as part of their corresponding
  * method, for example, "+" will be tested by "add"
  */
-
-
-require __DIR__ . "/include/Number.php";
+require __DIR__ . "/helpers/Number.php";
 
 /**
  * Test that an assign op does not modify the original the original.
