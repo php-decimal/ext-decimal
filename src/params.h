@@ -20,37 +20,30 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef HAVE_PHP_DECIMAL_H
-#define HAVE_PHP_DECIMAL_H
-
-#ifdef PHP_WIN32
-#   define PHP_DECIMAL_API __declspec(dllexport)
-#elif defined(__GNUC__) && __GNUC__ >= 4
-#   define PHP_DECIMAL_API __attribute__ ((visibility("default")))
-#else
-#   define PHP_DECIMAL_API
-#endif
-
-#ifdef ZTS
-#   include "TSRM.h"
-#endif
+#ifndef PHP_DECIMAL_PARAMS_H
+#define PHP_DECIMAL_PARAMS_H
 
 #include <php.h>
-#include <mpdecimal.h>
-#include "src/globals.h"
-
-#define PHP_DECIMAL_EXTNAME "decimal"
-#define PHP_DECIMAL_VERSION "2.0.0"
 
 /**
- * Module and class entry
+ * Start parameter parsing block, throwing exceptions for incorrect arg count.
  */
-extern zend_module_entry php_decimal_module_entry;
+#define PHP_DECIMAL_PARSE_PARAMS(min, max) \
+    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, min, max)
 
-#define phpext_decimal_ptr &php_decimal_module_entry
+/**
+ * End a parameter parse block. This exists to achieve consistent naming.
+ */
+#define PHP_DECIMAL_PARSE_PARAMS_END() \
+    ZEND_PARSE_PARAMETERS_END();
 
-#if defined(ZTS) && defined(COMPILE_DL_DS)
-    ZEND_TSRMLS_CACHE_EXTERN();
-#endif
+/**
+ * No parameters expected - warn only because that appears to be the custom.
+ */
+#define PHP_DECIMAL_PARSE_PARAMS_NONE() do { \
+    if (zend_parse_parameters_none() == FAILURE) { \
+        return; \
+    } \
+} while (0)
 
 #endif

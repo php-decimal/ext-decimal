@@ -20,37 +20,23 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef HAVE_PHP_DECIMAL_H
-#define HAVE_PHP_DECIMAL_H
-
-#ifdef PHP_WIN32
-#   define PHP_DECIMAL_API __declspec(dllexport)
-#elif defined(__GNUC__) && __GNUC__ >= 4
-#   define PHP_DECIMAL_API __attribute__ ((visibility("default")))
-#else
-#   define PHP_DECIMAL_API
-#endif
-
-#ifdef ZTS
-#   include "TSRM.h"
-#endif
+#ifndef HAVE_PHP_DECIMAL_NUMBER_H
+#define HAVE_PHP_DECIMAL_NUMBER_H
 
 #include <php.h>
-#include <mpdecimal.h>
-#include "src/globals.h"
+#include "common.h"
 
-#define PHP_DECIMAL_EXTNAME "decimal"
-#define PHP_DECIMAL_VERSION "2.0.0"
+#define PHP_DECIMAL_NUMBER_CLASS_NAME "Number"
+#define PHP_DECIMAL_NUMBER_FQCN        PHP_DECIMAL_NAMESPACE "\\" PHP_DECIMAL_NUMBER_CLASS_NAME
+
+#define Z_IMPLEMENTS_NUMBER_P(z) (instanceof_function(Z_OBJCE_P(z), php_decimal_number_ce))
+#define Z_IS_DECIMAL_NUMBER_P(z) (Z_TYPE_P(z) == IS_OBJECT && Z_IMPLEMENTS_NUMBER_P(z))
 
 /**
- * Module and class entry
+ *
  */
-extern zend_module_entry php_decimal_module_entry;
+extern zend_class_entry *php_decimal_number_ce;
 
-#define phpext_decimal_ptr &php_decimal_module_entry
-
-#if defined(ZTS) && defined(COMPILE_DL_DS)
-    ZEND_TSRMLS_CACHE_EXTERN();
-#endif
+void php_decimal_register_number_class();
 
 #endif

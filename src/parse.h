@@ -20,37 +20,21 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef HAVE_PHP_DECIMAL_H
-#define HAVE_PHP_DECIMAL_H
-
-#ifdef PHP_WIN32
-#   define PHP_DECIMAL_API __declspec(dllexport)
-#elif defined(__GNUC__) && __GNUC__ >= 4
-#   define PHP_DECIMAL_API __attribute__ ((visibility("default")))
-#else
-#   define PHP_DECIMAL_API
-#endif
-
-#ifdef ZTS
-#   include "TSRM.h"
-#endif
+#ifndef PHP_DECIMAL_PARSE_H
+#define PHP_DECIMAL_PARSE_H
 
 #include <php.h>
 #include <mpdecimal.h>
-#include "src/globals.h"
+#include "common.h"
+#include "decimal.h"
+#include "rational.h"
 
-#define PHP_DECIMAL_EXTNAME "decimal"
-#define PHP_DECIMAL_VERSION "2.0.0"
+php_decimal_success_t php_decimal_parse_scalar(mpd_t *res, const zval *val);
+php_decimal_success_t php_decimal_parse_scalar_quiet(mpd_t *res, const zval *val);
 
-/**
- * Module and class entry
- */
-extern zend_module_entry php_decimal_module_entry;
-
-#define phpext_decimal_ptr &php_decimal_module_entry
-
-#if defined(ZTS) && defined(COMPILE_DL_DS)
-    ZEND_TSRMLS_CACHE_EXTERN();
-#endif
+php_decimal_success_t php_decimal_parse_rational(zval *result, const zval *val);
+php_decimal_success_t php_decimal_parse_decimal(zval *result, const zval *val, const zend_long prec, zend_bool inherit);
+php_decimal_success_t php_decimal_parse_mpd(mpd_t *res, const zval *val, const zend_long prec);
+php_decimal_success_t php_decimal_parse_num_den(mpd_t *num, mpd_t *den, const zval *val);
 
 #endif

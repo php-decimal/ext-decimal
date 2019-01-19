@@ -20,37 +20,22 @@
  * TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#ifndef HAVE_PHP_DECIMAL_H
-#define HAVE_PHP_DECIMAL_H
-
-#ifdef PHP_WIN32
-#   define PHP_DECIMAL_API __declspec(dllexport)
-#elif defined(__GNUC__) && __GNUC__ >= 4
-#   define PHP_DECIMAL_API __attribute__ ((visibility("default")))
-#else
-#   define PHP_DECIMAL_API
-#endif
-
-#ifdef ZTS
-#   include "TSRM.h"
-#endif
+#ifndef HAVE_PHP_DECIMAL_COMPARE_H
+#define HAVE_PHP_DECIMAL_COMPARE_H
 
 #include <php.h>
 #include <mpdecimal.h>
-#include "src/globals.h"
-
-#define PHP_DECIMAL_EXTNAME "decimal"
-#define PHP_DECIMAL_VERSION "2.0.0"
+#include "bool.h"
+#include "decimal.h"
+#include "rational.h"
 
 /**
- * Module and class entry
+ *
  */
-extern zend_module_entry php_decimal_module_entry;
+#define PHP_DECIMAL_COMPARISON_FAILURE   1
+#define PHP_DECIMAL_COMPARISON_UNDEFINED 2
 
-#define phpext_decimal_ptr &php_decimal_module_entry
-
-#if defined(ZTS) && defined(COMPILE_DL_DS)
-    ZEND_TSRMLS_CACHE_EXTERN();
-#endif
+int php_decimal_compare_decimal_to_zval(const php_decimal_t *op1, const zval *op2);
+int php_decimal_compare_rational_to_zval(const php_rational_t *op1, const zval *op2);
 
 #endif

@@ -18,13 +18,14 @@
 /include
 /libmpdec
 /mpdecimal*
+/sandbox*
+/*.sh
 /tests/**/*.diff
 /tests/**/*.exp
 /tests/**/*.log
 /tests/**/*.out
 /tests/**/*.php
 /tests/**/*.sh
-/test-local.sh
 /vendor
 acinclude.m4
 aclocal.m4

@@ -48,3 +48,12 @@ php run-tests.php -P -q
 ```
 
 
+TODO:
+- EXPECTED/UNEXPECTED (go through existing first to confirm) (bench first!)
+- Complete all comments, go through every single file. Search for all empty blocks
+- Make sure that all methods are defined in the order that they are declared.
+- Make sure that all methods have a test file.
+- Do a spell check.
+- Comparison and operations between builtins and Number implementations.
+- Make sure that every file has a license doc comment.
+- Make sure that every file is included in the package.xml info.
