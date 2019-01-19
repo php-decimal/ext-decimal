@@ -118,7 +118,7 @@ void php_decimal_precision_overflow()
 
 void php_decimal_operand_truncated_to_integer()
 {
-    zend_error(E_WARNING, "Rational arithmetic operand truncated to integer");
+    zend_error(E_WARNING, "Decimal arithmetic operand truncated to integer");
 }
 
 void php_decimal_number_not_implemented()

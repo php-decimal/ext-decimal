@@ -119,12 +119,12 @@ foreach ($tests as $test) {
 }
 ?>
 --EXPECTF--
-Warning: Rational arithmetic operand truncated to integer in %s on line %d
+Warning: Decimal arithmetic operand truncated to integer in %s on line %d
 
-Warning: Rational arithmetic operand truncated to integer in %s on line %d
+Warning: Decimal arithmetic operand truncated to integer in %s on line %d
 
-Warning: Rational arithmetic operand truncated to integer in %s on line %d
+Warning: Decimal arithmetic operand truncated to integer in %s on line %d
 
-Warning: Rational arithmetic operand truncated to integer in %s on line %d
+Warning: Decimal arithmetic operand truncated to integer in %s on line %d
 
-Warning: Rational arithmetic operand truncated to integer in %s on line %d
+Warning: Decimal arithmetic operand truncated to integer in %s on line %d
