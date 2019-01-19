@@ -14,6 +14,11 @@ if test "$PHP_DECIMAL" != "no"; then
         LIBMPDEC_INC=$i/include
         AC_MSG_RESULT(found in $LIBMPDEC_DIR)
         break
+      elif test -r $i/lib64/libmpdec.$SHLIB_SUFFIX_NAME || test -r $i/lib64/libmpdec.a; then
+        LIBMPDEC_DIR=$i/lib64
+        LIBMPDEC_INC=$i/include
+        AC_MSG_RESULT(found in $LIBMPDEC_DIR)
+        break
       elif test -r $i/lib/libmpdec.$SHLIB_SUFFIX_NAME || test -r $i/lib/libmpdec.a; then
         LIBMPDEC_DIR=$i/lib
         LIBMPDEC_INC=$i/include

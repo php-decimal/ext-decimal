@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](http://semver.org/).
 
-## [2.0.0] - 2019-01-XX
+## [2.0.0] - 2019-01
 - Default decimal precision changed from 28 to 34 to match [Decimal128](https://en.wikipedia.org/wiki/Decimal128_floating-point_format).
 - Decimal operations now use the **minimum** precision of all operands, rather than the maximum.
 - Remove `Decimal\Decimal::equals` method.
@@ -13,6 +13,9 @@ This project follows [Semantic Versioning](http://semver.org/).
 - Better consistency around scientific notation when converting to string or JSON.
 - Precision is now applied on operations only (input is preserved).
 - Decimal constructors are now private - must use `\Decimal\Number::valueOf`.
+
+## [1.1.0] - 2018-11-20
+- Added `trim` method to Decimal to trim trailing zeroes.
 
 ## [1.0.1] - 2018-10-29
 - Added docs and tests to package.xml @remicollet
