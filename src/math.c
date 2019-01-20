@@ -270,22 +270,63 @@ void php_decimal_trunc(mpd_t *res, const mpd_t *op1, zend_long prec)
 /**
  * Calculates the GCD of two unsigned long values. This is a lot faster than
  * decimal arithmetic when numbers are small enough to be native.
+ *
+ * https://en.wikipedia.org/wiki/Binary_GCD_algorithm#Iterative_version_in_C
  */
-static inline zend_ulong php_decimal_gcd_long(zend_ulong a, zend_ulong b)
+static zend_always_inline zend_ulong php_decimal_gcd_long(zend_ulong a, zend_ulong b)
 {
-    mpd_ssize_t t;
+    int shift;
 
-    while (b != 0) {
-        t = a % b;
-        a = b;
-        b = t;
+    /* GCD(0,v) == v; GCD(u,0) == u, GCD(0,0) == 0 */
+    if (a == 0) return b;
+    if (b == 0) return a;
+
+    /* Let shift := lg K, where K is the greatest power of 2 dividing both a and b. */
+    for (shift = 0; ((a | b) & 1) == 0; shift++) {
+        a >>= 1;
+        b >>= 1;
     }
 
-    return a;
+    while ((a & 1) == 0) {
+        a >>= 1;
+    }
+
+    /* From here on, a is always odd. */
+    do {
+        /**
+         * Remove all factors of 2 in b -- they are not common.
+         *
+         * Note: b is not zero, so while will terminate.
+         */
+        while ((b & 1) == 0) {
+            b >>= 1;
+        }
+
+        /**
+         * Now a and b are both odd. Swap if necessary so a <= b,
+         * then set b = b - a (which is even). For bignums, the
+         * swapping is just pointer movement, and the subtraction
+         * can be done in-place.
+         */
+        if (a > b) {
+            zend_ulong t = b;
+                       b = a;
+                       a = t;
+        }
+
+        /* Here b >= a. */
+        b = b - a;
+
+    } while (b != 0);
+
+    /* restore common factors of 2 */
+    return a << shift;
 }
 
 /**
+ * Calculates the GCD of two mpd_t's.
  *
+ * We can assume that both num and den are integers.
  */
 static void php_decimal_gcd(mpd_t *gcd, const mpd_t *num, const mpd_t *den)
 {
@@ -298,7 +339,8 @@ static void php_decimal_gcd(mpd_t *gcd, const mpd_t *num, const mpd_t *den)
     if (status == 0) {
         php_decimal_set_ulong(gcd, php_decimal_gcd_long(lnum, lden));
 
-    /* */
+    /* Fall back to Euclidean algorithm for larger numbers. */
+    /* TODO: Could we simplify partially then use the ulong algorithm? */
     } else {
         PHP_DECIMAL_TEMP_MPD(a);
         PHP_DECIMAL_TEMP_MPD(b);
@@ -320,7 +362,6 @@ static void php_decimal_gcd(mpd_t *gcd, const mpd_t *num, const mpd_t *den)
 
 void php_decimal_rational_simplify(mpd_t *num, mpd_t *den)
 {
-    /* */
     if (UNEXPECTED(mpd_isspecial(num) || mpd_isspecial(den))) {
 
         /* NAN in num or den is NAN */
@@ -345,14 +386,14 @@ void php_decimal_rational_simplify(mpd_t *num, mpd_t *den)
             return;
         }
 
-    /* TODO this is the main bottleneck for rationals */
     } else {
         uint32_t status = 0;
 
         /* We only need to simplify if the rational is not an integer. */
+        /* This is the primary bottleneck for rational numbers. */
         if ( ! php_decimal_is_one(den)) {
 
-            /* Calculate the GCD */
+            /* Calculate the GCD and simplify.  */
             PHP_DECIMAL_TEMP_MPD(gcd);
             php_decimal_gcd(&gcd, num, den);
 
