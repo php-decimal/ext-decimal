@@ -757,7 +757,7 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, signum)
 {
     PHP_DECIMAL_PARSE_PARAMS_NONE();
-    RETURN_LONG(mpd_arith_sign(THIS_DECIMAL_MPD()));
+    RETURN_LONG(php_decimal_signum(THIS_DECIMAL_MPD()));
 }
 
 /**

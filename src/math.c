@@ -38,6 +38,11 @@
 /*                                 DECIMAL                                    */
 /******************************************************************************/
 
+int php_decimal_signum(const mpd_t *mpd)
+{
+    return mpd_iszero(mpd) ? 0 : mpd_arith_sign(mpd);
+}
+
 void php_decimal_abs(mpd_t *res, const mpd_t *op1, zend_long prec)
 {
     uint32_t status = 0;

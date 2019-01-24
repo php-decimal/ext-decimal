@@ -27,6 +27,11 @@
 #include <mpdecimal.h>
 
 /**
+ * Decimal helpers
+ */
+int php_decimal_signum(const mpd_t *mpd);
+
+/**
  * Rational helpers
  */
 void php_decimal_rational_normalize(mpd_t *num, mpd_t *den);
