@@ -2086,7 +2086,7 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(signum)
 {
     PHP_DECIMAL_PARAMS_PARSE_NONE();
-    RETURN_LONG(mpd_arith_sign(THIS_MPD()));
+    RETURN_LONG(mpd_iszero(THIS_MPD()) ? 0 : mpd_arith_sign(THIS_MPD()));
 }
 
 /**

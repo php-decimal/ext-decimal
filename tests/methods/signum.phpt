@@ -14,6 +14,8 @@ use Decimal\Decimal;
 function decimal(...$args) { return new Decimal(...$args); }
 
 var_dump(decimal()->signum());
+var_dump(decimal("-0")->signum());
+var_dump(decimal("+0")->signum());
 
 var_dump(decimal("1234.5678E+9")->signum());
 var_dump(decimal("1234.5678E-9")->signum());
@@ -26,7 +28,9 @@ var_dump(decimal( "INF")->signum());
 var_dump(decimal("-INF")->signum());
 ?>
 --EXPECT--
-int(1)
+int(0)
+int(0)
+int(0)
 int(1)
 int(1)
 int(-1)
