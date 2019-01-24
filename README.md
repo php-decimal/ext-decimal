@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/php-decimal/ext-decimal.svg?branch=master)](https://travis-ci.org/php-decimal/ext-decimal)
 [![Build status](https://ci.appveyor.com/api/projects/status/lg5nw5tqgpmv1c33?svg=true)](https://ci.appveyor.com/project/rtheunissen/php-decimal)
-[![PECL](https://img.shields.io/badge/PECL-1.1.0-blue.svg)](https://pecl.php.net/package/decimal)
+[![PECL](https://img.shields.io/badge/PECL-1.1.1-blue.svg)](https://pecl.php.net/package/decimal)
 
 Correctly-rounded, arbitrary-precision decimal arithmetic for PHP 7
 

@@ -10,10 +10,10 @@
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2018-11-20</date>
-    <time>11:56:52</time>
+    <date>2019-01-24</date>
+    <time>10:05:05</time>
     <version>
-        <release>1.1.0</release>
+        <release>1.1.1</release>
         <api>1.1.0</api>
     </version>
     <stability>
@@ -22,7 +22,7 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        Added "trim" method, to remove trailing zeroes.
+        Fix `signum` returning 1 for zero, instead of 0.
     </notes>
     <contents>
         <dir name="/">
