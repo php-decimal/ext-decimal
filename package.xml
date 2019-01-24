@@ -22,7 +22,7 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        Fix `signum` returning 1 for zero, instead of 0.
+        Fix "signum" returning 1 for zero, instead of 0.
     </notes>
     <contents>
         <dir name="/">
