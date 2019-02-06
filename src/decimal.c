@@ -430,7 +430,7 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
 static php_decimal_t *php_decimal_get_result_store(zval *obj)
 {
     /* Create a new decimal if something else relies on this decimal? */
-    if (Z_REFCOUNT_P(obj) > 2) {
+    if (Z_REFCOUNT_P(obj) > 1) {
         return php_decimal(); // <-- Always returned this before.
     }
 

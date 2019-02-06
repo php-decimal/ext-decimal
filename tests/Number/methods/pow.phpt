@@ -91,7 +91,7 @@ object(Number)#1 (1) {
 }
 Number::pow
 
-Warning: Decimal arithmetic operand truncated to integer in %s on line %d
+Warning: Decimal arithmetic operand truncated to integer in %s on line 61
 object(Number)#2 (1) {
   ["value":protected]=>
   object(Decimal\Rational)#4 (2) {
@@ -103,7 +103,7 @@ object(Number)#2 (1) {
 }
 Number::pow
 
-Warning: Decimal arithmetic operand truncated to integer in %s on line %d
+Warning: Decimal arithmetic operand truncated to integer in %s on line 61
 object(Number)#3 (1) {
   ["value":protected]=>
   object(Decimal\Rational)#1 (2) {
@@ -121,7 +121,7 @@ object(Decimal\Decimal)#2 (2) {
   int(34)
 }
 Number::toDecimal
-object(Decimal\Decimal)#3 (2) {
+object(Decimal\Decimal)#2 (2) {
   ["value"]=>
   string(35) "32.00000000000000000000000000000000"
   ["precision"]=>
@@ -129,8 +129,8 @@ object(Decimal\Decimal)#3 (2) {
 }
 Number::toRational
 
-Warning: Decimal arithmetic operand truncated to integer in %s on line %d
-object(Decimal\Rational)#1 (2) {
+Warning: Decimal arithmetic operand truncated to integer in %s on line 38
+object(Decimal\Rational)#3 (2) {
   ["num"]=>
   string(2) "16"
   ["den"]=>
@@ -138,8 +138,8 @@ object(Decimal\Rational)#1 (2) {
 }
 Number::toRational
 
-Warning: Decimal arithmetic operand truncated to integer in %s on line %d
-object(Decimal\Rational)#3 (2) {
+Warning: Decimal arithmetic operand truncated to integer in %s on line 41
+object(Decimal\Rational)#2 (2) {
   ["num"]=>
   string(2) "16"
   ["den"]=>

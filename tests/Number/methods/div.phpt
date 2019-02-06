@@ -117,21 +117,21 @@ object(Decimal\Decimal)#2 (2) {
   int(34)
 }
 Number::toDecimal
-object(Decimal\Decimal)#3 (2) {
+object(Decimal\Decimal)#2 (2) {
   ["value"]=>
   string(3) "1.6"
   ["precision"]=>
   int(34)
 }
 Number::toRational
-object(Decimal\Rational)#1 (2) {
+object(Decimal\Rational)#3 (2) {
   ["num"]=>
   string(1) "8"
   ["den"]=>
   string(1) "5"
 }
 Number::toRational
-object(Decimal\Rational)#3 (2) {
+object(Decimal\Rational)#2 (2) {
   ["num"]=>
   string(1) "8"
   ["den"]=>
