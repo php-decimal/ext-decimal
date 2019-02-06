@@ -38,6 +38,8 @@
 /*                                 DECIMAL                                    */
 /******************************************************************************/
 
+// TODO: Check for unsafe cases where res is used as tmp.
+
 int php_decimal_signum(const mpd_t *mpd)
 {
     return mpd_iszero(mpd) ? 0 : mpd_arith_sign(mpd);
