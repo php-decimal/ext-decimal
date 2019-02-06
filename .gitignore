@@ -18,7 +18,6 @@
 /include
 /libmpdec
 /mpdecimal*
-/sandbox*
 /*.sh
 /tests/**/*.diff
 /tests/**/*.exp
@@ -27,7 +26,8 @@
 /tests/**/*.php
 /tests/**/*.sh
 /vendor
-/sandbox*
+/sandbox
+/sandbox.c
 /watch.sh
 acinclude.m4
 aclocal.m4

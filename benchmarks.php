@@ -87,29 +87,29 @@ function benchmark(string $action, array $calculations)
  * ADD
  */
 benchmark("add", [
-    // BC_MATH => function(array $values): string {
-    //     $result = "0";
-    //     foreach ($values as $value) {
-    //         $result = bcadd($result, $value, 50);
-    //     }
-    //     return $result;
-    // },
+    BC_MATH => function(array $values): string {
+        $result = "0";
+        foreach ($values as $value) {
+            $result = bcadd($result, $value, 50);
+        }
+        return $result;
+    },
 
-    // DECIMAL => function(array $values): string {
-    //     $result = Decimal::valueOf("0", 100);
+    DECIMAL => function(array $values): string {
+        $result = Decimal::valueOf("0", 100);
+        foreach ($values as $value) {
+            $result = $result->add($value);
+        }
+        return (string) $result;
+    },
+
+    // RATIONAL => function(array $values): string {
+    //     $result = Rational::valueOf("0");
     //     foreach ($values as $value) {
     //         $result = $result + $value;
     //     }
     //     return (string) $result;
     // },
-
-    RATIONAL => function(array $values): string {
-        $result = Rational::valueOf("0");
-        foreach ($values as $value) {
-            $result = $result + $value;
-        }
-        return (string) $result;
-    },
 ]);
 
 // /**

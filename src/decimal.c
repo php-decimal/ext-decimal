@@ -429,6 +429,8 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
      *
      * TODO: Explain why the zval copy is necessary here. Are we creating a copy
      *       so that we don't overwrite op1 when we set the result?
+     *
+     * TODO: Apply this to rational and number as well?
      */
     if (op1 == result) {
         if (EXPECTED(Z_IS_DECIMAL_P(op1)) && Z_REFCOUNT_P(op1) == 1) {
@@ -469,7 +471,7 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
 /**
  * Parse a decimal binary operation (op1 OP op2).
  */
-#define PHP_DECIMAL_PARSE_BINARY_OP(op) do { \
+#define PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(binary_op) do { \
     php_decimal_t *res = php_decimal_get_result_store(getThis()); \
     zval          *op2 = NULL; \
     \
@@ -477,21 +479,21 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
         Z_PARAM_ZVAL(op2) \
     PHP_DECIMAL_PARSE_PARAMS_END() \
     \
-    php_decimal_do_binary_op(op, res, getThis(), op2); \
+    php_decimal_do_binary_op(binary_op, res, getThis(), op2); \
     RETURN_DECIMAL(res); \
 } while (0)
 
 /**
  * Parse a decimal unary operation (OP op1).
  */
-#define PHP_DECIMAL_PARSE_UNARY_OP(op) do { \
+#define PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(unary_op) do { \
     php_decimal_t *obj = THIS_DECIMAL(); \
     php_decimal_t *res = php_decimal_get_result_store(getThis()); \
     \
-    php_decimal_set_prec(res, php_decimal_get_prec(obj)); \
-    \
     PHP_DECIMAL_PARSE_PARAMS_NONE(); \
-    op(PHP_DECIMAL_MPD(res), PHP_DECIMAL_MPD(obj), php_decimal_get_prec(res)); \
+    \
+    php_decimal_set_prec(res, php_decimal_get_prec(obj)); \
+    unary_op(PHP_DECIMAL_MPD(res), PHP_DECIMAL_MPD(obj), php_decimal_get_prec(res)); \
     RETURN_DECIMAL(res); \
 } while(0)
 
@@ -544,7 +546,7 @@ PHP_DECIMAL_ARGINFO_ZVAL(value)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, add)
 {
-    PHP_DECIMAL_PARSE_BINARY_OP(php_decimal_add);
+    PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(php_decimal_add);
 }
 
 /**
@@ -555,7 +557,7 @@ PHP_DECIMAL_ARGINFO_ZVAL(value)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, sub)
 {
-    PHP_DECIMAL_PARSE_BINARY_OP(php_decimal_sub);
+    PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(php_decimal_sub);
 }
 
 /**
@@ -566,7 +568,7 @@ PHP_DECIMAL_ARGINFO_ZVAL(value)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, mul)
 {
-    PHP_DECIMAL_PARSE_BINARY_OP(php_decimal_mul);
+    PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(php_decimal_mul);
 }
 
 /**
@@ -577,7 +579,7 @@ PHP_DECIMAL_ARGINFO_ZVAL(value)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, div)
 {
-    PHP_DECIMAL_PARSE_BINARY_OP(php_decimal_div);
+    PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(php_decimal_div);
 }
 
 /**
@@ -588,7 +590,7 @@ PHP_DECIMAL_ARGINFO_ZVAL(value)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, mod)
 {
-    PHP_DECIMAL_PARSE_BINARY_OP(php_decimal_mod);
+    PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(php_decimal_mod);
 }
 
 /**
@@ -599,7 +601,7 @@ PHP_DECIMAL_ARGINFO_ZVAL(value)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, pow)
 {
-    PHP_DECIMAL_PARSE_BINARY_OP(php_decimal_pow);
+    PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(php_decimal_pow);
 }
 
 /**
@@ -610,7 +612,7 @@ PHP_DECIMAL_ARGINFO_ZVAL(value)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, rem)
 {
-    PHP_DECIMAL_PARSE_BINARY_OP(php_decimal_rem);
+    PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(php_decimal_rem);
 }
 
 /**
@@ -621,7 +623,7 @@ PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Decimal, ln, 0)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, ln)
 {
-    PHP_DECIMAL_PARSE_UNARY_OP(php_decimal_ln);
+    PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(php_decimal_ln);
 }
 
 /**
@@ -631,7 +633,7 @@ PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Decimal, exp, 0)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, exp)
 {
-    PHP_DECIMAL_PARSE_UNARY_OP(php_decimal_exp);
+    PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(php_decimal_exp);
 }
 
 /**
@@ -641,7 +643,7 @@ PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Decimal, log10, 0)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, log10)
 {
-    PHP_DECIMAL_PARSE_UNARY_OP(php_decimal_log10);
+    PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(php_decimal_log10);
 }
 
 /**
@@ -651,7 +653,7 @@ PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Decimal, sqrt, 0)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, sqrt)
 {
-    PHP_DECIMAL_PARSE_UNARY_OP(php_decimal_sqrt);
+    PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(php_decimal_sqrt);
 }
 
 /**
@@ -691,7 +693,7 @@ PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Decimal, floor, 0)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, floor)
 {
-    PHP_DECIMAL_PARSE_UNARY_OP(php_decimal_floor);
+    PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(php_decimal_floor);
 }
 
 /**
@@ -701,7 +703,7 @@ PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Decimal, ceil, 0)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, ceil)
 {
-    PHP_DECIMAL_PARSE_UNARY_OP(php_decimal_ceil);
+    PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(php_decimal_ceil);
 }
 
 /**
@@ -711,7 +713,7 @@ PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Decimal, trunc, 0)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, trunc)
 {
-    PHP_DECIMAL_PARSE_UNARY_OP(php_decimal_trunc);
+    PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(php_decimal_trunc);
 }
 
 /**
@@ -722,7 +724,7 @@ PHP_DECIMAL_ARGINFO_ZVAL(places)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, shiftl)
 {
-    PHP_DECIMAL_PARSE_BINARY_OP(php_decimal_shiftl);
+    PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(php_decimal_shiftl);
 }
 
 /**
@@ -733,7 +735,7 @@ PHP_DECIMAL_ARGINFO_ZVAL(places)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, shiftr)
 {
-    PHP_DECIMAL_PARSE_BINARY_OP(php_decimal_shiftr);
+    PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(php_decimal_shiftr);
 }
 
 /**
@@ -827,7 +829,7 @@ PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Decimal, abs, 0)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, abs)
 {
-    PHP_DECIMAL_PARSE_UNARY_OP(php_decimal_abs);
+    PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(php_decimal_abs);
 }
 
 /**
@@ -837,7 +839,7 @@ PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Decimal, negate, 0)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, negate)
 {
-    PHP_DECIMAL_PARSE_UNARY_OP(php_decimal_neg);
+    PHP_DECIMAL_PARSE_AND_DO_UNARY_OP(php_decimal_neg);
 }
 
 /**
