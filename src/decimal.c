@@ -162,7 +162,7 @@ static php_decimal_binary_op_t php_decimal_get_binary_op(zend_uchar opcode)
  *
  * We don't know which of the operands is a decimal, if not both.
  */
-static void php_decimal_do_binary_op(php_decimal_binary_op_t op, php_decimal_t *res, zval *op1, zval *op2)
+static void php_decimal_do_binary_op(php_decimal_binary_op_t op, php_decimal_t *res, const zval *op1, const zval *op2)
 {
     mpd_t *mpd1;
     mpd_t *mpd2;
@@ -413,7 +413,7 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
     /* Operation failed - return success to avoid casting. */
     if (UNEXPECTED(EG(exception))) {
         zval_ptr_dtor(result);
-        ZVAL_UNDEF(result);
+        ZVAL_NULL(result);
         return SUCCESS;
     }
 
@@ -422,6 +422,22 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
     }
 
     return SUCCESS;
+}
+
+/**
+ * Determines the decimal object to use for the result of an operation.
+ */
+static php_decimal_t *php_decimal_get_result_store(zval *obj)
+{
+    /* Create a new decimal if something else relies on this decimal? */
+    if (Z_REFCOUNT_P(obj) > 2) {
+        return php_decimal(); // <-- Always returned this before.
+    }
+
+    /* No other reference to $this, so we can re-use it as the result? */
+    Z_ADDREF_P(obj);
+
+    return Z_DECIMAL_P(obj);
 }
 
 
@@ -433,7 +449,7 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
  * Parse a decimal binary operation (op1 OP op2).
  */
 #define PHP_DECIMAL_PARSE_BINARY_OP(op) do { \
-    php_decimal_t *res = php_decimal(); \
+    php_decimal_t *res = php_decimal_get_result_store(getThis()); \
     zval          *op2 = NULL; \
     \
     PHP_DECIMAL_PARSE_PARAMS(1, 1) \
@@ -448,7 +464,9 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
  */
 #define PHP_DECIMAL_PARSE_UNARY_OP(op) do { \
     php_decimal_t *obj = THIS_DECIMAL(); \
-    php_decimal_t *res = php_decimal_with_prec(php_decimal_get_prec(obj)); \
+    php_decimal_t *res = php_decimal_get_result_store(getThis()); \
+    \
+    php_decimal_set_prec(res, php_decimal_get_prec(obj)); \
     \
     PHP_DECIMAL_PARSE_PARAMS_NONE(); \
     op(PHP_DECIMAL_MPD(res), PHP_DECIMAL_MPD(obj), php_decimal_get_prec(res)); \

@@ -120,33 +120,36 @@ void php_decimal_pow(mpd_t *res, const mpd_t *op1, const mpd_t *op2, zend_long p
 void php_decimal_shiftl(mpd_t *res, const mpd_t *op1, const mpd_t *op2, zend_long prec)
 {
     uint32_t status = 0;
+    PHP_DECIMAL_TEMP_MPD(tmp);
 
-    if (mpd_isinteger(op2)) {
-        mpd_qscaleb(res, op1, op2, MAX_CONTEXT, &status);
-
-    } else {
+    if (!mpd_isinteger(op2)) {
         php_decimal_operand_truncated_to_integer();
-        mpd_qtrunc(res, op2, MAX_CONTEXT, &status);
-        mpd_qscaleb(res, op1, res, MAX_CONTEXT, &status);
+        mpd_qtrunc(&tmp, op2, MAX_CONTEXT, &status);
+        op2 = &tmp;
     }
+
+    mpd_qscaleb(res, op1, op2, MAX_CONTEXT, &status);
+    mpd_del(&tmp);
 }
 
 void php_decimal_shiftr(mpd_t *res, const mpd_t *op1, const mpd_t *op2, zend_long prec)
 {
     uint32_t status = 0;
+    PHP_DECIMAL_TEMP_MPD(tmp);
 
     if (mpd_isinteger(op2)) {
-        mpd_qcopy_negate(res, op2, &status);
-        op2 = res;
+        mpd_qcopy_negate(&tmp, op2, &status);
+        op2 = &tmp;
 
     } else {
         php_decimal_operand_truncated_to_integer();
-        mpd_qtrunc(res, op2, MAX_CONTEXT, &status);
-        mpd_negate(res, res, &status);
-        op2 = res;
+        mpd_qtrunc(&tmp, op2, MAX_CONTEXT, &status);
+        mpd_negate(&tmp, res, &status);
+        op2 = &tmp;
     }
 
     mpd_qscaleb(res, op1, op2, MAX_CONTEXT, &status);
+    mpd_del(&tmp);
 }
 
 void php_decimal_mod(mpd_t *res, const mpd_t *op1, const mpd_t *op2, zend_long prec)
