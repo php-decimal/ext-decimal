@@ -64,6 +64,8 @@ static zend_object_handlers php_decimal_handlers;
  */
 static php_decimal_t *php_decimal_alloc()
 {
+    php_printf("creating...\n");
+
     php_decimal_t *obj = ecalloc(1, sizeof(php_decimal_t));
 
     // TODO we should still go through everything to check for branch prediction.
