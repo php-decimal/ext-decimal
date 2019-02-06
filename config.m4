@@ -40,7 +40,7 @@ if test "$PHP_DECIMAL" != "no"; then
     else
       AC_MSG_CHECKING([for libmpdec headers in default path])
       if test -r $LIBMPDEC_INC/mpdecimal.h; then
-        PHP_ADD_INCLUDE(LIBMPDEC_INC)
+        PHP_ADD_INCLUDE($LIBMPDEC_INC)
         AC_MSG_RESULT(found in $LIBMPDEC_INC)
       else
         AC_MSG_WARN(not found)
