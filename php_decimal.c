@@ -2583,13 +2583,6 @@ PHP_MINIT_FUNCTION(decimal)
 
     ZEND_INIT_MODULE_GLOBALS(decimal, php_decimal_init_globals, NULL);
 
-    /* Initialize the shared context */
-    mpd_init(php_decimal_context(), PHP_DECIMAL_DEFAULT_PRECISION);
-
-    /* Set default rounding */
-    mpd_qsettraps(php_decimal_context(), PHP_DECIMAL_TRAPS);
-    mpd_qsetround(php_decimal_context(), PHP_DECIMAL_DEFAULT_ROUNDING);
-
     /* Set custom memory allocation functions */
     mpd_callocfunc  = php_decimal_mpd_calloc;
     mpd_mallocfunc  = php_decimal_mpd_malloc;
@@ -2615,6 +2608,13 @@ PHP_MSHUTDOWN_FUNCTION(decimal)
  */
 PHP_RINIT_FUNCTION(decimal)
 {
+    /* Initialize the shared context */
+    mpd_init(php_decimal_context(), PHP_DECIMAL_DEFAULT_PRECISION);
+
+    /* Set default rounding */
+    mpd_qsettraps(php_decimal_context(), PHP_DECIMAL_TRAPS);
+    mpd_qsetround(php_decimal_context(), PHP_DECIMAL_DEFAULT_ROUNDING);
+
 #if defined(COMPILE_DL_DECIMAL) && defined(ZTS)
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
