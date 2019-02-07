@@ -2608,16 +2608,16 @@ PHP_MSHUTDOWN_FUNCTION(decimal)
  */
 PHP_RINIT_FUNCTION(decimal)
 {
+#if defined(COMPILE_DL_DECIMAL) && defined(ZTS)
+    ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+
     /* Initialize the shared context */
     mpd_init(php_decimal_context(), PHP_DECIMAL_DEFAULT_PRECISION);
 
     /* Set default rounding */
     mpd_qsettraps(php_decimal_context(), PHP_DECIMAL_TRAPS);
     mpd_qsetround(php_decimal_context(), PHP_DECIMAL_DEFAULT_ROUNDING);
-
-#if defined(COMPILE_DL_DECIMAL) && defined(ZTS)
-    ZEND_TSRMLS_CACHE_UPDATE();
-#endif
 
     return SUCCESS;
 }
