@@ -10,10 +10,10 @@
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2019-01-24</date>
+    <date>2019-02-07</date>
     <time>10:05:05</time>
     <version>
-        <release>1.1.1</release>
+        <release>1.1.2</release>
         <api>1.1.0</api>
     </version>
     <stability>
@@ -22,7 +22,7 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        Fix "signum" returning 1 for zero, instead of 0.
+        Fix incompatibility with pthreads. #12 @krakjoe
     </notes>
     <contents>
         <dir name="/">

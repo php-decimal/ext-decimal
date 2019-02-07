@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](http://semver.org/).
 
+## [1.1.2] - 2019-02-07
+- Fix pthreads incompatibility. #12
+
 ## [1.1.1] - 2019-01-24
 - Fix `signum` returning 1 for zero, instead of 0. #9
 

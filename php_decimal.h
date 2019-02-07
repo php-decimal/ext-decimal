@@ -49,7 +49,7 @@
 #include "ext/spl/spl_exceptions.h"
 #include "mpdecimal.h"
 
-#define PHP_DECIMAL_VERSION "1.1.1"
+#define PHP_DECIMAL_VERSION "1.1.2"
 
 #define PHP_DECIMAL_EXTNAME "decimal"
 
