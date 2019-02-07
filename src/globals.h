@@ -61,4 +61,9 @@ ZEND_EXTERN_MODULE_GLOBALS(decimal)
  */
 void php_decimal_init_globals(zend_decimal_globals *g);
 
+/**
+ *
+ */
+void php_decimal_init_shared_contexts();
+
 #endif

@@ -107,6 +107,13 @@ PHP_RINIT_FUNCTION(decimal)
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 
+    /**
+     * Shared contexts must be initialized per request, not process (MINIT).
+     *
+     * See: https://github.com/php-decimal/ext-decimal/issues/12
+     */
+    php_decimal_init_shared_contexts();
+
     return SUCCESS;
 }
 

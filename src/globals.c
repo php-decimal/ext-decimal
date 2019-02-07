@@ -35,7 +35,10 @@ ZEND_DECLARE_MODULE_GLOBALS(decimal)
 void php_decimal_init_globals(zend_decimal_globals *g)
 {
     memset(g, 0, sizeof(zend_decimal_globals));
+}
 
+void php_decimal_init_shared_contexts()
+{
     /* Initialize the default shared context (and min alloc) */
     mpd_init(SHARED_CONTEXT, PHP_DECIMAL_DEFAULT_PREC);
     mpd_qsettraps(SHARED_CONTEXT, PHP_DECIMAL_CONTEXT_TRAPS);
