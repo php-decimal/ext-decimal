@@ -36,6 +36,11 @@ zend_class_entry *php_decimal_ce;
  */
 zend_object_handlers php_decimal_handlers;
 
+/*
+* Truly global context
+*/
+mpd_context_t php_decimal_ctx;
+
 
 /******************************************************************************/
 /*                          ERRORS AND DEBUGGING                              */
@@ -252,7 +257,7 @@ static void php_decimal_mpd_traphandler(mpd_context_t *ctx)
  */
 static zend_always_inline mpd_context_t *php_decimal_context()
 {
-    return &DECIMAL_G(ctx);
+    return &php_decimal_ctx;
 }
 
 /**
@@ -2592,6 +2597,13 @@ PHP_MINIT_FUNCTION(decimal)
     /* */
     mpd_traphandler = php_decimal_mpd_traphandler;
 
+    /* Initialize the shared context */
+    mpd_init(php_decimal_context(), PHP_DECIMAL_DEFAULT_PRECISION);
+
+    /* Set default rounding */
+    mpd_qsettraps(php_decimal_context(), PHP_DECIMAL_TRAPS);
+    mpd_qsetround(php_decimal_context(), PHP_DECIMAL_DEFAULT_ROUNDING);
+
     return SUCCESS;
 }
 
@@ -2611,13 +2623,6 @@ PHP_RINIT_FUNCTION(decimal)
 #if defined(COMPILE_DL_DECIMAL) && defined(ZTS)
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
-
-    /* Initialize the shared context */
-    mpd_init(php_decimal_context(), PHP_DECIMAL_DEFAULT_PRECISION);
-
-    /* Set default rounding */
-    mpd_qsettraps(php_decimal_context(), PHP_DECIMAL_TRAPS);
-    mpd_qsetround(php_decimal_context(), PHP_DECIMAL_DEFAULT_ROUNDING);
 
     return SUCCESS;
 }
