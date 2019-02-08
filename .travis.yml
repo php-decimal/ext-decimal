@@ -5,12 +5,21 @@ php:
   - 7.1
   - 7.2
   - 7.3
+  - 7.4
   - nightly
 
 env:
   matrix:
     - ENABLE_OPCACHE=1
     - ENABLE_OPCACHE=0
+
+matrix:
+  allow_failures:
+    - php: nightly
+      env: ENABLE_OPCACHE=1
+    - php: nightly
+      env: ENABLE_OPCACHE=0
+
 
 before_install:
   - sudo apt-get update
