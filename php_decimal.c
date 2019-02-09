@@ -80,6 +80,9 @@ PHP_MINIT_FUNCTION(decimal)
     php_decimal_register_decimal_class();
     php_decimal_register_rational_class();
 
+    /* Set guaranteed minimum number of coefficient words based on default prec. */
+    mpd_setminalloc(2 * ((PHP_DECIMAL_DEFAULT_PREC + MPD_RDIGITS - 1) / MPD_RDIGITS));
+
     /* Set custom memory allocation functions */
     mpd_callocfunc  = php_decimal_mpd_calloc;
     mpd_mallocfunc  = php_decimal_mpd_malloc;
@@ -107,12 +110,7 @@ PHP_RINIT_FUNCTION(decimal)
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 
-    /**
-     * Shared contexts must be initialized per request, not process (MINIT).
-     *
-     * See: https://github.com/php-decimal/ext-decimal/issues/12
-     */
-    php_decimal_init_shared_contexts();
+    php_decimal_init_context();
 
     return SUCCESS;
 }

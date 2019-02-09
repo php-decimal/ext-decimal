@@ -37,14 +37,14 @@ void php_decimal_init_globals(zend_decimal_globals *g)
     memset(g, 0, sizeof(zend_decimal_globals));
 }
 
-void php_decimal_init_shared_contexts()
+void php_decimal_init_context()
 {
-    /* Initialize the default shared context (and min alloc) */
-    mpd_init(SHARED_CONTEXT, PHP_DECIMAL_DEFAULT_PREC);
+    /* Initialize the default shared context. */
+    mpd_defaultcontext(SHARED_CONTEXT);
     mpd_qsettraps(SHARED_CONTEXT, PHP_DECIMAL_CONTEXT_TRAPS);
     mpd_qsetround(SHARED_CONTEXT, PHP_DECIMAL_CONTEXT_ROUNDING);
 
-    /* Initialize the maximum precision context (for rationals) */
+    /* Initialize the maximum precision context (for rational) */
     mpd_maxcontext(MAX_CONTEXT);
     mpd_qsettraps(MAX_CONTEXT, PHP_DECIMAL_CONTEXT_TRAPS);
     mpd_qsetround(MAX_CONTEXT, PHP_DECIMAL_CONTEXT_ROUNDING);

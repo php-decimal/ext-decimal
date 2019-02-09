@@ -31,12 +31,12 @@
 #include "limits.h"
 
 /**
- *
+ * Default precision.
  */
 #define PHP_DECIMAL_DEFAULT_PREC  34
 
 /**
- *
+ * Rounding applied to arithmetic, rather than rounding functions.
  */
 #define PHP_DECIMAL_CONTEXT_ROUNDING  MPD_ROUND_HALF_EVEN
 
@@ -70,6 +70,9 @@
     SHARED_CONTEXT->round = _prev; \
 } while(0)
 
+/**
+ * Checks whether a given precision is valid.
+ */
 zend_bool php_decimal_validate_prec(const zend_long prec);
 
 #endif
