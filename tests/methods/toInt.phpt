@@ -72,6 +72,9 @@ if ((string) $number !== "2.5") {
 
 ?>
 --EXPECT--
+RuntimeException: Converting NaN or Inf to integer is not defined
+RuntimeException: Converting NaN or Inf to integer is not defined
+RuntimeException: Converting NaN or Inf to integer is not defined
 OverflowException: Integer overflow
 TypeError: Decimal\Decimal::__construct() expected parameter 1 to be a string, integer, or decimal, float given
 TypeError: Decimal\Decimal::__construct() expected parameter 1 to be a string, integer, or decimal, float given

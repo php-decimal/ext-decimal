@@ -23,9 +23,15 @@ var_dump(decimal("1234.5678E-9")->signum());
 var_dump(decimal("-1234.5678E+9")->signum());
 var_dump(decimal("-1234.5678E-9")->signum());
 
-var_dump(decimal( "NAN")->signum());
 var_dump(decimal( "INF")->signum());
 var_dump(decimal("-INF")->signum());
+
+try {
+    decimal("NAN")->signum();
+} catch (RuntimeException $e) {
+    printf("%s\n", $e->getMessage());
+}
+
 ?>
 --EXPECT--
 int(0)
@@ -36,5 +42,5 @@ int(1)
 int(-1)
 int(-1)
 int(1)
-int(1)
 int(-1)
+Sign of NaN is not defined

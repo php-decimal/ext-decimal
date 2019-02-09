@@ -50,10 +50,6 @@ $tests = [
     [(int) decimal(PHP_INT_MAX),        PHP_INT_MAX],
     [(int) decimal(PHP_INT_MIN),        PHP_INT_MIN],
 
-    [(int) decimal( NAN),               0],
-    [(int) decimal( INF),               0],
-    [(int) decimal(-INF),               0],
-
     /**
      * FLOAT
      */
@@ -92,23 +88,44 @@ foreach ($tests as $test) {
 try {
     (int) decimal("1E+1000");
 } catch (OverflowException $e) {
-    printf("%s\n", $e->getMessage());
+    printf("A %s\n", $e->getMessage());
 }
 
 try {
     (float) decimal("1E-1000");
 } catch (UnderflowException $e) {
-    printf("%s\n", $e->getMessage());
+    printf("B %s\n", $e->getMessage());
 }
 
 try {
     (float) decimal("-1E-1000");
 } catch (UnderflowException $e) {
-    printf("%s\n", $e->getMessage());
+    printf("C %s\n", $e->getMessage());
+}
+
+try {
+    (int) decimal(NAN);
+} catch (RuntimeException $e) {
+    printf("D %s\n", $e->getMessage());
+}
+
+try {
+    (int) decimal(INF);
+} catch (RuntimeException $e) {
+    printf("E %s\n", $e->getMessage());
+}
+
+try {
+    (int) decimal(-INF);
+} catch (RuntimeException $e) {
+    printf("F %s\n", $e->getMessage());
 }
 
 ?>
 --EXPECT--
-Integer overflow
-Floating point underflow
-Floating point underflow
+A Integer overflow
+B Floating point underflow
+C Floating point underflow
+D Converting NaN or Inf to integer is not defined
+E Converting NaN or Inf to integer is not defined
+F Converting NaN or Inf to integer is not defined

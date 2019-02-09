@@ -212,6 +212,22 @@ static void php_decimal_integer_overflow()
 }
 
 /**
+ * Called when NaN or Inf is converted to integer.
+ */
+void php_decimal_integer_from_special_is_not_defined()
+{
+    zend_throw_exception(spl_ce_RuntimeException, "Converting NaN or Inf to integer is not defined", 0);
+}
+
+/**
+ * Called when attempting to query the signum of NaN.
+ */
+void php_decimal_sign_of_nan_is_not_defined()
+{
+    zend_throw_exception(spl_ce_RuntimeException, "Sign of NaN is not defined", 0);
+}
+
+/**
  * Called when __construct is called directly on a decimal object.
  */
 static void php_decimal_constructor_already_called()
@@ -777,8 +793,9 @@ static zend_long php_decimal_to_long(php_decimal_t *obj)
     uint32_t  status = 0;
     zend_long result = 0;
 
-    /* This matches PHP's behaviour. */
+    /* PHP converts to zero but that does not make sense and could hide bugs. */
     if (UNEXPECTED(mpd_isspecial(mpd))) {
+        php_decimal_integer_from_special_is_not_defined();
         return 0;
     }
 
@@ -882,6 +899,16 @@ static zend_string *php_decimal_format(php_decimal_t *obj, zend_long places, zen
 /******************************************************************************/
 /*                                OPERATIONS                                  */
 /******************************************************************************/
+
+static int php_decimal_signum(const mpd_t *mpd)
+{
+    if (UNEXPECTED(mpd_isnan(mpd))) {
+        php_decimal_sign_of_nan_is_not_defined();
+        return 0;
+    }
+
+    return mpd_iszero(mpd) ? 0 : mpd_arith_sign(mpd);
+}
 
 /**
  * Sets the result of res to op1 + op2, using the precision of res.
@@ -2086,7 +2113,7 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(signum)
 {
     PHP_DECIMAL_PARAMS_PARSE_NONE();
-    RETURN_LONG(mpd_iszero(THIS_MPD()) ? 0 : mpd_arith_sign(THIS_MPD()));
+    RETURN_LONG(php_decimal_signum(THIS_MPD()));
 }
 
 /**
