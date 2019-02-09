@@ -279,6 +279,7 @@ ZEND_RSHUTDOWN_FUNCTION(decimal);
 ZEND_MINFO_FUNCTION(decimal);
 
 ZEND_BEGIN_MODULE_GLOBALS(decimal)
+mpd_context_t ctx;
 mpd_t *pi;
 ZEND_END_MODULE_GLOBALS(decimal)
 

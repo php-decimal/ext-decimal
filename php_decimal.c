@@ -36,11 +36,6 @@ zend_class_entry *php_decimal_ce;
  */
 zend_object_handlers php_decimal_handlers;
 
-/*
-* Truly global context
-*/
-mpd_context_t php_decimal_ctx;
-
 
 /******************************************************************************/
 /*                          ERRORS AND DEBUGGING                              */
@@ -257,7 +252,7 @@ static void php_decimal_mpd_traphandler(mpd_context_t *ctx)
  */
 static zend_always_inline mpd_context_t *php_decimal_context()
 {
-    return &php_decimal_ctx;
+    return &DECIMAL_G(ctx);
 }
 
 /**
