@@ -10,11 +10,11 @@
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2019-02-07</date>
+    <date>2019-02-09</date>
     <time>10:05:05</time>
     <version>
-        <release>1.1.2</release>
-        <api>1.1.0</api>
+        <release>1.2.0</release>
+        <api>1.2.0</api>
     </version>
     <stability>
         <release>stable</release>
@@ -22,7 +22,9 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        Fix incompatibility with pthreads. #12 @krakjoe
+        - Change signum of NAN returning 1, now throws RuntimeException. #10
+        - Change toInt of NAN and INF returning 0, now throws RuntimeException. #11
+        - Fix pthreads incompatibility (properly). #12
     </notes>
     <contents>
         <dir name="/">

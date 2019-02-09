@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](http://semver.org/).
 
+## [1.2.0] - 2019-02-09
+- Change signum of NAN returning 1, now throws RuntimeException. #10
+- Change toInt of NAN and INF returning 0, now throws RuntimeException. #11
+- Fix pthreads incompatibility (properly). #12
+
 ## [1.1.2] - 2019-02-07
 - Fix pthreads incompatibility. #12
 
