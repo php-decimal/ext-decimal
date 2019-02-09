@@ -87,8 +87,6 @@ PHP_MINIT_FUNCTION(decimal)
     mpd_free        = php_decimal_mpd_free;
     mpd_traphandler = php_decimal_mpd_traphandler;
 
-    php_decimal_init_contexts();
-
     return SUCCESS;
 }
 
@@ -108,6 +106,13 @@ PHP_RINIT_FUNCTION(decimal)
 #if defined(COMPILE_DL_DECIMAL) && defined(ZTS)
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
+
+    /**
+     * Shared contexts must be initialized per request, not process (MINIT).
+     *
+     * See: https://github.com/php-decimal/ext-decimal/issues/12
+     */
+    php_decimal_init_shared_contexts();
 
     return SUCCESS;
 }

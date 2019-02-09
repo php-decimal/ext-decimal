@@ -31,24 +31,24 @@
     #define DECIMAL_GLOBALS(v) (decimal_globals.v)
 #endif
 
-extern mpd_context_t php_decimal_ctx;
-extern mpd_context_t php_decimal_max;
 
 /**
  * The global, shared mpd context.
  */
-#define SHARED_CONTEXT (&php_decimal_ctx)
+#define SHARED_CONTEXT (&DECIMAL_GLOBALS(ctx))
 
 /**
  * The global, max mpd context.
  */
-#define MAX_CONTEXT (&php_decimal_max)
+#define MAX_CONTEXT (&DECIMAL_GLOBALS(max))
 
 /**
  *
  */
 ZEND_BEGIN_MODULE_GLOBALS(decimal)
-    zval zero;
+mpd_context_t ctx;
+mpd_context_t max;
+zval          zero;
 ZEND_END_MODULE_GLOBALS(decimal)
 
 /**
@@ -64,6 +64,6 @@ void php_decimal_init_globals(zend_decimal_globals *g);
 /**
  *
  */
-void php_decimal_init_contexts();
+void php_decimal_init_shared_contexts();
 
 #endif
