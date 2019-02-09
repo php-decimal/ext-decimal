@@ -98,7 +98,7 @@ void php_decimal_integer_overflow();
 /**
  * Called when NaN or Inf is converted to integer.
  */
-void php_decimal_integer_from_special_is_undefined();
+void php_decimal_integer_from_special_is_not_defined();
 
 /**
  * Called when attempting to query the signum of NaN.

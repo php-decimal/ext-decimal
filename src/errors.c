@@ -106,7 +106,7 @@ void php_decimal_integer_overflow()
     zend_throw_exception(spl_ce_OverflowException, "Integer overflow", 0);
 }
 
-void php_decimal_integer_from_special_is_undefined()
+void php_decimal_integer_from_special_is_not_defined()
 {
     zend_throw_exception(spl_ce_RuntimeException, "Converting NaN or Inf to integer is not defined", 0);
 }

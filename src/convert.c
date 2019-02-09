@@ -183,7 +183,7 @@ zend_long php_decimal_to_long(const mpd_t *mpd)
 
     /* PHP converts to zero but that does not make sense and could hide bugs. */
     if (UNEXPECTED(mpd_isspecial(mpd))) {
-        php_decimal_integer_from_special_is_undefined();
+        php_decimal_integer_from_special_is_not_defined();
         return 0;
     }
 
@@ -334,7 +334,7 @@ zend_long php_decimal_rational_to_long(const php_rational_t *obj)
 
     /* PHP converts to zero but that does not make sense and could hide bugs. */
     if (UNEXPECTED(mpd_isspecial(num))) {
-        php_decimal_integer_from_special_is_undefined();
+        php_decimal_integer_from_special_is_not_defined();
         return 0;
 
     } else {
