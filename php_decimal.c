@@ -2588,21 +2588,15 @@ PHP_MINIT_FUNCTION(decimal)
 
     ZEND_INIT_MODULE_GLOBALS(decimal, php_decimal_init_globals, NULL);
 
-    /* Set custom memory allocation functions */
+    /* Set guaranteed minimum number of coefficient words based on default prec. */
+    mpd_setminalloc(2 * ((PHP_DECIMAL_DEFAULT_PRECISION + MPD_RDIGITS - 1) / MPD_RDIGITS));
+
+    /* Set custom memory allocation and trap handler functions. */
     mpd_callocfunc  = php_decimal_mpd_calloc;
     mpd_mallocfunc  = php_decimal_mpd_malloc;
     mpd_reallocfunc = php_decimal_mpd_realloc;
     mpd_free        = php_decimal_mpd_free;
-
-    /* */
     mpd_traphandler = php_decimal_mpd_traphandler;
-
-    /* Initialize the shared context */
-    mpd_init(php_decimal_context(), PHP_DECIMAL_DEFAULT_PRECISION);
-
-    /* Set default rounding */
-    mpd_qsettraps(php_decimal_context(), PHP_DECIMAL_TRAPS);
-    mpd_qsetround(php_decimal_context(), PHP_DECIMAL_DEFAULT_ROUNDING);
 
     return SUCCESS;
 }
@@ -2623,6 +2617,13 @@ PHP_RINIT_FUNCTION(decimal)
 #if defined(COMPILE_DL_DECIMAL) && defined(ZTS)
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
+
+    /* Initialize the shared context */
+    mpd_defaultcontext(php_decimal_context());
+
+    /* Set default rounding */
+    mpd_qsettraps(php_decimal_context(), PHP_DECIMAL_TRAPS);
+    mpd_qsetround(php_decimal_context(), PHP_DECIMAL_DEFAULT_ROUNDING);
 
     return SUCCESS;
 }
