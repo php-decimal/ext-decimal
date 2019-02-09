@@ -106,6 +106,16 @@ void php_decimal_integer_overflow()
     zend_throw_exception(spl_ce_OverflowException, "Integer overflow", 0);
 }
 
+void php_decimal_integer_from_special_is_undefined()
+{
+    zend_throw_exception(spl_ce_RuntimeException, "Converting NaN or Inf to integer is not defined", 0);
+}
+
+void php_decimal_sign_of_nan_is_not_defined()
+{
+    zend_throw_exception(spl_ce_RuntimeException, "Sign of NaN is not defined", 0);
+}
+
 void php_decimal_operator_not_supported()
 {
     zend_throw_exception(zend_ce_arithmetic_error, "Operator not supported by decimal numbers", 0);

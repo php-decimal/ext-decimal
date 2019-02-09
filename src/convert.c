@@ -181,8 +181,9 @@ zend_long php_decimal_to_long(const mpd_t *mpd)
     uint32_t  status = 0;
     zend_long result = 0;
 
-    /* This matches PHP's behaviour. */
+    /* PHP converts to zero but that does not make sense and could hide bugs. */
     if (UNEXPECTED(mpd_isspecial(mpd))) {
+        php_decimal_integer_from_special_is_undefined();
         return 0;
     }
 
@@ -331,8 +332,9 @@ zend_long php_decimal_rational_to_long(const php_rational_t *obj)
     const mpd_t *num = PHP_RATIONAL_NUM(obj);
     const mpd_t *den = PHP_RATIONAL_DEN(obj);
 
-    /* This matches PHP's behaviour. */
+    /* PHP converts to zero but that does not make sense and could hide bugs. */
     if (UNEXPECTED(mpd_isspecial(num))) {
+        php_decimal_integer_from_special_is_undefined();
         return 0;
 
     } else {

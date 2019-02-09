@@ -47,7 +47,7 @@ foreach ($tests as $test) {
 
     try {
         $result = Decimal::valueOf($number)->toInt();
-    } catch (\OverflowException $e) {
+    } catch (\Exception $e) {
         printf("%s: %s\n", get_class($e), $e->getMessage());
         continue;
     }
@@ -67,6 +67,9 @@ if ((string) $number !== "2.5") {
 
 ?>
 --EXPECT--
+RuntimeException: Converting NaN or Inf to integer is not defined
+RuntimeException: Converting NaN or Inf to integer is not defined
+RuntimeException: Converting NaN or Inf to integer is not defined
 OverflowException: Integer overflow
 OverflowException: Integer overflow
 OverflowException: Integer overflow

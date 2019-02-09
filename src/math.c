@@ -29,7 +29,7 @@
 #include "math.h"
 
 /**
- *
+ * Alias for consistency.
  */
 #define mpd_negate mpd_qcopy_negate
 
@@ -38,10 +38,15 @@
 /*                                 DECIMAL                                    */
 /******************************************************************************/
 
-// TODO: Check for unsafe cases where res is used as tmp.
+// TODO: Check for unsafe cases where res is used as tmp (res might be op1)
 
 int php_decimal_signum(const mpd_t *mpd)
 {
+    if (UNEXPECTED(mpd_isnan(mpd))) {
+        php_decimal_sign_of_nan_is_not_defined();
+        return 0;
+    }
+
     return mpd_iszero(mpd) ? 0 : mpd_arith_sign(mpd);
 }
 

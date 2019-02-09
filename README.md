@@ -47,3 +47,4 @@ TODO:
 - Comparison and operations between builtins and Number implementations.
 - Make sure that every file has a license doc comment.
 - Make sure that every file is included in the package.xml info.
+- Consider constants for ZERO, ONE, TEN, PI etc.

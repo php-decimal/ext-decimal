@@ -96,6 +96,16 @@ void php_decimal_floating_point_underflow();
 void php_decimal_integer_overflow();
 
 /**
+ * Called when NaN or Inf is converted to integer.
+ */
+void php_decimal_integer_from_special_is_undefined();
+
+/**
+ * Called when attempting to query the signum of NaN.
+ */
+void php_decimal_sign_of_nan_is_not_defined();
+
+/**
  * Called when an operation is attempted using an unsupported operator, like "|".
  */
 void php_decimal_operator_not_supported();
