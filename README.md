@@ -48,3 +48,4 @@ TODO:
 - Make sure that every file has a license doc comment.
 - Make sure that every file is included in the package.xml info.
 - Consider constants for ZERO, ONE, TEN, PI etc.
+- Support float? :( Because opcache converts numeric strings to float.
