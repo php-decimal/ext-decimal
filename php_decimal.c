@@ -58,6 +58,28 @@ static void php_decimal_mpd_free(void *ptr)
 }
 
 /**
+ * The second Opcache pass will convert numeric string constants to float,
+ * so statements like `$decimal * "0.75"` will throw because floats are not
+ * supported. Otherwise, this conversion will be transparent which means you
+ * are using float internally when your code uses a string.
+ *
+ * Disabling it gives us guaranteed consistency at a small performance cost.
+ */
+static void php_decimal_disable_opcache_pass2()
+{
+    zend_long level = INI_INT("opcache.optimization_level");
+
+    if (level) {
+        zend_string *key = zend_string_init(ZEND_STRL("opcache.optimization_level"), 1);
+        zend_string *val = strpprintf(0, "0x%08X", (unsigned int) (level & ~2));
+
+        zend_alter_ini_entry(key, val, ZEND_INI_SYSTEM, ZEND_INI_STAGE_ACTIVATE);
+        zend_string_release(key);
+        zend_string_release(val);
+    }
+}
+
+/**
  * Module information displayed by phpinfo()
  */
 PHP_MINFO_FUNCTION(decimal)
@@ -110,8 +132,8 @@ PHP_RINIT_FUNCTION(decimal)
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 
+    php_decimal_disable_opcache_pass2();
     php_decimal_init_context();
-
     return SUCCESS;
 }
 

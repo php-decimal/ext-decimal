@@ -82,21 +82,22 @@ php_decimal_success_t php_decimal_set_string(mpd_t *mpd, zend_string *str)
     return SUCCESS;
 }
 
-
 /**
  * Sets an mpd to a given double value. Will only be successful if the double is
  * a special value, ie INF, -INF and NAN.
  */
 php_decimal_success_t php_decimal_set_special(mpd_t *res, double dval)
 {
-    if (zend_isinf(dval)) {
-        mpd_set_infinity(res);
-        mpd_set_sign(res, dval > 0 ? MPD_POS : MPD_NEG);
+    /* NAN */
+    if (zend_isnan(dval)) {
+        mpd_set_qnan(res);
         return SUCCESS;
     }
 
-    if (zend_isnan(dval)) {
-        mpd_set_qnan(res);
+    /* INF, -INF */
+    if (zend_isinf(dval)) {
+        mpd_set_infinity(res);
+        mpd_set_sign(res, dval > 0 ? MPD_POS : MPD_NEG);
         return SUCCESS;
     }
 
@@ -110,16 +111,20 @@ php_decimal_success_t php_decimal_set_special(mpd_t *res, double dval)
  */
 void php_decimal_set_double(mpd_t *res, double dval)
 {
+    zval tmp;
     zend_string *str;
 
-    zval tmp;
+    /**
+     * Write the double to a stack zval, then parse its string value. This
+     * makes sure that we stay consistent with string casting, at the cost
+     * of a slower conversion.
+     */
     ZVAL_DOUBLE(&tmp, dval);
-
     str = zval_get_string(&tmp);
     php_decimal_set_string(res, str);
+
     zend_string_free(str);
 }
-
 
 /**
  * Sets an mpd to a given long value.
@@ -147,14 +152,11 @@ double php_decimal_to_double(const mpd_t *mpd)
         if (mpd_isnan(mpd)) {
             return php_get_nan();
         }
-        /* Infinity */
+
+        /* INF, -INF */
         return mpd_ispositive(mpd)
             ? +php_get_inf()
             : -php_get_inf();
-
-    /* Priority path for zero. */
-    } else if (mpd_iszerocoeff(mpd)) {
-        return 0;
 
     /* Convert the decimal to a string first. */
     } else {
@@ -211,6 +213,8 @@ zend_long php_decimal_to_long(const mpd_t *mpd)
 /**
  * Special numbers should use the 3-letter uppercase representation. This macro
  * checks if mpd is special, and returns a zend_string immediately if it is.
+ *
+ * TODO: Could we make these persistent, so that we don't allocate every time?
  */
 static inline zend_string *php_decimal_to_special_string(const mpd_t *mpd)
 {
@@ -229,15 +233,15 @@ zend_string *php_decimal_to_string(const mpd_t *mpd)
     zend_string   *res;
     mpd_ssize_t    len;
 
-    if (mpd_isspecial(mpd)) {
+    if (UNEXPECTED(mpd_isspecial(mpd))) {
         return php_decimal_to_special_string(mpd);
     }
 
-    /* */
+    /* All exponents beyond the threshold can use scientific notation. */
     if (abs(mpd->exp) >= PHP_DECIMAL_EXP_THRESHOLD) {
         len = mpd_to_sci_size(&str, mpd, PHP_DECIMAL_EXP_STR_CASE);
 
-    /* */
+    /* Otherwise, force fixed output. This avoids things like 0+E0 */
     } else {
         str = mpd_format(mpd, "-F", MAX_CONTEXT);
         len = strlen(str);
