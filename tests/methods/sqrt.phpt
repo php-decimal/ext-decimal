@@ -28,7 +28,7 @@ $tests = [
 
     [decimal( "NAN"),       "NAN",      28],
     [decimal( "INF"),       "INF",      28],
-    [decimal("-INF"),      "-INF",      28],
+    [decimal("-INF"),       "NAN",      28],
 ];
 
 foreach ($tests as $test) {

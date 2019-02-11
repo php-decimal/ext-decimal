@@ -1090,13 +1090,13 @@ static void php_decimal_sqrt(php_decimal_t *res, mpd_t *op1)
 {
     uint32_t status = 0;
 
-    if (mpd_isspecial(op1)) {
-        mpd_qcopy(PHP_DECIMAL_MPD(res), op1, &status);
+    if (mpd_isnegative(op1)) {
+        php_decimal_set_nan(res);
         return;
     }
 
-    if (mpd_isnegative(op1)) {
-        php_decimal_set_nan(res);
+    if (mpd_isspecial(op1)) {
+        mpd_qcopy(PHP_DECIMAL_MPD(res), op1, &status);
         return;
     }
 
