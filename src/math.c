@@ -220,13 +220,13 @@ void php_decimal_sqrt(mpd_t *res, const mpd_t *op1, zend_long prec)
 {
     uint32_t status = 0;
 
-    if (UNEXPECTED(mpd_isspecial(op1))) {
-        mpd_qcopy(res, op1, &status);
+    if (mpd_isnegative(op1)) {
+        php_decimal_set_nan(res);
         return;
     }
 
-    if (mpd_isnegative(op1)) {
-        php_decimal_set_nan(res);
+    if (UNEXPECTED(mpd_isspecial(op1))) {
+        mpd_qcopy(res, op1, &status);
         return;
     }
 

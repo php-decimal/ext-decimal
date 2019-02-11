@@ -28,7 +28,7 @@ $tests = [
 
     [Decimal::valueOf( "NAN"),       "NAN",      Decimal::DEFAULT_PRECISION],
     [Decimal::valueOf( "INF"),       "INF",      Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf("-INF"),      "-INF",      Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-INF"),       "NAN",      Decimal::DEFAULT_PRECISION],
 ];
 
 foreach ($tests as $test) {
