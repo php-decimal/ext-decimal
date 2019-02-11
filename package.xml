@@ -10,11 +10,11 @@
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2019-02-09</date>
+    <date>2019-02-11</date>
     <time>10:05:05</time>
     <version>
-        <release>1.2.0</release>
-        <api>1.2.0</api>
+        <release>1.3.0</release>
+        <api>1.3.0</api>
     </version>
     <stability>
         <release>stable</release>
@@ -22,9 +22,8 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        - Change signum of NAN returning 1, now throws RuntimeException. #10
-        - Change toInt of NAN and INF returning 0, now throws RuntimeException. #11
-        - Fix pthreads incompatibility (properly). #12
+        - Fixed sqrt of -INF returning -INF rather than NAN. #13
+        - Disable opcache pass 2 due to numeric string to float casts. Thanks @krakjoe
     </notes>
     <contents>
         <dir name="/">

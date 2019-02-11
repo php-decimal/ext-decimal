@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](http://semver.org/).
 
+## [1.3.0] - 2019-02-11
+- Fixed sqrt of -INF returning -INF rather than NAN. #13
+- Disable opcache pass 2 due to numeric string to float casts. Thanks @krakjoe
+
 ## [1.2.0] - 2019-02-09
 - Change signum of NAN returning 1, now throws RuntimeException. #10
 - Change toInt of NAN and INF returning 0, now throws RuntimeException. #11
