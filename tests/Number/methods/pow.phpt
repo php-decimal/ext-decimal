@@ -1,9 +1,5 @@
 --TEST--
 Number::pow
---SKIPIF--
-<?php
-if (!extension_loaded("decimal")) echo "skip";
-?>
 --FILE--
 <?php
 require __DIR__ . "/../helpers/Number.php";

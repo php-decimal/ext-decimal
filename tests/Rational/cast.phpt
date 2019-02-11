@@ -1,9 +1,5 @@
 --TEST--
 Rational cast to string, bool, int, float
---SKIPIF--
-<?php
-if (!extension_loaded("decimal")) echo "skip";
-?>
 --FILE--
 <?php
 use Decimal\Rational;

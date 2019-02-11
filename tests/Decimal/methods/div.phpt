@@ -1,9 +1,5 @@
 --TEST--
 Decimal::div
---SKIPIF--
-<?php
-if (!extension_loaded("decimal")) echo "skip";
-?>
 --FILE--
 <?php
 use Decimal\Decimal;

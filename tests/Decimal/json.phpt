@@ -2,8 +2,7 @@
 Decimal json_encode
 --SKIPIF--
 <?php
-if (!extension_loaded("decimal")) echo 'skip';
-if (!extension_loaded("json"))    echo 'skip';
+if (!extension_loaded("json")) echo 'skip';
 ?>
 --FILE--
 <?php
