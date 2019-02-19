@@ -8,7 +8,7 @@ $b = "2";
 /**
  *  This should reuse the decimal created for A as the result.
  */
-$c = \Decimal\Decimal::valueOf($a)->add($b)->sub(0);
+$c = \Decimal\Decimal::valueOf($a, 5)->add($b)->sub(0);
 debug_zval_dump($c);
 // object(Decimal\Decimal)#1 (2) refcount(2){
 //   ["value"]=>
@@ -123,53 +123,53 @@ debug_zval_dump($c);
 
 
 ?>
---EXPECT--
-object(Decimal\Decimal)#1 (2) refcount(2){
+--EXPECTF--
+object(Decimal\Decimal)#%d (2) refcount(2){
   ["value"]=>
   string(1) "3" refcount(1)
   ["precision"]=>
-  int(34)
+  int(5)
 }
-object(Decimal\Decimal)#1 (2) refcount(2){
+object(Decimal\Decimal)#%d (2) refcount(2){
   ["value"]=>
   string(1) "6" refcount(1)
   ["precision"]=>
-  int(34)
+  int(5)
 }
-object(Decimal\Decimal)#2 (2) refcount(2){
+object(Decimal\Decimal)#%d (2) refcount(2){
   ["value"]=>
   string(1) "7" refcount(1)
   ["precision"]=>
-  int(34)
+  int(5)
 }
-object(Decimal\Decimal)#1 (2) refcount(2){
+object(Decimal\Decimal)#%d (2) refcount(2){
   ["value"]=>
   string(2) "14" refcount(1)
   ["precision"]=>
-  int(34)
+  int(5)
 }
-object(Decimal\Decimal)#1 (2) refcount(2){
+object(Decimal\Decimal)#%d (2) refcount(2){
   ["value"]=>
   string(2) "23" refcount(1)
   ["precision"]=>
-  int(34)
+  int(5)
 }
-object(Decimal\Decimal)#2 (2) refcount(2){
+object(Decimal\Decimal)#%d (2) refcount(2){
   ["value"]=>
   string(2) "24" refcount(1)
   ["precision"]=>
-  int(34)
+  int(5)
 }
-object(Decimal\Decimal)#1 (2) refcount(2){
+object(Decimal\Decimal)#%d (2) refcount(2){
   ["value"]=>
   string(2) "48" refcount(1)
   ["precision"]=>
-  int(34)
+  int(5)
 }
 DomainException: Failed to parse string as decimal: "a"
-object(Decimal\Decimal)#1 (2) refcount(2){
+object(Decimal\Decimal)#%d (2) refcount(2){
   ["value"]=>
   string(3) "NAN" refcount(1)
   ["precision"]=>
-  int(34)
+  int(5)
 }
