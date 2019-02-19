@@ -135,7 +135,7 @@ object(Decimal\Rational)#3 (2) {
 Number::toRational
 
 Warning: Decimal arithmetic operand truncated to integer in %s on line 41
-object(Decimal\Rational)#2 (2) {
+object(Decimal\Rational)#3 (2) {
   ["num"]=>
   string(2) "16"
   ["den"]=>

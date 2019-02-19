@@ -127,7 +127,7 @@ object(Decimal\Rational)#3 (2) {
   string(1) "1"
 }
 Number::toRational
-object(Decimal\Rational)#2 (2) {
+object(Decimal\Rational)#3 (2) {
   ["num"]=>
   string(1) "3"
   ["den"]=>

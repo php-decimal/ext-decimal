@@ -314,6 +314,7 @@ failure:
 static php_decimal_success_t php_decimal_rational_do_operation(zend_uchar opcode, zval *result, zval *op1, zval *op2)
 {
     zval op1_copy;
+    php_rational_t *res;
     php_decimal_binary_rop_t op = php_decimal_get_binary_rop(opcode);
 
     /* Unsupported operator - return success to avoid casting. */
@@ -322,23 +323,36 @@ static php_decimal_success_t php_decimal_rational_do_operation(zend_uchar opcode
         return SUCCESS;
     }
 
-    /* This allows for assign syntax, ie. $op1 /= $op2 */
+    /**
+     * Check for assignment, eg. $a += 1
+     *
+     * If we know that we are writing to an object that is not referenced by
+     * anything else, we can mutate that object without the need for an
+     * intermediary. The goal is to avoid unnecessary allocations.
+     *
+     * If either the value we are writing to is unknown or it is referenced by
+     * something else, we have no choice but to allocate a new object.
+     */
     if (op1 == result) {
-        ZVAL_COPY_VALUE(&op1_copy, op1);
-        op1 = &op1_copy;
+        if (EXPECTED(Z_IS_RATIONAL_P(op1)) && Z_REFCOUNT_P(op1) == 1) {
+            res = Z_RATIONAL_P(op1);
+        } else {
+            ZVAL_COPY_VALUE(&op1_copy, op1);
+            op1 = &op1_copy;
+            res = php_rational();
+        }
+    } else {
+        res = php_rational();
     }
 
     /* Attempt operation. */
-    ZVAL_DECIMAL(result, php_rational());
-    php_decimal_do_binary_rop(op, Z_RATIONAL_P(result), op1, op2);
+    ZVAL_DECIMAL(result, res);
+    php_decimal_do_binary_rop(op, res, op1, op2);
 
-    /**
-     * Something went wrong so unset the result, but we don't want the engine to
-     * carry on trying to cast the rational, so we return success.
-     */
+    /* Operation failed - return success to avoid casting. */
     if (UNEXPECTED(EG(exception))) {
-        zval_ptr_dtor(result);
-        ZVAL_UNDEF(result);
+        php_decimal_set_nan(PHP_RATIONAL_NUM(Z_RATIONAL_P(result)));
+        php_decimal_set_one(PHP_RATIONAL_DEN(Z_RATIONAL_P(result)));
         return SUCCESS;
     }
 
@@ -449,6 +463,21 @@ error:
 /*                              PHP CLASS METHODS                             */
 /******************************************************************************/
 
+/**
+ * Determines the rational object to use for the result of an operation.
+ */
+static php_rational_t *php_decimal_get_result_store(zval *obj)
+{
+    /* Create a new decimal if something else relies on this decimal? */
+    if (Z_REFCOUNT_P(obj) > 1) {
+        return php_rational();
+    }
+
+    /* No other reference to $this, so we can re-use it as the result? */
+    Z_ADDREF_P(obj);
+
+    return Z_RATIONAL_P(obj);
+}
 
 /**
  * Parse a rational binary operation (op1 OP op2).
@@ -461,9 +490,7 @@ error:
     PHP_DECIMAL_PARSE_PARAMS_END() \
     { \
         php_rational_t *op1 = THIS_RATIONAL(); \
-        php_rational_t *res = php_rational(); \
-        \
-        ZVAL_RATIONAL(return_value, res); \
+        php_rational_t *res = php_decimal_get_result_store(getThis()); \
         \
         PHP_DECIMAL_TEMP_MPD(a); \
         PHP_DECIMAL_TEMP_MPD(b); \
@@ -475,17 +502,16 @@ error:
         mpd_t *num2 = &a; \
         mpd_t *den2 = &b; \
         \
-        if (php_decimal_parse_num_den(num2, den2, op2) == FAILURE) { \
-            zval_ptr_dtor(return_value); \
-            mpd_del(&a); \
-            mpd_del(&b); \
-            return; \
+        ZVAL_RATIONAL(return_value, res); \
+        \
+        if (EXPECTED(php_decimal_parse_num_den(num2, den2, op2) == SUCCESS)) { \
+            rop(rnum, rden, num1, den1, num2, den2); \
+        } else { \
+            php_decimal_set_nan(rnum); \
+            php_decimal_set_one(rden); \
         } \
-        rop(rnum, rden, num1, den1, num2, den2); \
         mpd_del(&a); \
         mpd_del(&b); \
-        \
-        RETURN_RATIONAL(res); \
     } \
 } while (0)
 
@@ -494,7 +520,7 @@ error:
  */
 #define PHP_DECIMAL_PARSE_UNARY_ROP(op) do { \
     php_rational_t *obj = THIS_RATIONAL(); \
-    php_rational_t *res = php_rational(); \
+    php_rational_t *res = php_decimal_get_result_store(getThis()); \
     \
     mpd_t *rnum = PHP_RATIONAL_NUM(res); \
     mpd_t *rden = PHP_RATIONAL_DEN(res); \

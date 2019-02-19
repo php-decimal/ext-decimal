@@ -3,7 +3,7 @@
     <name>decimal</name>
     <channel>pecl.php.net</channel>
     <summary>Arbitrary precision floating-point decimal</summary>
-    <description>Adds support for correctly-rounded arbitrary precision decimal floating-point arithmetic in PHP 7</description>
+    <description>Correctly-rounded arbitrary precision decimal floating-point arithmetic in PHP 7</description>
     <lead>
         <name>Rudi Theunissen</name>
         <user>rtheunissen</user>
@@ -17,15 +17,17 @@
         <api>2.0.0</api>
     </version>
     <stability>
-        <release>stable</release>
-        <api>stable</api>
+        <release>alpha</release>
+        <api>alpha</api>
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
         - Default decimal precision changed from 28 to 34.
         - Decimal operations now use the **minimum** precision of all operands.
         - Added `Decimal\Rational` implementation for rational numbers (fractions).
-        - Added `Decimal\Number` abstract.
+        - Added `Decimal\Number` abstract class.
+        - Performance improvements, reduced object allocations.
+        - Private constructors, static initializers via `valueOf`.
     </notes>
     <contents>
         <dir name="/">

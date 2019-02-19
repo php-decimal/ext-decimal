@@ -514,12 +514,15 @@ void php_decimal_radd(
 ) {
     uint32_t status = 0;
 
+    PHP_DECIMAL_TEMP_MPD(tmp);
+
     /* a/b + c/d = (a*d + b*c) / (b*d) */
-    mpd_qmul(rden, den1, num2,       MAX_CONTEXT, &status); /* b*c       */
-    mpd_qfma(rnum, num1, den2, rden, MAX_CONTEXT, &status); /* a*d + b*c */
+    mpd_qmul(&tmp, den1, num2,       MAX_CONTEXT, &status); /* b*c       */
+    mpd_qfma(rnum, num1, den2, &tmp, MAX_CONTEXT, &status); /* a*d + b*c */
     mpd_qmul(rden, den1, den2,       MAX_CONTEXT, &status); /* b*d       */
 
     php_decimal_rational_simplify(rnum, rden);
+    mpd_del(&tmp);
 }
 
 void php_decimal_rsub(
@@ -532,13 +535,16 @@ void php_decimal_rsub(
 ) {
     uint32_t status = 0;
 
+    PHP_DECIMAL_TEMP_MPD(tmp);
+
     /* a/b - c/d = (a*d - b*c) / (b*d) */
-    mpd_qmul  (rnum, den1, num2,       MAX_CONTEXT, &status); /* b*c          */
-    mpd_negate(rnum, rnum,                          &status); /*              */
-    mpd_qfma  (rnum, num1, den2, rnum, MAX_CONTEXT, &status); /* a*d - b*c    */
+    mpd_qmul  (&tmp, den1, num2,       MAX_CONTEXT, &status); /* b*c          */
+    mpd_negate(&tmp, &tmp,                          &status); /*              */
+    mpd_qfma  (rnum, num1, den2, &tmp, MAX_CONTEXT, &status); /* a*d - b*c    */
     mpd_qmul  (rden, den1, den2,       MAX_CONTEXT, &status); /* b*d          */
 
     php_decimal_rational_simplify(rnum, rden);
+    mpd_del(&tmp);
 }
 
 void php_decimal_rmul(
@@ -734,10 +740,13 @@ void php_decimal_rshiftl(
 ) {
     uint32_t status = 0;
 
+    PHP_DECIMAL_TEMP_MPD(tmp);
+
      /* We can assume that den2 is 1 - can only shift by integer */
-    mpd_qdivint(rnum, num2, den2, MAX_CONTEXT, &status);
-    mpd_qscaleb(rnum, num1, rnum, MAX_CONTEXT, &status);
+    mpd_qdivint(&tmp, num2, den2, MAX_CONTEXT, &status);
+    mpd_qscaleb(rnum, num1, &tmp, MAX_CONTEXT, &status);
     mpd_qcopy  (rden, den1,                    &status);
+    mpd_del(&tmp);
 
     php_decimal_rational_normalize(rnum, rden);
     php_decimal_rational_simplify(rnum, rden);
@@ -753,11 +762,14 @@ void php_decimal_rshiftr(
 ) {
     uint32_t status = 0;
 
+    PHP_DECIMAL_TEMP_MPD(tmp);
+
     /* We can assume that den2 is 1 - can only shift by integer */
-    mpd_qdivint(rnum, num2, den2, MAX_CONTEXT, &status);
-    mpd_negate (rnum, rnum,                    &status);
-    mpd_qscaleb(rnum, num1, rnum, MAX_CONTEXT, &status);
+    mpd_qdivint(&tmp, num2, den2, MAX_CONTEXT, &status);
+    mpd_negate (&tmp, &tmp,                    &status);
+    mpd_qscaleb(rnum, num1, &tmp, MAX_CONTEXT, &status);
     mpd_qcopy  (rden, den1,                    &status);
+    mpd_del(&tmp);
 
     php_decimal_rational_normalize(rnum, rden);
     php_decimal_rational_simplify(rnum, rden);

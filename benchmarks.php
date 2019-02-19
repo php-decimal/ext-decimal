@@ -80,6 +80,8 @@ function benchmark(string $action, array $calculations)
             echo "time: " . number_format($runtime, 4) . "\t";
             echo "result: " . $result;
         }
+
+        echo "\n";
     }
 }
 
@@ -98,18 +100,18 @@ benchmark("add", [
     DECIMAL => function(array $values): string {
         $result = Decimal::valueOf("0", 100);
         foreach ($values as $value) {
-            $result = $result->add($value);
+            $result += $value;
         }
         return (string) $result;
     },
 
-    // RATIONAL => function(array $values): string {
-    //     $result = Rational::valueOf("0");
-    //     foreach ($values as $value) {
-    //         $result = $result + $value;
-    //     }
-    //     return (string) $result;
-    // },
+    RATIONAL => function(array $values): string {
+        $result = Rational::valueOf("0");
+        foreach ($values as $value) {
+            $result += $value;
+        }
+        return (string) $result;
+    },
 ]);
 
 // /**
@@ -170,31 +172,31 @@ benchmark("add", [
 //     },
 // ]);
 
-// /**
-//  * DIVIDE
-//  */
-// benchmark("div", [
-//     // BC_MATH => function(array $values): string {
-//     //     $result = '1';
-//     //     foreach ($values as $value) {
-//     //         $result = @bcdiv($result, $value, 50);
-//     //     }
-//     //     return (string) $result;
-//     // },
+/**
+ * DIVIDE
+ */
+benchmark("div", [
+    BC_MATH => function(array $values): string {
+        $result = '1';
+        foreach ($values as $value) {
+            $result = @bcdiv($result, $value, 50);
+        }
+        return (string) $result;
+    },
 
-//     // DECIMAL => function(array $values): string {
-//     //     $result = Decimal::valueOf('1', 100);
-//     //     foreach ($values as $value) {
-//     //         $result = $result / $value;
-//     //     }
-//     //     return (string) $result;
-//     // },
+    DECIMAL => function(array $values): string {
+        $result = Decimal::valueOf('1', 100);
+        foreach ($values as $value) {
+            $result /= $value;
+        }
+        return (string) $result;
+    },
 
-//     RATIONAL => function(array $values): string {
-//         $result = Rational::valueOf("1");
-//         foreach ($values as $value) {
-//             $result = $result / $value;
-//         }
-//         return (string) $result;
-//     },
-// ]);
+    RATIONAL => function(array $values): string {
+        $result = Rational::valueOf("1");
+        foreach ($values as $value) {
+            $result /= $value;
+        }
+        return (string) $result;
+    },
+]);

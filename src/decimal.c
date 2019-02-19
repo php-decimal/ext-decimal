@@ -385,22 +385,6 @@ static php_decimal_success_t php_decimal_cast_object(zval *obj, zval *result, in
 }
 
 /**
- * Determines the decimal object to use for the result of an operation.
- */
-static php_decimal_t *php_decimal_get_result_store(zval *obj)
-{
-    /* Create a new decimal if something else relies on this decimal? */
-    if (Z_REFCOUNT_P(obj) > 1) {
-        return php_decimal();
-    }
-
-    /* No other reference to $this, so we can re-use it as the result? */
-    Z_ADDREF_P(obj);
-
-    return Z_DECIMAL_P(obj);
-}
-
-/**
  * Operator overloading.
  *
  * We don't know which of op1 and op2 is a decimal object (if not both).
@@ -425,12 +409,7 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
      * intermediary. The goal is to avoid unnecessary allocations.
      *
      * If either the value we are writing to is unknown or it is referenced by
-     * something else, we have no choice but to allocate a new decimal object.
-     *
-     * TODO: Explain why the zval copy is necessary here. Are we creating a copy
-     *       so that we don't overwrite op1 when we set the result?
-     *
-     * TODO: Apply this to rational and number as well?
+     * something else, we have no choice but to allocate a new object.
      */
     if (op1 == result) {
         if (EXPECTED(Z_IS_DECIMAL_P(op1)) && Z_REFCOUNT_P(op1) == 1) {
@@ -450,12 +429,10 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
 
     /* Operation failed - return success to avoid casting. */
     if (UNEXPECTED(EG(exception))) {
-        zval_ptr_dtor(result);
-        ZVAL_NULL(result);
+        php_decimal_set_nan(PHP_DECIMAL_MPD(res));
         return SUCCESS;
     }
 
-    /* TODO see above: why is the zval copy necessary here? */
     if (op1 == &op1_copy) {
         zval_dtor(op1);
     }
@@ -469,17 +446,34 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
 /******************************************************************************/
 
 /**
+ * Determines the decimal object to use for the result of an operation.
+ */
+static php_decimal_t *php_decimal_get_result_store(zval *obj)
+{
+    /* Create a new decimal if something else relies on this decimal? */
+    if (Z_REFCOUNT_P(obj) > 1) {
+        return php_decimal();
+    }
+
+    /* No other reference to $this, so we can re-use it as the result? */
+    Z_ADDREF_P(obj);
+
+    return Z_DECIMAL_P(obj);
+}
+
+/**
  * Parse a decimal binary operation (op1 OP op2).
  */
 #define PHP_DECIMAL_PARSE_AND_DO_BINARY_OP(binary_op) do { \
     php_decimal_t *res = php_decimal_get_result_store(getThis()); \
+    zval          *op1 = getThis(); \
     zval          *op2 = NULL; \
     \
     PHP_DECIMAL_PARSE_PARAMS(1, 1) \
         Z_PARAM_ZVAL(op2) \
     PHP_DECIMAL_PARSE_PARAMS_END() \
     \
-    php_decimal_do_binary_op(binary_op, res, getThis(), op2); \
+    php_decimal_do_binary_op(binary_op, res, op1, op2); \
     RETURN_DECIMAL(res); \
 } while (0)
 
