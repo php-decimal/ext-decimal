@@ -49,7 +49,7 @@ extern zend_module_entry php_decimal_module_entry;
 
 #define phpext_decimal_ptr &php_decimal_module_entry
 
-#if defined(ZTS) && defined(COMPILE_DL_DS)
+#if defined(ZTS) && defined(COMPILE_DL_DECIMAL)
     ZEND_TSRMLS_CACHE_EXTERN();
 #endif
 
