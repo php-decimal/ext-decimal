@@ -979,7 +979,7 @@ static zend_function_entry rational_methods[] = {
     PHP_DECIMAL_ME_STATIC(Rational, valueOf)
 
     /* */
-    PHP_DECIMAL_ME_EX(Rational, __construct, ZEND_ACC_PRIVATE | ZEND_ACC_CTOR)
+    PHP_DECIMAL_ME_EX(Rational, __construct, ZEND_ACC_PRIVATE)
 
     PHP_DECIMAL_ME(Rational, add)
     PHP_DECIMAL_ME(Rational, sub)
@@ -1048,7 +1048,7 @@ void php_decimal_register_rational_class()
     /**
      *
      */
-    memcpy(&php_decimal_rational_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    memcpy(&php_decimal_rational_handlers, &std_object_handlers, sizeof(zend_object_handlers));
 
     /**
      * No need for an offset because we're casting back and forth between
@@ -1063,8 +1063,8 @@ void php_decimal_register_rational_class()
     php_decimal_rational_handlers.compare          = php_decimal_rational_compare;
     php_decimal_rational_handlers.do_operation     = php_decimal_rational_do_operation;
     php_decimal_rational_handlers.get_debug_info   = php_decimal_rational_get_debug_info;
-    php_decimal_rational_handlers.read_property    = php_decimal_guarded_read_property;
-    php_decimal_rational_handlers.write_property   = php_decimal_guarded_write_property;
-    php_decimal_rational_handlers.has_property     = php_decimal_guarded_has_property;
-    php_decimal_rational_handlers.unset_property   = php_decimal_guarded_unset_property;
+    php_decimal_rational_handlers.read_property    = php_decimal_blocked_read_property;
+    php_decimal_rational_handlers.write_property   = php_decimal_blocked_write_property;
+    php_decimal_rational_handlers.has_property     = php_decimal_blocked_has_property;
+    php_decimal_rational_handlers.unset_property   = php_decimal_blocked_unset_property;
 }

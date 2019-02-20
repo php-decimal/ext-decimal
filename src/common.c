@@ -50,24 +50,31 @@ void php_decimal_release_mpd(mpd_t *mpd)
 /**
  * Object property read - not supported.
  */
-zval *php_decimal_guarded_read_property(zval *object, zval *member, int type, void **cache_slot, zval *rv)
+zval *php_decimal_blocked_read_property(zend_object *zobj, zend_string *name, int type, void **cache_slot, zval *rv)
 {
     php_decimal_object_properties_not_supported();
-    return &EG(uninitialized_zval);
+
+    if (type == BP_VAR_W || type == BP_VAR_RW) {
+        ZVAL_ERROR(rv);
+        return rv;
+    } else {
+        return &EG(uninitialized_zval);
+    }
 }
 
 /**
  *   Object property write - not supported.
  */
-void php_decimal_guarded_write_property(zval *object, zval *member, zval *value, void **cache_slot)
+zval *php_decimal_blocked_write_property(zend_object *zobj, zend_string *name, zval *value, void **cache_slot)
 {
     php_decimal_object_properties_not_supported();
+    return value;
 }
 
 /**
  * Object property isset/empty - not supported.
  */
-int php_decimal_guarded_has_property(zval *object, zval *member, int has_set_exists, void **cache_slot)
+int php_decimal_blocked_has_property(zend_object *zobj, zend_string *name, int has_set_exists, void **cache_slot)
 {
     php_decimal_object_properties_not_supported();
     return 0;
@@ -76,7 +83,16 @@ int php_decimal_guarded_has_property(zval *object, zval *member, int has_set_exi
 /**
  * Object property unset - not supported.
  */
-void php_decimal_guarded_unset_property(zval *object, zval *member, void **cache_slot)
+void php_decimal_blocked_unset_property(zend_object *zobj, zend_string *name, void **cache_slot)
 {
     php_decimal_object_properties_not_supported();
 }
+
+
+
+
+
+
+
+
+

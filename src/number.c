@@ -500,7 +500,7 @@ void php_decimal_register_number_class()
     /**
      *
      */
-    memcpy(&php_decimal_number_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    memcpy(&php_decimal_number_handlers, &std_object_handlers, sizeof(zend_object_handlers));
     php_decimal_number_handlers.do_operation = php_decimal_number_do_operation;
     php_decimal_number_handlers.compare      = php_decimal_number_compare;
     php_decimal_number_handlers.cast_object  = php_decimal_number_cast_object;

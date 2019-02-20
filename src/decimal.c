@@ -1061,7 +1061,7 @@ static zend_function_entry decimal_methods[] = {
     PHP_DECIMAL_ME_STATIC(Decimal, valueOf)
 
     /* */
-    PHP_DECIMAL_ME_EX(Decimal, __construct, ZEND_ACC_PRIVATE | ZEND_ACC_CTOR)
+    PHP_DECIMAL_ME_EX(Decimal, __construct, ZEND_ACC_PRIVATE)
 
     PHP_DECIMAL_ME(Decimal, add)
     PHP_DECIMAL_ME(Decimal, sub)
@@ -1139,7 +1139,7 @@ void php_decimal_register_decimal_class()
     /**
      *
      */
-    memcpy(&php_decimal_handlers, zend_get_std_object_handlers(), sizeof(zend_object_handlers));
+    memcpy(&php_decimal_handlers, &std_object_handlers, sizeof(zend_object_handlers));
 
     /**
      * No need for an offset because we're casting back and forth between
@@ -1154,8 +1154,8 @@ void php_decimal_register_decimal_class()
     php_decimal_handlers.compare          = php_decimal_compare;
     php_decimal_handlers.do_operation     = php_decimal_do_operation;
     php_decimal_handlers.get_debug_info   = php_decimal_get_debug_info;
-    php_decimal_handlers.read_property    = php_decimal_guarded_read_property;
-    php_decimal_handlers.write_property   = php_decimal_guarded_write_property;
-    php_decimal_handlers.has_property     = php_decimal_guarded_has_property;
-    php_decimal_handlers.unset_property   = php_decimal_guarded_unset_property;
+    php_decimal_handlers.read_property    = php_decimal_blocked_read_property;
+    php_decimal_handlers.write_property   = php_decimal_blocked_write_property;
+    php_decimal_handlers.has_property     = php_decimal_blocked_has_property;
+    php_decimal_handlers.unset_property   = php_decimal_blocked_unset_property;
 }
