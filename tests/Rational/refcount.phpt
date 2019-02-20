@@ -123,51 +123,51 @@ debug_zval_dump($c);
 
 
 ?>
---EXPECT--
-object(Decimal\Rational)#1 (2) refcount(2){
+--EXPECTF--
+object(Decimal\Rational)#%d (2) refcount(2){
   ["num"]=>
   string(1) "4" refcount(1)
   ["den"]=>
   string(1) "1" refcount(1)
 }
-object(Decimal\Rational)#1 (2) refcount(2){
+object(Decimal\Rational)#%d (2) refcount(2){
   ["num"]=>
   string(1) "7" refcount(1)
   ["den"]=>
   string(1) "1" refcount(1)
 }
-object(Decimal\Rational)#2 (2) refcount(2){
+object(Decimal\Rational)#%d (2) refcount(2){
   ["num"]=>
   string(1) "8" refcount(1)
   ["den"]=>
   string(1) "1" refcount(1)
 }
-object(Decimal\Rational)#1 (2) refcount(2){
+object(Decimal\Rational)#%d (2) refcount(2){
   ["num"]=>
   string(2) "16" refcount(1)
   ["den"]=>
   string(1) "1" refcount(1)
 }
-object(Decimal\Rational)#1 (2) refcount(2){
+object(Decimal\Rational)#%d (2) refcount(2){
   ["num"]=>
   string(2) "51" refcount(1)
   ["den"]=>
   string(1) "2" refcount(1)
 }
-object(Decimal\Rational)#2 (2) refcount(2){
+object(Decimal\Rational)#%d (2) refcount(2){
   ["num"]=>
   string(2) "53" refcount(1)
   ["den"]=>
   string(1) "2" refcount(1)
 }
-object(Decimal\Rational)#1 (2) refcount(2){
+object(Decimal\Rational)#%d (2) refcount(2){
   ["num"]=>
   string(3) "265" refcount(1)
   ["den"]=>
   string(1) "4" refcount(1)
 }
 DomainException: Failed to parse string as decimal: "a"
-object(Decimal\Rational)#1 (2) refcount(2){
+object(Decimal\Rational)#%d (2) refcount(2){
   ["num"]=>
   string(3) "NAN" refcount(1)
   ["den"]=>
