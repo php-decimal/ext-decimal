@@ -93,8 +93,11 @@ zval *php_decimal_blocked_read_property(zval *obj, zval *prop, int type, void **
 /**
  *
  */
+#if PHP_VERSION_ID >= 70400
 zval *php_decimal_blocked_write_property(zval *obj, zval *prop, zval *value, void **cache_slot);
-
+#else
+void php_decimal_blocked_write_property(zval *obj, zval *prop, zval *value, void **cache_slot);
+#endif
 /**
  *
  */
