@@ -67,12 +67,16 @@ zval *php_decimal_blocked_read_property(zval *obj, zval *prop, int type, void **
  */
 #if PHP_VERSION_ID >= 70400
 zval *php_decimal_blocked_write_property(zval *obj, zval *prop, zval *value, void **cache_slot)
+{
+    php_decimal_object_properties_not_supported();
+    return value;
+}
 #else
 void php_decimal_blocked_write_property(zval *obj, zval *prop, zval *value, void **cache_slot)
-#endif
 {
     php_decimal_object_properties_not_supported();
 }
+#endif
 
 /**
  * Object property isset/empty - not supported.
