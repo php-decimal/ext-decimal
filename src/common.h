@@ -88,9 +88,21 @@ void php_decimal_release_mpd(mpd_t *mpd);
 /**
  *
  */
-zval *php_decimal_blocked_read_property(zend_object *zobj, zend_string *name, int type, void **cache_slot, zval *rv);
-zval *php_decimal_blocked_write_property(zend_object *zobj, zend_string *name, zval *value, void **cache_slot);
-int   php_decimal_blocked_has_property(zend_object *zobj, zend_string *name, int has_set_exists, void **cache_slot);
-void  php_decimal_blocked_unset_property(zend_object *zobj, zend_string *name, void **cache_slot);
+zval *php_decimal_blocked_read_property(zval *obj, zval *prop, int type, void **cache_slot, zval *rv);
+
+/**
+ *
+ */
+zval *php_decimal_blocked_write_property(zval *obj, zval *prop, zval *value, void **cache_slot);
+
+/**
+ *
+ */
+int php_decimal_blocked_has_property(zval *obj, zval *prop, int has_set_exists, void **cache_slot);
+
+/**
+ *
+ */
+void php_decimal_blocked_unset_property(zval *obj, zval *prop, void **cache_slot);
 
 #endif
