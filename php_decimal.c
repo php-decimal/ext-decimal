@@ -1666,6 +1666,43 @@ static php_success_t php_decimal_compare_zval_to_zval(zval *retval, zval *op1, z
 }
 
 /**
+ * Compares decimal between two zvals/decimals. This is the function used as between.
+ */
+static php_success_t php_decimal_compare_between_left_and_right(zval *retval, zval *target, zval *leftOp, zval *rightOp)
+{
+    int resultLeft;
+    int resultRight;
+
+    if (Z_IS_DECIMAL_P(leftOp)) {
+        resultLeft = php_decimal_compare(Z_DECIMAL_P(target), Z_DECIMAL_P(leftOp));
+    } else {
+        resultLeft = php_decimal_compare_to_zval(Z_DECIMAL_P(target), leftOp);
+    }
+
+    if (resultLeft == -1) {
+        ZVAL_BOOL(retval, 0);
+
+        return SUCCESS;
+    }
+
+    if (Z_IS_DECIMAL_P(rightOp)) {
+        resultRight = php_decimal_compare(Z_DECIMAL_P(target), Z_DECIMAL_P(rightOp));
+    } else {
+        resultRight = php_decimal_compare_to_zval(Z_DECIMAL_P(target), rightOp);
+    }
+
+    if (resultRight == 1) {
+        ZVAL_BOOL(retval, 0);
+
+        return SUCCESS;
+    }
+
+    ZVAL_BOOL(retval, 1);
+
+    return SUCCESS;
+}
+
+/**
  * var_dump, print_r etc.
  */
 static HashTable *php_decimal_get_debug_info(zval *obj, int *is_temp)
@@ -2353,6 +2390,29 @@ PHP_DECIMAL_METHOD(compareTo)
     php_decimal_compare_zval_to_zval(return_value, getThis(), op2);
 }
 
+/**
+ * Decimal::between
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(between, _IS_BOOL, 1)
+PHP_DECIMAL_ARGINFO_ZVAL(other)
+PHP_DECIMAL_ARGINFO_ZVAL(other)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(between)
+{
+    zval *opLeft = NULL;
+    zval *opRight = NULL;
+
+    ZEND_PARSE_PARAMETERS_START(2, 2)
+        Z_PARAM_ZVAL(opLeft)
+        Z_PARAM_ZVAL(opRight)
+    ZEND_PARSE_PARAMETERS_END();
+
+    php_decimal_compare_between_left_and_right(return_value, getThis(), opLeft, opRight);
+}
+
+/**
+ * Decimal::sum
+ */
 PHP_DECIMAL_ARGINFO_RETURN_DECIMAL(sum, 1)
 PHP_DECIMAL_ARGINFO_ZVAL(values)
 PHP_DECIMAL_ARGINFO_OPTIONAL_LONG(precision)
@@ -2375,6 +2435,9 @@ PHP_DECIMAL_METHOD(sum)
     RETURN_DECIMAL(res);
 }
 
+/**
+ * Decimal::avg
+ */
 PHP_DECIMAL_ARGINFO_RETURN_DECIMAL(avg, 1)
 PHP_DECIMAL_ARGINFO_ZVAL(values)
 PHP_DECIMAL_ARGINFO_OPTIONAL_LONG(precision)
@@ -2451,6 +2514,7 @@ static zend_function_entry decimal_methods[] = {
 
     PHP_DECIMAL_ME(equals)
     PHP_DECIMAL_ME(compareTo)
+    PHP_DECIMAL_ME(between)
 
     /* Static methods */
     PHP_DECIMAL_STATIC_ME(sum)
