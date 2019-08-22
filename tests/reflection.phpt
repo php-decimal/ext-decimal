@@ -32,13 +32,13 @@ function print_method_summary(ReflectionClass $class, string $method)
     printf("%s\n", $method->getName());
     printf("Number of parameters: %d\n", $method->getNumberOfParameters());
     printf("Number of required parameters: %d\n", $method->getNumberOfRequiredParameters());
-    printf("Return type: %s\n", $method->hasReturnType() ? $method->getReturnType() : "void");
+    printf("Return type: %s\n", $method->hasReturnType() ? (PHP_VERSION_ID >= 70100 ? $method->getReturnType()->getName() : (string) $method->getReturnType()) : "void");
     printf("Allows return null? %s\n", $method->hasReturnType() ? ($method->getReturnType()->allowsNull() ? "yes" : "no") : "no");
     printf("Returns reference? %s\n", $method->returnsReference() ? "yes" : "no");
     printf("Parameters:\n");
     foreach ($method->getParameters() as $parameter) {
         printf("Name: %s\n", $parameter->getName());
-        printf("Type: %s\n", ((string) $parameter->getType()) ?: "mixed");
+        printf("Type: %s\n", ($parameter->hasType() ? (PHP_VERSION_ID >= 70100 ? $parameter->getType()->getName() : (string) $parameter->getType()) : "mixed"));
         printf("Reference? %s\n", $parameter->isPassedByReference() ? "yes" : "no");
         printf("Allows null? %s\n", $parameter->allowsNull() ? "yes" : "no");
         printf("Optional? %s\n", $parameter->isOptional() ? "yes" : "no");
