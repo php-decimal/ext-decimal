@@ -95,6 +95,16 @@ typedef struct _php_decimal_t {
 void php_decimal_register_decimal_class();
 
 /**
+ *
+ */
+void php_decimal_init_decimal_constants();
+
+/**
+ *
+ */
+void php_decimal_dtor_decimal_constants();
+
+/**
  * Prints a decimal object to stdout.
  */
 void php_decimal_print(const php_decimal_t *obj);

@@ -5,25 +5,25 @@ Decimal::toInt
 use Decimal\Decimal;
 
 $tests = [
-    ["0",  0],
+    ["0",       0],
 
-    ["-0.1",  0],
-    [ "0.1",  0],
+    ["-0.1",    0],
+    [ "0.1",    0],
 
-    ["-2.4", -2],
-    ["-2.5", -2],
-    ["-2.6", -2],
+    ["-2.4",   -2],
+    ["-2.5",   -2],
+    ["-2.6",   -2],
 
-    [ "2.4",  2],
-    [ "2.5",  2],
-    [ "2.6",  2],
+    [ "2.4",    2],
+    [ "2.5",    2],
+    [ "2.6",    2],
 
     [ "1E-50",  0],
     ["-1E-50",  0],
 
-    [ "NAN",  0],
-    [ "INF",  0],
-    ["-INF",  0],
+    [ "NAN",    0],
+    [ "INF",    0],
+    ["-INF",    0],
 
     ["1E+1000", PHP_INT_MAX], // Exception
 
@@ -63,9 +63,9 @@ if ((string) $number !== "2.5") {
 
 ?>
 --EXPECT--
-RuntimeException: Converting NaN or Inf to integer is not defined
-RuntimeException: Converting NaN or Inf to integer is not defined
-RuntimeException: Converting NaN or Inf to integer is not defined
+RuntimeException: Converting NaN or Infinity to integer is undefined
+RuntimeException: Converting NaN or Infinity to integer is undefined
+RuntimeException: Converting NaN or Infinity to integer is undefined
 OverflowException: Integer overflow
 OverflowException: Integer overflow
 OverflowException: Integer overflow

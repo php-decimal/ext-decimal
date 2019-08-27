@@ -18,6 +18,9 @@ var_dump(Decimal::ROUND_HALF_ODD);
 
 var_dump(Decimal::MIN_PRECISION);
 var_dump(Decimal::MAX_PRECISION);
+
+var_dump(Decimal::PI);
+var_dump(Decimal::E);
 ?>
 --EXPECTF--
 int(34)
@@ -32,3 +35,15 @@ int(3)
 int(4)
 int(1)
 int(%d)
+object(Decimal\Decimal)#%d (2) {
+  ["value"]=>
+  string(17) "3.141592653589793"
+  ["precision"]=>
+  int(34)
+}
+object(Decimal\Decimal)#%d (2) {
+  ["value"]=>
+  string(36) "2.7182818284590452353602874713526625"
+  ["precision"]=>
+  int(34)
+}

@@ -29,14 +29,17 @@
 #define PHP_DECIMAL_NUMBER_CLASS_NAME "Number"
 #define PHP_DECIMAL_NUMBER_FQCN        PHP_DECIMAL_NAMESPACE "\\" PHP_DECIMAL_NUMBER_CLASS_NAME
 
-#define Z_IMPLEMENTS_NUMBER_P(z) (instanceof_function(Z_OBJCE_P(z), php_decimal_number_ce))
-#define Z_IS_DECIMAL_NUMBER_P(z) (Z_TYPE_P(z) == IS_OBJECT && Z_IMPLEMENTS_NUMBER_P(z))
+#define Z_OBJ_IS_NUMBER_P(z) (instanceof_function(Z_OBJCE_P(z), php_decimal_number_ce))
+#define Z_IS_DECIMAL_NUMBER_P(z) (Z_TYPE_P(z) == IS_OBJECT && Z_OBJ_IS_NUMBER_P(z))
 
 /**
  *
  */
 extern zend_class_entry *php_decimal_number_ce;
 
+/**
+ *
+ */
 void php_decimal_register_number_class();
 
 #endif

@@ -11,10 +11,7 @@ var_dump((float)  Number::valueOf("2.9"));
 
 ?>
 --EXPECT--
-Number::toString
 string(1) "4"
 bool(true)
-Number::toInt
 int(2)
-Number::toFloat
 float(2.9)

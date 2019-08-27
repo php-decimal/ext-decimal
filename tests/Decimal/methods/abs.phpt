@@ -8,36 +8,35 @@ use Decimal\Decimal;
  * op1, expected result, expected precision
  */
 $tests = [
-    [Decimal::valueOf( "0"),        "0", 34],
-    [Decimal::valueOf("+0"),        "0", 34],
-    [Decimal::valueOf("-0"),        "0", 34],
+    [Decimal::valueOf( "0"),        "0",    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("+0"),        "0",    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-0"),        "0",    Decimal::DEFAULT_PRECISION],
 
-    [Decimal::valueOf("-0.1"),      "0.1", 34],
-    [Decimal::valueOf("+0.1"),      "0.1", 34],
-    [Decimal::valueOf( "0.1"),      "0.1", 34],
+    [Decimal::valueOf("-0.1"),      "0.1",  Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("+0.1"),      "0.1",  Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "0.1"),      "0.1",  Decimal::DEFAULT_PRECISION],
 
-    [Decimal::valueOf("-1"),        "1", 34],
-    [Decimal::valueOf( "1"),        "1", 34],
+    [Decimal::valueOf("-1"),        "1",    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "1"),        "1",    Decimal::DEFAULT_PRECISION],
 
-    [Decimal::valueOf("-INF"),      "INF", 34],
-    [Decimal::valueOf( "INF"),      "INF", 34],
-    [Decimal::valueOf( "NAN"),      "NAN", 34],
+    [Decimal::valueOf("-INF"),      "INF",  Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"),      "INF",  Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "NAN"),      "NAN",  Decimal::DEFAULT_PRECISION],
 
+    [Decimal::valueOf( "0", 10),    "0",    10],
+    [Decimal::valueOf("+0", 10),    "0",    10],
+    [Decimal::valueOf("-0", 10),    "0",    10],
 
-    [Decimal::valueOf( "0", 10),    "0", 10],
-    [Decimal::valueOf("+0", 10),    "0", 10],
-    [Decimal::valueOf("-0", 10),    "0", 10],
+    [Decimal::valueOf("-0.1", 10),  "0.1",  10],
+    [Decimal::valueOf("+0.1", 10),  "0.1",  10],
+    [Decimal::valueOf( "0.1", 10),  "0.1",  10],
 
-    [Decimal::valueOf("-0.1", 10),  "0.1", 10],
-    [Decimal::valueOf("+0.1", 10),  "0.1", 10],
-    [Decimal::valueOf( "0.1", 10),  "0.1", 10],
+    [Decimal::valueOf("-1", 10),    "1",    10],
+    [Decimal::valueOf( "1", 10),    "1",    10],
 
-    [Decimal::valueOf("-1", 10),    "1", 10],
-    [Decimal::valueOf( "1", 10),    "1", 10],
-
-    [Decimal::valueOf("-INF", 10),  "INF", 10],
-    [Decimal::valueOf( "INF", 10),  "INF", 10],
-    [Decimal::valueOf( "NAN", 10),  "NAN", 10],
+    [Decimal::valueOf( "NAN", 10),  "NAN",  10],
+    [Decimal::valueOf( "INF", 10),  "INF",  10],
+    [Decimal::valueOf("-INF", 10),  "INF",  10],
 ];
 
 /* Test expected output */

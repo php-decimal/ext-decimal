@@ -1,5 +1,5 @@
 --TEST--
-Number::sub
+Number::toString
 --FILE--
 <?php
 require __DIR__ . "/../helpers/Number.php";
@@ -13,14 +13,11 @@ var_dump(Number::valueOf(4) + "1");
 
 ?>
 --EXPECT--
-Number::toString
 string(1) "4"
-Number::toString
 string(1) "4"
-Number::toString
 string(1) "4"
 Number::add
-object(Number)#2 (1) {
+object(Number)#4 (1) {
   ["value":protected]=>
   int(5)
 }

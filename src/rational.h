@@ -68,8 +68,14 @@ typedef struct _php_rational_t {
     mpd_t        den;
 } php_rational_t;
 
+/**
+ *
+ */
 void php_decimal_register_rational_class();
 
+/**
+ *
+ */
 php_rational_t *php_rational();
 
 #endif

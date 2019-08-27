@@ -30,11 +30,12 @@ $tests = [
     [Decimal::valueOf("0.000123456"),       "-3.908487798372228318930600222932094",                 Decimal::DEFAULT_PRECISION],
     [Decimal::valueOf("0.000123456", 50),   "-3.9084877983722283189306002229320942053464158123113", 50],
 
-    [Decimal::valueOf("-INF"), (string) log10(-INF), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf( "NAN"), (string) log10( NAN), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf( "INF"), (string) log10( INF), Decimal::DEFAULT_PRECISION],
     [Decimal::valueOf(   "0"), (string) log10(   0), Decimal::DEFAULT_PRECISION],
     [Decimal::valueOf(  "-1"), (string) log10(  -1), Decimal::DEFAULT_PRECISION],
+    
+    [Decimal::valueOf( "NAN"), (string) log10( NAN), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"), (string) log10( INF), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-INF"), (string) log10(-INF), Decimal::DEFAULT_PRECISION],
 ];
 
 foreach ($tests as $test) {

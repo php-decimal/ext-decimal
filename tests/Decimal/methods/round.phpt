@@ -270,7 +270,7 @@ $tests = [
     /* ROUND NEGATIVE FIGURES */
     ["1.2345", -3, [Decimal::ROUND_HALF_UP], "0"],
     ["12345",  -3, [Decimal::ROUND_HALF_UP], "12000"],
-    ["12345",  -9, [Decimal::ROUND_HALF_UP], "0E+9"],
+    ["12345",  -9, [Decimal::ROUND_HALF_UP], "0"],
 
     /* ROUND TO CURRENT SIGNIFICANT FIGURES */
     ["0.12345", 5, [Decimal::ROUND_HALF_UP], "0.12345"],

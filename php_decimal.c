@@ -98,10 +98,6 @@ PHP_MINIT_FUNCTION(decimal)
 {
     ZEND_INIT_MODULE_GLOBALS(decimal, php_decimal_init_globals, NULL);
 
-    php_decimal_register_number_class();
-    php_decimal_register_decimal_class();
-    php_decimal_register_rational_class();
-
     /* Set guaranteed minimum number of coefficient words based on default prec. */
     mpd_setminalloc(2 * ((PHP_DECIMAL_DEFAULT_PREC + MPD_RDIGITS - 1) / MPD_RDIGITS));
 
@@ -112,6 +108,10 @@ PHP_MINIT_FUNCTION(decimal)
     mpd_free        = php_decimal_mpd_free;
     mpd_traphandler = php_decimal_mpd_traphandler;
 
+    php_decimal_register_number_class();
+    php_decimal_register_decimal_class();
+    php_decimal_register_rational_class();
+    
     return SUCCESS;
 }
 
@@ -131,9 +131,10 @@ PHP_RINIT_FUNCTION(decimal)
 #if defined(COMPILE_DL_DECIMAL) && defined(ZTS)
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
-
     php_decimal_disable_opcache_pass2();
-    php_decimal_init_context();
+    php_decimal_context_init();
+    php_decimal_init_decimal_constants();
+
     return SUCCESS;
 }
 
@@ -142,6 +143,9 @@ PHP_RINIT_FUNCTION(decimal)
  */
 PHP_RSHUTDOWN_FUNCTION(decimal)
 {
+    php_decimal_context_dtor();
+    php_decimal_dtor_decimal_constants();
+
     return SUCCESS;
 }
 

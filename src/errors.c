@@ -83,7 +83,7 @@ void php_decimal_division_by_zero_error()
 
 void php_decimal_unserialize_error()
 {
-    zend_throw_exception(spl_ce_InvalidArgumentException, "Could not unserialize decimal", 0);
+    zend_throw_exception(spl_ce_RuntimeException, "Failed to unserialize decimal number string", 0);
 }
 
 void php_decimal_object_properties_not_supported()
@@ -108,12 +108,17 @@ void php_decimal_integer_overflow()
 
 void php_decimal_integer_from_special_is_not_defined()
 {
-    zend_throw_exception(spl_ce_RuntimeException, "Converting NaN or Inf to integer is not defined", 0);
+    zend_throw_exception(spl_ce_RuntimeException, "Converting NaN or Infinity to integer is undefined", 0);
 }
 
 void php_decimal_sign_of_nan_is_not_defined()
 {
-    zend_throw_exception(spl_ce_RuntimeException, "Sign of NaN is not defined", 0);
+    zend_throw_exception(spl_ce_RuntimeException, "Sign of NaN is undefined", 0);
+}
+
+void php_decimal_comparison_is_not_defined()
+{
+    zend_throw_exception(spl_ce_RuntimeException, "Attempted comparison is ambiguous or undefined", 0);
 }
 
 void php_decimal_operator_not_supported()

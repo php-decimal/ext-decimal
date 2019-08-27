@@ -11,11 +11,11 @@ $tests = [
     [Decimal::valueOf("-0.1", 50), "0.90483741803595957316424905944643662119470536098040", 50],
     [Decimal::valueOf( "0.1", 50), "1.1051709180756476248117078264902466682245471947375", 50],
 
-    [Decimal::valueOf(0), "1", 34],
+    [Decimal::valueOf(0), "1", Decimal::DEFAULT_PRECISION],
 
-    [Decimal::valueOf("-INF"), "0",   34],
-    [Decimal::valueOf( "NAN"), "NAN", 34],
-    [Decimal::valueOf( "INF"), "INF", 34],
+    [Decimal::valueOf( "NAN"), "NAN", Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"), "INF", Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-INF"), "0",   Decimal::DEFAULT_PRECISION],
 ];
 
 foreach ($tests as $test) {

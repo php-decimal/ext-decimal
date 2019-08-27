@@ -30,17 +30,14 @@ $tests = [
     [Decimal::valueOf(0),       1,     -1],
     [Decimal::valueOf(0),       true,   0], // Objects are always equal to true.
     [Decimal::valueOf(0),       1.0,   -1],
-    [Decimal::valueOf(0),       "1",   -1],
 
     [Decimal::valueOf(1),       1,      0],
     [Decimal::valueOf(1),       true,   0], // Objects are always equal to true.
     [Decimal::valueOf(1),       1.0,    0],
-    [Decimal::valueOf(1),       "1",    0],
 
     [Decimal::valueOf(NAN),     1,      1],
     [Decimal::valueOf(NAN),     true,   0], // Objects are always equal to true.
     [Decimal::valueOf(NAN),     1.0,    1],
-    [Decimal::valueOf(NAN),     "1",    1],
 
     [Decimal::valueOf(0),       NAN,    1],
     [Decimal::valueOf(1),       NAN,    1],
@@ -52,12 +49,12 @@ $tests = [
     [Decimal::valueOf("1E-10"), 1E-10,  0],
     [Decimal::valueOf("1E+10"), 1E+10,  0],
 
-    [Decimal::valueOf("0.123", 3), "0.123",   0],
-    [Decimal::valueOf("0.123", 3), "0.1234", -1], // Precision of op1 not used
-    [Decimal::valueOf("0.123", 3), "0.12  ",  1],
+    [Decimal::valueOf("0.123", 3), 0.123,   0],
+    [Decimal::valueOf("0.123", 3), 0.1234, -1], // Precision of op1 not used
+    [Decimal::valueOf("0.123", 3), 0.12,    1],
 
-    [Decimal::valueOf("0.1000000000000000000001"), 0.1,   1],
-    [Decimal::valueOf("0.2000000000000000000001"), 0.2,   1],
+    [Decimal::valueOf("0.1000000000000000000001"), 0.1,   0],
+    [Decimal::valueOf("0.2000000000000000000001"), 0.2,   0],
 
     [Decimal::valueOf("0.0000000000000000000001"), 0.1,  -1],
     [Decimal::valueOf("0.0000000000000000000001"), 0.0,   1],
@@ -65,27 +62,16 @@ $tests = [
     [Decimal::valueOf("0.123", 3), Decimal::valueOf("0.1234", 3), -1],
     [Decimal::valueOf("0.123", 3), Decimal::valueOf("0.1234", 4), -1],
 
-    /* Parse beyond the default precision. Should use max prec, not default.
-       0.123
-       0.12300...001
-                  ^default prec cutoff
-    */
-    [Decimal::valueOf("0.123", 3), "0.123" . str_repeat("0", Decimal::DEFAULT_PRECISION) . "1", -1],
-
-    [Decimal::valueOf("-0.123", 3), "-0.122", -1],
-    [Decimal::valueOf("-0.123", 3), "-0.123",  0],
-    [Decimal::valueOf("-0.123", 3), "-0.124",  1], // Numeric value, not lexicographic
-
     [Decimal::valueOf("-0.1"),     -0.1, 0],
     [Decimal::valueOf("-0.2"),     -0.2, 0],
     [Decimal::valueOf("-1E-10"), -1E-10, 0],
     [Decimal::valueOf("-1E+10"), -1E+10, 0],
 
-    [Decimal::valueOf("0.1"),     "0.01",      1],
-    [Decimal::valueOf("0.1"),     "0.1",       0],
-    [Decimal::valueOf("0.1"),     "0.2",      -1],
-    [Decimal::valueOf("0.2"),     "0.1",       1],
-    [Decimal::valueOf("0.01"),    "0.1",      -1],
+    [Decimal::valueOf("0.1"),     0.01,       1],
+    [Decimal::valueOf("0.1"),     0.10,       0],
+    [Decimal::valueOf("0.1"),     0.20,      -1],
+    [Decimal::valueOf("0.2"),     0.10,       1],
+    [Decimal::valueOf("0.01"),    0.10,      -1],
 
     [Decimal::valueOf("0.1"),     Decimal::valueOf("0.01"),      1],
     [Decimal::valueOf("0.1"),     Decimal::valueOf("0.1"),       0],
@@ -97,32 +83,44 @@ $tests = [
     [Decimal::valueOf("0.1", 2),  Decimal::valueOf("0.1", 2),    0],
     [Decimal::valueOf("0.1", 2),  Decimal::valueOf("0.1", 3),   -1],
 
-    [Decimal::valueOf( "INF"),    Decimal::valueOf( "NAN"),      INF <=>  NAN],
-    [Decimal::valueOf( "INF"),    Decimal::valueOf( "INF"),      INF <=>  INF],
-    [Decimal::valueOf( "INF"),    Decimal::valueOf("-INF"),      INF <=> -INF],
-    [Decimal::valueOf("-INF"),    Decimal::valueOf( "NAN"),     -INF <=>  NAN],
-    [Decimal::valueOf("-INF"),    Decimal::valueOf( "INF"),     -INF <=>  INF],
-    [Decimal::valueOf("-INF"),    Decimal::valueOf("-INF"),     -INF <=> -INF],
-    [Decimal::valueOf( "NAN"),    Decimal::valueOf( "NAN"),      NAN <=>  NAN],
-    [Decimal::valueOf( "NAN"),    Decimal::valueOf( "INF"),      NAN <=>  INF],
-    [Decimal::valueOf( "NAN"),    Decimal::valueOf("-INF"),      NAN <=> -INF],
+    [Decimal::valueOf(0), "",    1],
+    [Decimal::valueOf(0), "abc", 1],
 
     [Decimal::valueOf( "INF"),    NAN,                           INF <=>  NAN],
     [Decimal::valueOf( "INF"),    INF,                           INF <=>  INF],
     [Decimal::valueOf( "INF"),   -INF,                           INF <=> -INF],
+    [Decimal::valueOf( "INF"),    Decimal::valueOf( "NAN"),      INF <=>  NAN],
+    [Decimal::valueOf( "INF"),    Decimal::valueOf( "INF"),      INF <=>  INF],
+    [Decimal::valueOf( "INF"),    Decimal::valueOf("-INF"),      INF <=> -INF],
+    [Decimal::valueOf( "INF"),    0,                             INF <=>  0],
+    [Decimal::valueOf( "INF"),    1,                             INF <=>  1],
+    [Decimal::valueOf( "INF"),   -1,                             INF <=> -1],
+
     [Decimal::valueOf("-INF"),    NAN,                          -INF <=>  NAN],
     [Decimal::valueOf("-INF"),    INF,                          -INF <=>  INF],
     [Decimal::valueOf("-INF"),   -INF,                          -INF <=> -INF],
+    [Decimal::valueOf("-INF"),    Decimal::valueOf( "NAN"),     -INF <=>  NAN],
+    [Decimal::valueOf("-INF"),    Decimal::valueOf( "INF"),     -INF <=>  INF],
+    [Decimal::valueOf("-INF"),    Decimal::valueOf("-INF"),     -INF <=> -INF],
+    [Decimal::valueOf("-INF"),    0,                            -INF <=>  0],
+    [Decimal::valueOf("-INF"),    1,                            -INF <=>  1],
+    [Decimal::valueOf("-INF"),   -1,                            -INF <=> -1],
+
     [Decimal::valueOf( "NAN"),    NAN,                           NAN <=>  NAN],
     [Decimal::valueOf( "NAN"),    INF,                           NAN <=>  INF],
     [Decimal::valueOf( "NAN"),   -INF,                           NAN <=> -INF],
+    [Decimal::valueOf( "NAN"),    Decimal::valueOf( "NAN"),      NAN <=>  NAN],
+    [Decimal::valueOf( "NAN"),    Decimal::valueOf( "INF"),      NAN <=>  INF],
+    [Decimal::valueOf( "NAN"),    Decimal::valueOf("-INF"),      NAN <=> -INF],
+    [Decimal::valueOf( "NAN"),    0,                             NAN <=>  0],
+    [Decimal::valueOf( "NAN"),    1,                             NAN <=>  1],
+    [Decimal::valueOf( "NAN"),   -1,                             NAN <=> -1],
 ];
 
 foreach ($tests as $index => $test) {
     list($op1, $op2, $expect) = $test;
 
     $results = [
-        // $op1->compareTo($op2),
         $op1 <=> $op2,
     ];
 
@@ -146,6 +144,7 @@ foreach ($tests as $index => $test) {
             "<=" => $op2 ? true  : false,
             ">=" => true,
             "==" => $op2 ? true  : false,
+            "!=" => $op2 ? false : true,
         ];
 
     /* NULL is a special case because objects are always greater than NULL. */
@@ -156,6 +155,7 @@ foreach ($tests as $index => $test) {
             "<=" => false,
             ">=" => true,
             "==" => false,
+            "!=" => true,
         ];
 
     /* NAN is a special case because nothing equals NAN, and comparison is undefined. */
@@ -166,16 +166,18 @@ foreach ($tests as $index => $test) {
             "<=" => false,
             ">=" => false,
             "==" => false,
+            "!=" => true,
         ];
 
     /* Match whatever compareTo returns, assuming previous tests are correct. */
     } else {
         $expected = [
             "<"  => $op1->compareTo($op2) == -1,
-            ">"  => $op1->compareTo($op2) == 1,
-            "<=" => $op1->compareTo($op2) <= 0,
-            ">=" => $op1->compareTo($op2) >= 0,
-            "==" => $op1->compareTo($op2) == 0,
+            ">"  => $op1->compareTo($op2) ==  1,
+            "<=" => $op1->compareTo($op2) <=  0,
+            ">=" => $op1->compareTo($op2) >=  0,
+            "==" => $op1->compareTo($op2) ==  0,
+            "!=" => $op1->compareTo($op2) !=  0,
         ];
     }
 
@@ -185,7 +187,8 @@ foreach ($tests as $index => $test) {
         ">"  => [$op1 >  $op2, $op2 <  $op1],
         "<=" => [$op1 <= $op2, $op2 >= $op1],
         ">=" => [$op1 >= $op2, $op2 <= $op1],
-        "==" => [$op1 == $op2, $op2 == $op1],
+        "==" => [$op1 == $op2, $op2 == $op1, $op1->equals($op2)],
+        "!=" => [$op1 != $op2, $op2 != $op1],
     ];
 
     foreach ($results as $op => $result) {
@@ -199,9 +202,5 @@ foreach ($tests as $index => $test) {
         }
     }
 }
-
-/* Check compared to non-numeric valid type. */
-var_dump(Decimal::valueOf(0) <=> "abc");
 ?>
 --EXPECT--
-int(1)

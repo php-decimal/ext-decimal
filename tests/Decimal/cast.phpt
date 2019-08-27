@@ -117,6 +117,6 @@ try {
 A Integer overflow
 B Floating point underflow
 C Floating point underflow
-D Converting NaN or Inf to integer is not defined
-E Converting NaN or Inf to integer is not defined
-F Converting NaN or Inf to integer is not defined
+D Converting NaN or Infinity to integer is undefined
+E Converting NaN or Infinity to integer is undefined
+F Converting NaN or Infinity to integer is undefined

@@ -66,8 +66,15 @@
     PHP_DECIMAL_ME_ABSTRACT_EX(cls, name, ZEND_ACC_PUBLIC)
 
 
+
+/**
+ *
+ */
 #define PHP_DECIMAL_LONG_CONSTANT(ce, name, value) \
     zend_declare_class_constant_long(ce, name, sizeof(name) - 1, value)
+
+#define PHP_DECIMAL_CONSTANT(ce, name, value) \
+    zend_declare_class_constant(ce, name, sizeof(name) - 1, value)
 
 /**
  * Custom definitions.

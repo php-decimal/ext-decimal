@@ -50,8 +50,8 @@ $tests = [
     [Rational::valueOf("1E-10"), 1E-10,  0],
     [Rational::valueOf("1E+10"), 1E+10,  0],
 
-    [Rational::valueOf("0.1000000000000000000001"), 0.1,   1],
-    [Rational::valueOf("0.2000000000000000000001"), 0.2,   1],
+    [Rational::valueOf("0.1000000000000000000001"), 0.1,   0],
+    [Rational::valueOf("0.2000000000000000000001"), 0.2,   0],
 
     [Rational::valueOf("0.0000000000000000000001"), 0.1,  -1],
     [Rational::valueOf("0.0000000000000000000001"), 0.0,   1],
@@ -75,25 +75,35 @@ $tests = [
     [Rational::valueOf("0.2"),     Rational::valueOf("0.1"),       1],
     [Rational::valueOf("0.01"),    Rational::valueOf("0.1"),      -1],
 
-    [Rational::valueOf( "INF"),    Rational::valueOf( "NAN"),      INF <=>  NAN],
-    [Rational::valueOf( "INF"),    Rational::valueOf( "INF"),      INF <=>  INF],
-    [Rational::valueOf( "INF"),    Rational::valueOf("-INF"),      INF <=> -INF],
-    [Rational::valueOf("-INF"),    Rational::valueOf( "NAN"),     -INF <=>  NAN],
-    [Rational::valueOf("-INF"),    Rational::valueOf( "INF"),     -INF <=>  INF],
-    [Rational::valueOf("-INF"),    Rational::valueOf("-INF"),     -INF <=> -INF],
-    [Rational::valueOf( "NAN"),    Rational::valueOf( "NAN"),      NAN <=>  NAN],
-    [Rational::valueOf( "NAN"),    Rational::valueOf( "INF"),      NAN <=>  INF],
-    [Rational::valueOf( "NAN"),    Rational::valueOf("-INF"),      NAN <=> -INF],
-
     [Rational::valueOf( "INF"),    NAN,                            INF <=>  NAN],
     [Rational::valueOf( "INF"),    INF,                            INF <=>  INF],
     [Rational::valueOf( "INF"),   -INF,                            INF <=> -INF],
+    [Rational::valueOf( "INF"),    Rational::valueOf( "NAN"),      INF <=>  NAN],
+    [Rational::valueOf( "INF"),    Rational::valueOf( "INF"),      INF <=>  INF],
+    [Rational::valueOf( "INF"),    Rational::valueOf("-INF"),      INF <=> -INF],
+    [Rational::valueOf( "INF"),    0,                              INF <=>  0],
+    [Rational::valueOf( "INF"),    1,                              INF <=>  1],
+    [Rational::valueOf( "INF"),   -1,                              INF <=> -1],
+
     [Rational::valueOf("-INF"),    NAN,                           -INF <=>  NAN],
     [Rational::valueOf("-INF"),    INF,                           -INF <=>  INF],
     [Rational::valueOf("-INF"),   -INF,                           -INF <=> -INF],
+    [Rational::valueOf("-INF"),    Rational::valueOf( "NAN"),     -INF <=>  NAN],
+    [Rational::valueOf("-INF"),    Rational::valueOf( "INF"),     -INF <=>  INF],
+    [Rational::valueOf("-INF"),    Rational::valueOf("-INF"),     -INF <=> -INF],
+    [Rational::valueOf("-INF"),    0,                             -INF <=>  0],
+    [Rational::valueOf("-INF"),    1,                             -INF <=>  1],
+    [Rational::valueOf("-INF"),   -1,                             -INF <=> -1],
+
     [Rational::valueOf( "NAN"),    NAN,                            NAN <=>  NAN],
     [Rational::valueOf( "NAN"),    INF,                            NAN <=>  INF],
     [Rational::valueOf( "NAN"),   -INF,                            NAN <=> -INF],
+    [Rational::valueOf( "NAN"),    Rational::valueOf( "NAN"),      NAN <=>  NAN],
+    [Rational::valueOf( "NAN"),    Rational::valueOf( "INF"),      NAN <=>  INF],
+    [Rational::valueOf( "NAN"),    Rational::valueOf("-INF"),      NAN <=> -INF],
+    [Rational::valueOf( "NAN"),    0,                              NAN <=>  0],
+    [Rational::valueOf( "NAN"),    1,                              NAN <=>  1],
+    [Rational::valueOf( "NAN"),   -1,                              NAN <=> -1],
 ];
 
 // TODO test comparing against Number
@@ -128,6 +138,7 @@ foreach ($tests as $index => $test) {
             ">"  => $op2 ? false : true,
             "<=" => $op2 ? true  : false,
             ">=" => true,
+            "!=" => $op2 ? false : true,
             "==" => $op2 ? true  : false,
         ];
 
@@ -138,6 +149,7 @@ foreach ($tests as $index => $test) {
             ">"  => true,
             "<=" => false,
             ">=" => true,
+            "!=" => true,
             "==" => false,
         ];
 
@@ -148,6 +160,7 @@ foreach ($tests as $index => $test) {
             ">"  => false,
             "<=" => false,
             ">=" => false,
+            "!=" => true,
             "==" => false,
         ];
 
@@ -158,6 +171,7 @@ foreach ($tests as $index => $test) {
             ">"  => $op1->compareTo($op2) == 1,
             "<=" => $op1->compareTo($op2) <= 0,
             ">=" => $op1->compareTo($op2) >= 0,
+            "!=" => $op1->compareTo($op2) != 0,
             "==" => $op1->compareTo($op2) == 0,
         ];
     }
@@ -168,7 +182,8 @@ foreach ($tests as $index => $test) {
         ">"  => [$op1 >  $op2, $op2 <  $op1],
         "<=" => [$op1 <= $op2, $op2 >= $op1],
         ">=" => [$op1 >= $op2, $op2 <= $op1],
-        "==" => [$op1 == $op2, $op2 == $op1],
+        "!=" => [$op1 != $op2, $op2 != $op1],
+        "==" => [$op1 == $op2, $op2 == $op1, $op1->equals($op2)],
     ];
 
     foreach ($results as $op => $result) {

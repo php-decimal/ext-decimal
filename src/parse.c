@@ -100,7 +100,7 @@ static php_decimal_success_t php_decimal_parse_scalar_ex(mpd_t *res, const zval 
 
         /* */
         case IS_STRING: {
-            if (php_decimal_set_string(res, Z_STR_P(val)) == SUCCESS) {
+            if (php_decimal_mpd_set_string(res, Z_STR_P(val)) == SUCCESS) {
                 return SUCCESS;
             }
 
@@ -112,13 +112,13 @@ static php_decimal_success_t php_decimal_parse_scalar_ex(mpd_t *res, const zval 
         }
 
         case IS_LONG: {
-            php_decimal_set_long(res, Z_LVAL_P(val));
+            php_decimal_mpd_set_long(res, Z_LVAL_P(val));
             return SUCCESS;
         }
 
         /* Should only consider special values here - float is not supported. */
         case IS_DOUBLE: {
-            if (php_decimal_set_special(res, Z_DVAL_P(val)) == SUCCESS) {
+            if (php_decimal_mpd_set_special(res, Z_DVAL_P(val)) == SUCCESS) {
                 return SUCCESS;
             }
         }
@@ -167,7 +167,7 @@ php_decimal_success_t php_decimal_parse_num_den(mpd_t *num, mpd_t *den, const zv
         return SUCCESS;
     }
 
-    if (Z_IMPLEMENTS_NUMBER_P(val)) {
+    if (Z_OBJ_IS_NUMBER_P(val)) {
         zval tmp;
         if (php_decimal_parse_number_to_rational(&tmp, val) == FAILURE) {
             return FAILURE;
@@ -203,10 +203,10 @@ php_decimal_success_t php_decimal_parse_mpd(mpd_t *res, const zval *val, const z
         return SUCCESS;
     }
 
-    if (Z_IMPLEMENTS_NUMBER_P(val)) {
+    if (Z_OBJ_IS_NUMBER_P(val)) {
         zval tmp;
         if (php_decimal_parse_number_to_decimal(&tmp, val, prec) == FAILURE) {
-            php_decimal_set_nan(res);
+            php_decimal_mpd_set_nan(res);
             return FAILURE;
         }
 
@@ -257,7 +257,7 @@ php_decimal_success_t php_decimal_parse_decimal(zval *result, const zval *val, c
         return SUCCESS;
 
     /* */
-    } else if (Z_IMPLEMENTS_NUMBER_P(val)) {
+    } else if (Z_OBJ_IS_NUMBER_P(val)) {
         if (php_decimal_parse_number_to_decimal(result, val, prec) == SUCCESS) {
             return SUCCESS;
         }
@@ -312,7 +312,7 @@ php_decimal_success_t php_decimal_parse_rational(zval *result, const zval *val)
     }
 
     /* */
-    if (Z_IMPLEMENTS_NUMBER_P(val)) {
+    if (Z_OBJ_IS_NUMBER_P(val)) {
         php_decimal_parse_number_to_rational(result, val);
         return SUCCESS;
     }

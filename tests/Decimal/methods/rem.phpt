@@ -8,46 +8,46 @@ use Decimal\Decimal;
  * OP1, OP2, Expected Result, Expected Precision
  */
 $tests = [
-    [Decimal::valueOf("0"),        "1",    0 %  1,    34],
-    [Decimal::valueOf("0"),       "-1",    0 % -1,    34],
+    [Decimal::valueOf("0"),        "1",    0 %  1,    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("0"),       "-1",    0 % -1,    Decimal::DEFAULT_PRECISION],
 
-    [Decimal::valueOf( "1"),       "3",    1 %  3,    34],
-    [Decimal::valueOf( "1"),      "-3",    1 % -3,    34],
-    [Decimal::valueOf("-1"),      "-3",   -1 % -3,    34],
-    [Decimal::valueOf("-1"),      "-3",   -1 % -3,    34],
+    [Decimal::valueOf( "1"),       "3",    1 %  3,    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "1"),      "-3",    1 % -3,    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-1"),      "-3",   -1 % -3,    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-1"),      "-3",   -1 % -3,    Decimal::DEFAULT_PRECISION],
 
-    [Decimal::valueOf( "7"),       "4",    7 %  4,    34],
-    [Decimal::valueOf( "7"),      "-4",    7 % -4,    34],
-    [Decimal::valueOf("-7"),       "4",   -7 %  4,    34],
-    [Decimal::valueOf("-7"),      "-4",   -7 % -4,    34],
+    [Decimal::valueOf( "7"),       "4",    7 %  4,    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "7"),      "-4",    7 % -4,    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-7"),       "4",   -7 %  4,    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-7"),      "-4",   -7 % -4,    Decimal::DEFAULT_PRECISION],
 
     /* rem is NOT an integer operation*/
-    [Decimal::valueOf("5.678"),   "1.234",    "0.742",   34],
-    [Decimal::valueOf("5.678"),   "2.234",    "1.210",   34],
-    [Decimal::valueOf("5.678"),   "3.234",    "2.444",   34],
+    [Decimal::valueOf("5.678"),   "1.234",    "0.742",   Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("5.678"),   "2.234",    "1.210",   Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("5.678"),   "3.234",    "2.444",   Decimal::DEFAULT_PRECISION],
 
-    [Decimal::valueOf("5"),       "1.5",      "0.5",     34],
-    [Decimal::valueOf("5"),       "2.5",      "0.0",     34],
-    [Decimal::valueOf("5"),       "3.5",      "1.5",     34],
+    [Decimal::valueOf("5"),       "1.5",      "0.5",     Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("5"),       "2.5",      "0.0",     Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("5"),       "3.5",      "1.5",     Decimal::DEFAULT_PRECISION],
 
     [
         Decimal::valueOf("5.678", 5),
         Decimal::valueOf("3.234", 5),
-                "2.444", 5
+                         "2.444", 5
     ],
 
-    [Decimal::valueOf( "NAN"),  "NAN",   "NAN", 34],
-    [Decimal::valueOf( "NAN"),  "INF",   "NAN", 34],
-    [Decimal::valueOf( "NAN"), "-INF",   "NAN", 34],
-    [Decimal::valueOf( "INF"),  "NAN",   "NAN", 34],
-    [Decimal::valueOf( "INF"),  "INF",   "NAN", 34], // <-- No exception, technically invalid.
-    [Decimal::valueOf( "INF"), "-INF",   "NAN", 34], // <-- No exception, technically invalid.
-    [Decimal::valueOf("-INF"),  "NAN",   "NAN", 34],
-    [Decimal::valueOf("-INF"),  "INF",   "NAN", 34], // <-- No exception, technically invalid.
-    [Decimal::valueOf("-INF"), "-INF",   "NAN", 34], // <-- No exception, technically invalid.
-    [Decimal::valueOf( "NAN"),  1,       "NAN", 34],
-    [Decimal::valueOf( "INF"),  1,       "NAN", 34], // <-- No exception, technically invalid.
-    [Decimal::valueOf("-INF"),  1,       "NAN", 34], // <-- No exception, technically invalid.
+    [Decimal::valueOf( "NAN"),  "NAN",   "NAN", Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "NAN"),  "INF",   "NAN", Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "NAN"), "-INF",   "NAN", Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"),  "NAN",   "NAN", Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"),  "INF",   "NAN", Decimal::DEFAULT_PRECISION], // <-- No exception, technically invalid.
+    [Decimal::valueOf( "INF"), "-INF",   "NAN", Decimal::DEFAULT_PRECISION], // <-- No exception, technically invalid.
+    [Decimal::valueOf("-INF"),  "NAN",   "NAN", Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-INF"),  "INF",   "NAN", Decimal::DEFAULT_PRECISION], // <-- No exception, technically invalid.
+    [Decimal::valueOf("-INF"), "-INF",   "NAN", Decimal::DEFAULT_PRECISION], // <-- No exception, technically invalid.
+    [Decimal::valueOf( "NAN"),  1,       "NAN", Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"),  1,       "NAN", Decimal::DEFAULT_PRECISION], // <-- No exception, technically invalid.
+    [Decimal::valueOf("-INF"),  1,       "NAN", Decimal::DEFAULT_PRECISION], // <-- No exception, technically invalid.
 ];
 
 foreach ($tests as $index => $test) {

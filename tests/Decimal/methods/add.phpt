@@ -9,9 +9,9 @@ use Decimal\Decimal;
  */
 $tests = [
     [
-        Decimal::valueOf("9.0E+90000" /* default */),
-        Decimal::valueOf("9.0E+90000" /* default */),
-                         "1.80E+90001", Decimal::DEFAULT_PRECISION,
+        Decimal::valueOf("9.0E+9"),
+        Decimal::valueOf("9.0E+9"),
+                         "18000000000", Decimal::DEFAULT_PRECISION,
     ],
     [
         Decimal::valueOf("1.1111", 1),
@@ -19,23 +19,23 @@ $tests = [
                          "4",      1,
     ],
     [
-        Decimal::valueOf("0.1" /* default */),
-        Decimal::valueOf("0.1" /* default */),
+        Decimal::valueOf("0.1"),
+        Decimal::valueOf("0.1"),
                          "0.2", Decimal::DEFAULT_PRECISION
     ],
     [
-        Decimal::valueOf("-0.1" /* default */),
-        Decimal::valueOf( "0.1" /* default */),
+        Decimal::valueOf("-0.1"),
+        Decimal::valueOf( "0.1"),
                           "0.0", Decimal::DEFAULT_PRECISION
     ],
     [
-        Decimal::valueOf( "0.1" /* default */),
-        Decimal::valueOf("-0.1" /* default */),
+        Decimal::valueOf( "0.1"),
+        Decimal::valueOf("-0.1"),
                           "0.0", Decimal::DEFAULT_PRECISION
     ],
     [
-        Decimal::valueOf("-0.1" /* default */),
-        Decimal::valueOf("-0.1" /* default */),
+        Decimal::valueOf("-0.1"),
+        Decimal::valueOf("-0.1"),
                          "-0.2", Decimal::DEFAULT_PRECISION
     ],
     [

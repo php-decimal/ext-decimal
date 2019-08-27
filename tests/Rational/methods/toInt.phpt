@@ -63,9 +63,9 @@ if ((string) $number !== "5/2") {
 
 ?>
 --EXPECT--
-RuntimeException: Converting NaN or Inf to integer is not defined
-RuntimeException: Converting NaN or Inf to integer is not defined
-RuntimeException: Converting NaN or Inf to integer is not defined
+RuntimeException: Converting NaN or Infinity to integer is undefined
+RuntimeException: Converting NaN or Infinity to integer is undefined
+RuntimeException: Converting NaN or Infinity to integer is undefined
 OverflowException: Integer overflow
 TypeError: Decimal\Rational::valueOf() expected parameter 1 to be a decimal number, string, or integer
 TypeError: Decimal\Rational::valueOf() expected parameter 1 to be a decimal number, string, or integer

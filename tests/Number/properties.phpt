@@ -1,5 +1,5 @@
 --TEST--
-Decimal properties
+Number properties
 --FILE--
 <?php
 require __DIR__ . "/helpers/Number.php";

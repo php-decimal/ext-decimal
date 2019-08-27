@@ -7,23 +7,25 @@ class Number extends \Decimal\Number
 {
     protected $value;
 
+    private static function parse($number)
+    {
+        $value = $number instanceof self ? $number->value : $number;
+
+             if ($value ===  "INF") $value =  INF;
+        else if ($value === "-INF") $value = -INF;
+        else if ($value ===  "NAN") $value =  NAN;
+
+        return $value;
+    }
+
     protected function __construct($value)
     {
-        $this->value = $value;
+        $this->value = self::parse($value);
     }
 
     public static function valueOf($value): \Decimal\Number
     {
         return new static($value);
-    }
-
-    private function parse($other)
-    {
-        if ($other instanceof Number) {
-            $other = $other->value;
-        }
-
-        return $other;
     }
 
     public function add($other): \Decimal\Number
@@ -82,110 +84,49 @@ class Number extends \Decimal\Number
         return new static($this->value / (10 ** $places));
     }
 
-    public function floor(): \Decimal\Number
-    {
-        // No need to implement this.
-    }
-
-    public function ceil(): \Decimal\Number
-    {
-        // No need to implement this.
-    }
-
-    public function trunc(): \Decimal\Number
-    {
-        // No need to implement this.
-    }
-
     public function round(int $places = NULL, int $mode = NULL): \Decimal\Number
     {
-        // No need to implement this.
-    }
-
-    public function abs(): \Decimal\Number
-    {
-        // No need to implement this.
-    }
-
-    public function negate(): \Decimal\Number
-    {
-        // No need to implement this.
-    }
-
-    public function parity(): int
-    {
-        // No need to implement this.
-    }
-
-    public function signum(): int
-    {
-        // No need to implement this.
-    }
-
-    public function isNaN(): bool
-    {
-        return (string) $this->value === "NAN";
-    }
-
-    public function isInf(): bool
-    {
-        // No need to implement this.
-    }
-
-    public function isInteger(): bool
-    {
-        // No need to implement this.
-    }
-
-    public function isZero(): bool
-    {
-        // No need to implement this.
+        return new static($this->toDecimal(\Decimal\Decimal::MAX_PRECISION)->round($places, $mode)->toString());
     }
 
     public function toFixed(int $places = NULL, bool $commas = NULL, int $mode = NULL): string
     {
-        // No need to implement this.
-    }
-
-    public function toString(): string
-    {
-        printf("%s\n", __METHOD__);
-
-        return (string) $this->value;
-    }
-
-    public function toInt(): int
-    {
-        printf("%s\n", __METHOD__);
-
-        return (int) $this->value;
-    }
-
-    public function toFloat(): float
-    {
-        printf("%s\n", __METHOD__);
-
-        return (float) $this->value;
+        return new static($this->toDecimal(\Decimal\Decimal::MAX_PRECISION)->toFixed($places, $commas, $mode));
     }
 
     public function toDecimal(int $precision): \Decimal\Decimal
     {
         printf("%s\n", __METHOD__);
 
-        return \Decimal\Decimal::valueOf($this->value, $precision);
+        return parent::toDecimal($precision);
     }
 
     public function toRational(): \Decimal\Rational
     {
         printf("%s\n", __METHOD__);
 
-        return \Decimal\Rational::valueOf($this->value);
+        return parent::toRational();
+    }
+
+    public function toString(): string
+    {
+        return (string) $this->value;
+    }
+
+    public function toInt(): int
+    {
+        return (int) $this->value;
+    }
+
+    public function toFloat(): float
+    {
+        return (float) $this->value;
     }
 
     public function compareTo($other): int
     {
         printf("%s\n", __METHOD__);
 
-        return $this->value <=> $this->parse($other);
+        return $this->value <=> self::parse($other);
     }
 }

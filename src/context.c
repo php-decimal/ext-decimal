@@ -28,6 +28,7 @@
 #include "errors.h"
 #include "limits.h"
 
+
 /**
  * Returns true if the given precision is valid, false otherwise.
  */
@@ -50,3 +51,26 @@ zend_bool php_decimal_validate_prec(const zend_long prec)
     return false;
 }
 
+/**
+ *
+ */
+void php_decimal_context_init()
+{
+    /* Initialize the default shared context. */
+    mpd_defaultcontext(SHARED_CONTEXT);
+    mpd_qsettraps(SHARED_CONTEXT, PHP_DECIMAL_CONTEXT_TRAPS);
+    mpd_qsetround(SHARED_CONTEXT, PHP_DECIMAL_CONTEXT_ROUNDING);
+
+    /* Initialize the maximum precision context (for rational) */
+    mpd_maxcontext(MAX_CONTEXT);
+    mpd_qsettraps(MAX_CONTEXT, PHP_DECIMAL_CONTEXT_TRAPS);
+    mpd_qsetround(MAX_CONTEXT, PHP_DECIMAL_CONTEXT_ROUNDING);
+}
+
+/**
+ *
+ */
+void php_decimal_context_dtor()
+{
+
+}

@@ -75,4 +75,10 @@
  */
 zend_bool php_decimal_validate_prec(const zend_long prec);
 
+/**
+ *
+ */
+void php_decimal_context_init();
+void php_decimal_context_dtor();
+
 #endif

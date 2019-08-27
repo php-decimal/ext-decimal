@@ -34,8 +34,8 @@ $tests = [
     [Decimal::valueOf("0.000123456", 50), "-8.9996257406810102209987166229396596684344507962672", 50],
 
     /* Match PHP on special values */
-    [Decimal::valueOf("-INF"), (string) log(-INF), Decimal::DEFAULT_PRECISION],
     [Decimal::valueOf( "NAN"), (string) log( NAN), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-INF"), (string) log(-INF), Decimal::DEFAULT_PRECISION],
     [Decimal::valueOf( "INF"), (string) log( INF), Decimal::DEFAULT_PRECISION],
 
     [Decimal::valueOf( "0"), (string) log( 0), Decimal::DEFAULT_PRECISION],

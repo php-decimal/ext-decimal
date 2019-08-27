@@ -21,6 +21,5 @@ var_dump(json_encode(Override::valueOf(5)));
 
 ?>
 --EXPECT--
-Number::toString
 string(5) ""0.3""
 string(3) ""*""

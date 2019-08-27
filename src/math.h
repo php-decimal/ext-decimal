@@ -41,6 +41,11 @@ void php_decimal_rational_from_mpd(mpd_t *num, mpd_t *den, const mpd_t *mpd);
 int  php_decimal_rational_parity(const php_rational_t *obj);
 
 /**
+ * Number helpers
+ */
+int php_decimal_number_parity(const zval *obj);
+
+/**
  * Decimal binary ops
  */
 typedef void (*php_decimal_binary_op_t)(mpd_t *res, const mpd_t *op1, const mpd_t *op2, zend_long prec);

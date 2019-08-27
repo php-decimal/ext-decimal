@@ -21,6 +21,7 @@
  * THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #include <php.h>
+#include <Zend/zend_interfaces.h>
 #include <mpdecimal.h>
 #include "common.h"
 #include "context.h"
@@ -37,8 +38,6 @@
 /******************************************************************************/
 /*                                 DECIMAL                                    */
 /******************************************************************************/
-
-// TODO: Check for unsafe cases where res is used as tmp (res might be op1)
 
 int php_decimal_signum(const mpd_t *mpd)
 {
@@ -106,7 +105,7 @@ void php_decimal_div(mpd_t *res, const mpd_t *op1, const mpd_t *op2, zend_long p
 
     /* 0/INF will be 0 with a very small EXP - normalize this to 0E+0. */
     if (UNEXPECTED(mpd_isspecial(op2) && mpd_iszero(res))) {
-        php_decimal_set_exp(res, 0);
+        php_decimal_mpd_set_exp(res, 0);
     }
 }
 
@@ -115,7 +114,7 @@ void php_decimal_pow(mpd_t *res, const mpd_t *op1, const mpd_t *op2, zend_long p
     uint32_t status = 0;
 
     if (mpd_iszero(op2)) {
-        php_decimal_set_long(res, 1);
+        php_decimal_mpd_set_long(res, 1);
         return;
     }
 
@@ -165,7 +164,7 @@ void php_decimal_mod(mpd_t *res, const mpd_t *op1, const mpd_t *op2, zend_long p
 
     if (UNEXPECTED(mpd_iszero(op2))) {
         php_decimal_division_by_zero_error();
-        php_decimal_set_inf(res, mpd_sign(op1));
+        php_decimal_mpd_set_inf(res, mpd_sign(op1));
 
     } else {
         PHP_DECIMAL_TEMP_MPD(a);
@@ -189,7 +188,7 @@ void php_decimal_rem(mpd_t *res, const mpd_t *op1, const mpd_t *op2, zend_long p
 
     if (UNEXPECTED(mpd_iszero(op2))) {
         php_decimal_division_by_zero_error();
-        php_decimal_set_inf(res, mpd_sign(op1));
+        php_decimal_mpd_set_inf(res, mpd_sign(op1));
         return;
     }
 
@@ -221,7 +220,7 @@ void php_decimal_sqrt(mpd_t *res, const mpd_t *op1, zend_long prec)
     uint32_t status = 0;
 
     if (mpd_isnegative(op1)) {
-        php_decimal_set_nan(res);
+        php_decimal_mpd_set_nan(res);
         return;
     }
 
@@ -352,7 +351,7 @@ static void php_decimal_gcd(mpd_t *gcd, const mpd_t *num, const mpd_t *den)
 
     /* Use a faster  algorithm if both integer conversions were successful, */
     if (status == 0) {
-        php_decimal_set_ulong(gcd, php_decimal_gcd_long(lnum, lden));
+        php_decimal_mpd_set_ulong(gcd, php_decimal_gcd_long(lnum, lden));
 
     /* Fall back to Euclidean algorithm for larger numbers. */
     /* TODO: Could we simplify partially then use the ulong algorithm? */
@@ -381,23 +380,23 @@ void php_decimal_rational_simplify(mpd_t *num, mpd_t *den)
 
         /* NAN in num or den is NAN */
         if (mpd_isnan(num) || mpd_isnan(den)) {
-            php_decimal_set_nan(num);
-            php_decimal_set_one(den);
+            php_decimal_mpd_set_nan(num);
+            php_decimal_mpd_set_one(den);
             return;
         }
 
         /* Dividing antyhing by INF is 0, unless the numerator is special. */
         if (mpd_isinfinite(den)) {
             if (mpd_isspecial(num)) {
-                php_decimal_set_nan(num);
-                php_decimal_set_one(den);
+                php_decimal_mpd_set_nan(num);
+                php_decimal_mpd_set_one(den);
                 return;
             }
 
             /* The result is 0, respecting the sign of the op. */
             mpd_set_sign(num, mpd_sign(num) ^ mpd_sign(den));
-            php_decimal_set_zero(num);
-            php_decimal_set_one(den);
+            php_decimal_mpd_set_zero(num);
+            php_decimal_mpd_set_one(den);
             return;
         }
 
@@ -406,7 +405,7 @@ void php_decimal_rational_simplify(mpd_t *num, mpd_t *den)
 
         /* We only need to simplify if the rational is not an integer. */
         /* This is the primary bottleneck for rational numbers. */
-        if ( ! php_decimal_is_one(den)) {
+        if ( ! php_decimal_mpd_is_one(den)) {
 
             /* Calculate the GCD and simplify.  */
             PHP_DECIMAL_TEMP_MPD(gcd);
@@ -458,7 +457,7 @@ void php_decimal_rational_from_mpd(mpd_t *num, mpd_t *den, const mpd_t *mpd)
     uint32_t status = 0;
 
     mpd_qcopy(num, mpd, &status);
-    php_decimal_set_one(den);
+    php_decimal_mpd_set_one(den);
     php_decimal_rational_normalize(num, den);
 }
 
@@ -577,8 +576,8 @@ void php_decimal_rdiv(
 ) {
     if (mpd_iszero(num2)) {
         php_decimal_division_by_zero_error();
-        php_decimal_set_inf(rnum, mpd_sign(num2));
-        php_decimal_set_one(rden);
+        php_decimal_mpd_set_inf(rnum, mpd_sign(num2));
+        php_decimal_mpd_set_one(rden);
         return;
     }
 
@@ -597,15 +596,15 @@ void php_decimal_rpow(
 
     /* Anything to the power of zero is 1 */
     if (mpd_iszero(num2)) {
-        php_decimal_set_one(rnum);
-        php_decimal_set_one(rden);
+        php_decimal_mpd_set_one(rnum);
+        php_decimal_mpd_set_one(rden);
         return;
     }
 
     /* Anything to the power of NAN is NAN */
     if (UNEXPECTED(mpd_isnan(num2))) {
-        php_decimal_set_nan(rnum);
-        php_decimal_set_one(rden);
+        php_decimal_mpd_set_nan(rnum);
+        php_decimal_mpd_set_one(rden);
         return;
     }
 
@@ -615,19 +614,19 @@ void php_decimal_rpow(
      */
     if (UNEXPECTED(mpd_isspecial(num1))) {
         if (mpd_isnan(num1)) {
-            php_decimal_set_nan(rnum);
-            php_decimal_set_one(rden);
+            php_decimal_mpd_set_nan(rnum);
+            php_decimal_mpd_set_one(rden);
             return;
         }
 
         if (mpd_ispositive(num2)) {
-            php_decimal_set_inf(rnum, MPD_POS);
-            php_decimal_set_one(rden);
+            php_decimal_mpd_set_inf(rnum, MPD_POS);
+            php_decimal_mpd_set_one(rden);
             return;
         }
 
-        php_decimal_set_zero(rnum);
-        php_decimal_set_one(rden);
+        php_decimal_mpd_set_zero(rnum);
+        php_decimal_mpd_set_one(rden);
         return;
     }
 
@@ -650,7 +649,7 @@ void php_decimal_rpow(
         PHP_DECIMAL_TEMP_MPD(b);
 
         /* Truncate the exponent if it is not already an integer. */
-        if ( ! php_decimal_is_one(den2)) {
+        if ( ! php_decimal_mpd_is_one(den2)) {
             mpd_qdivint(&a, num2, den2, MAX_CONTEXT, &status);
             php_decimal_operand_truncated_to_integer();
             num2 = &a;
@@ -689,8 +688,8 @@ void php_decimal_rmod(
 
     if (UNEXPECTED(mpd_iszero(num2))) {
         php_decimal_division_by_zero_error();
-        php_decimal_set_inf(rnum, mpd_sign(num2));
-        php_decimal_set_one(rden);
+        php_decimal_mpd_set_inf(rnum, mpd_sign(num2));
+        php_decimal_mpd_set_one(rden);
         return;
     }
 
@@ -698,7 +697,7 @@ void php_decimal_rmod(
     mpd_qdivint(rden, num2, den2, MAX_CONTEXT, &status);
 
     mpd_qrem(rnum, rnum, rden, MAX_CONTEXT, &status);
-    php_decimal_set_one(rden);
+    php_decimal_mpd_set_one(rden);
 }
 
 void php_decimal_rrem(
@@ -713,8 +712,8 @@ void php_decimal_rrem(
 
     if (UNEXPECTED(mpd_iszero(num2))) {
         php_decimal_division_by_zero_error();
-        php_decimal_set_inf(rnum, mpd_sign(num2));
-        php_decimal_set_one(rden);
+        php_decimal_mpd_set_inf(rnum, mpd_sign(num2));
+        php_decimal_mpd_set_one(rden);
         return;
     }
 
@@ -779,7 +778,7 @@ void php_decimal_rfloor(mpd_t *rnum, mpd_t *rden, const mpd_t *num, const mpd_t 
 {
     uint32_t status = 0;
 
-    if (mpd_isspecial(num) || php_decimal_is_one(den)) {
+    if (mpd_isspecial(num) || php_decimal_mpd_is_one(den)) {
         mpd_qcopy(rnum, num, &status);
         mpd_qcopy(rden, den, &status);
         return;
@@ -787,7 +786,7 @@ void php_decimal_rfloor(mpd_t *rnum, mpd_t *rden, const mpd_t *num, const mpd_t 
 
     /* Evaluate the rational to an integer. */
     mpd_qdivint(rnum, num, den, MAX_CONTEXT, &status);
-    php_decimal_set_one(rden);
+    php_decimal_mpd_set_one(rden);
 
     /* Negative values should truncate toward negative infinity.  */
     if (mpd_isnegative(num)) {
@@ -799,7 +798,7 @@ void php_decimal_rceil(mpd_t *rnum, mpd_t *rden, const mpd_t *num, const mpd_t *
 {
     uint32_t status = 0;
 
-    if (mpd_isspecial(num) || php_decimal_is_one(den)) {
+    if (mpd_isspecial(num) || php_decimal_mpd_is_one(den)) {
         mpd_qcopy(rnum, num, &status);
         mpd_qcopy(rden, den, &status);
         return;
@@ -807,7 +806,7 @@ void php_decimal_rceil(mpd_t *rnum, mpd_t *rden, const mpd_t *num, const mpd_t *
 
     /* Evaluate the rational to an integer. */
     mpd_qdivint(rnum, num, den, MAX_CONTEXT, &status);
-    php_decimal_set_one(rden);
+    php_decimal_mpd_set_one(rden);
 
     /* Positive values should round up toward positive infinity.  */
     if (mpd_ispositive(num)) {
@@ -819,7 +818,7 @@ void php_decimal_rtrunc(mpd_t *rnum, mpd_t *rden, const mpd_t *num, const mpd_t 
 {
     uint32_t status = 0;
 
-    if (mpd_isspecial(num) || php_decimal_is_one(den)) {
+    if (mpd_isspecial(num) || php_decimal_mpd_is_one(den)) {
         mpd_qcopy(rnum, num, &status);
         mpd_qcopy(rden, den, &status);
         return;
@@ -827,5 +826,35 @@ void php_decimal_rtrunc(mpd_t *rnum, mpd_t *rden, const mpd_t *num, const mpd_t 
 
     /* Evaluate the rational to an integer. */
     mpd_qdivint(rnum, num, den, MAX_CONTEXT, &status);
-    php_decimal_set_one(rden);
+    php_decimal_mpd_set_one(rden);
+}
+
+
+/******************************************************************************/
+/*                                  NUMBER                                    */
+/******************************************************************************/
+
+int php_decimal_number_parity(const zval *obj)
+{
+    int parity;
+
+    zval tmp;
+    zval res;
+    zval two;
+    ZVAL_LONG(&two, 2);
+
+    /* */
+    zend_call_method_with_1_params((zval *) obj, Z_OBJCE_P(obj), NULL, "mod", &tmp, &two);
+
+    /* TODO check exceptions? */
+    zend_call_method_with_0_params(&tmp, Z_OBJCE_P(&tmp), NULL, "iszero", &res);
+
+    /* */
+    parity = Z_TYPE_P(&res) == IS_TRUE ? 0 : 1;
+
+    zval_ptr_dtor(&tmp);
+    zval_ptr_dtor(&res);
+    zval_ptr_dtor(&two);
+
+    return parity;
 }

@@ -4,28 +4,63 @@ Decimal::trunc
 <?php
 use Decimal\Decimal;
 
-var_dump((string) Decimal::valueOf(0)->trunc());
-
-var_dump((string) Decimal::valueOf("1234.5678")->trunc());
-var_dump((string) Decimal::valueOf("1E-500")->trunc());
-
-var_dump((string) Decimal::valueOf( "NAN")->trunc());
-var_dump((string) Decimal::valueOf( "INF")->trunc());
-var_dump((string) Decimal::valueOf("-INF")->trunc());
-
 /**
- * Test immutable
+ * op1, expected result, expected precision
  */
-$obj = Decimal::valueOf("1.234");
-$obj->trunc();
-var_dump((string) $obj);
+$tests = [
+    [Decimal::valueOf( "0"),        "0",    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("+0"),        "0",    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-0"),       "-0",    Decimal::DEFAULT_PRECISION],
 
+    [Decimal::valueOf("-0.1"),     "-0",    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("+0.1"),      "0",    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "0.1"),      "0",    Decimal::DEFAULT_PRECISION],
+
+    [Decimal::valueOf("-1"),       "-1",    Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "1"),        "1",    Decimal::DEFAULT_PRECISION],
+
+    [Decimal::valueOf("-INF"),     "-INF",  Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"),      "INF",  Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "NAN"),      "NAN",  Decimal::DEFAULT_PRECISION],
+
+    [Decimal::valueOf( "0",   10),  "0",    10],
+    [Decimal::valueOf("+0",   10),  "0",    10],
+    [Decimal::valueOf("-0",   10), "-0",    10],
+
+    [Decimal::valueOf("-0.1", 10), "-0",    10],
+    [Decimal::valueOf("+0.1", 10),  "0",    10],
+    [Decimal::valueOf( "0.1", 10),  "0",    10],
+
+    [Decimal::valueOf("-1",   10), "-1",    10],
+    [Decimal::valueOf( "1",   10),  "1",    10],
+
+    [Decimal::valueOf("1.5",  10),  "1",    10],
+    [Decimal::valueOf("1E-5", 10),  "0",    10],
+
+    [Decimal::valueOf( "NAN", 10),  "NAN",  10],
+    [Decimal::valueOf( "INF", 10),  "INF",  10],
+    [Decimal::valueOf("-INF", 10), "-INF",  10],
+
+    /* Example from PHP documentation on floating point precision */
+    [Decimal::valueOf("0.1")->add("0.7")->mul(10)->trunc(), "8", 34]
+];
+
+foreach ($tests as $test) {
+    list($op1, $expect, $prec) = $test;
+
+    $result = $op1->trunc();
+
+    if ([(string) $result, $result->precision()] !== [$expect, $prec]) {
+        print_r(compact("op1", "result", "expect", "prec"));
+    }
+}
+
+/* Test immutable */
+$number = Decimal::valueOf("-1.5");
+$result = $number->trunc();
+
+if ((string) $number !== "-1.5") {
+    var_dump("Mutated!", compact("number"));
+}
 ?>
 --EXPECT--
-string(1) "0"
-string(4) "1234"
-string(1) "0"
-string(3) "NAN"
-string(3) "INF"
-string(4) "-INF"
-string(5) "1.234"

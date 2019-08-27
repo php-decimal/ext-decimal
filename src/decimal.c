@@ -203,7 +203,7 @@ static void php_decimal_do_binary_op(php_decimal_binary_op_t op, php_decimal_t *
     return;
 
 failure:
-    php_decimal_set_nan(PHP_DECIMAL_MPD(res));
+    php_decimal_mpd_set_nan(PHP_DECIMAL_MPD(res));
     mpd_del(&tmp);
 }
 
@@ -225,7 +225,7 @@ static php_decimal_success_t php_decimal_serialize(zval *object, unsigned char *
     PHP_VAR_SERIALIZE_INIT(serialize_data);
 
     /* Serialize the internal value as a string. */
-    ZVAL_STR(&tmp, php_decimal_to_string(PHP_DECIMAL_MPD(obj)));
+    ZVAL_STR(&tmp, php_decimal_mpd_to_serialized(PHP_DECIMAL_MPD(obj)));
     php_var_serialize(&buf, &tmp, &serialize_data);
     zval_ptr_dtor(&tmp);
 
@@ -288,7 +288,7 @@ static php_decimal_success_t php_decimal_unserialize(zval *object, zend_class_en
     php_decimal_set_prec(res, Z_LVAL_P(prec));
 
     /* Attempt to parse the unserialized string, quietly, delegate to local error. */
-    if (php_decimal_set_string(PHP_DECIMAL_MPD(res), Z_STR_P(value)) == FAILURE) {
+    if (php_decimal_mpd_set_string(PHP_DECIMAL_MPD(res), Z_STR_P(value)) == FAILURE) {
         goto error;
     }
 
@@ -298,7 +298,6 @@ static php_decimal_success_t php_decimal_unserialize(zval *object, zend_class_en
 
 error:
     zval_ptr_dtor(object);
-    PHP_VAR_UNSERIALIZE_DESTROY(unserialize_data);
     php_decimal_unserialize_error();
     return FAILURE;
 }
@@ -312,16 +311,16 @@ error:
  * Compares two zval's, one of which must be a decimal. This is the function
  * used by the compare handler, as well as compareTo.
  */
-static php_decimal_success_t php_decimal_compare(zval *res, zval *op1, zval *op2)
+static php_decimal_success_t php_decimal_compare_handler(zval *res, zval *op1, zval *op2)
 {
     int result;
     int invert;
 
     if (Z_IS_DECIMAL_P(op1)) {
-        result = php_decimal_compare_decimal_to_zval(Z_DECIMAL_P(op1), op2);
+        result = php_decimal_compare(Z_DECIMAL_P(op1), op2);
         invert = 0;
     } else {
-        result = php_decimal_compare_decimal_to_zval(Z_DECIMAL_P(op2), op1);
+        result = php_decimal_compare(Z_DECIMAL_P(op2), op1);
         invert = 1;
     }
 
@@ -338,7 +337,7 @@ static php_decimal_success_t php_decimal_compare(zval *res, zval *op1, zval *op2
 /**
  * var_dump, print_r etc.
  */
-static HashTable *php_decimal_get_debug_info(zval *obj, int *is_temp)
+static HashTable *php_decimal_get_debug_info_handler(zval *obj, int *is_temp)
 {
     zval tmp;
     HashTable *debug_info;
@@ -346,7 +345,7 @@ static HashTable *php_decimal_get_debug_info(zval *obj, int *is_temp)
     ALLOC_HASHTABLE(debug_info);
     zend_hash_init(debug_info, 2, NULL, ZVAL_PTR_DTOR, 0);
 
-    ZVAL_STR(&tmp, php_decimal_to_string(Z_MPD_P(obj)));
+    ZVAL_STR(&tmp, php_decimal_mpd_to_string(Z_MPD_P(obj)));
     zend_hash_str_update(debug_info, "value", sizeof("value") - 1, &tmp);
 
     ZVAL_LONG(&tmp, php_decimal_get_prec(Z_DECIMAL_P(obj)));
@@ -360,19 +359,19 @@ static HashTable *php_decimal_get_debug_info(zval *obj, int *is_temp)
 /**
  * Cast to string, int, float or bool.
  */
-static php_decimal_success_t php_decimal_cast_object(zval *obj, zval *result, int type)
+static php_decimal_success_t php_decimal_cast_object_handler(zval *obj, zval *result, int type)
 {
     switch (type) {
         case IS_STRING:
-            ZVAL_STR(result, php_decimal_to_string(Z_MPD_P(obj)));
+            ZVAL_STR(result, php_decimal_mpd_to_string(Z_MPD_P(obj)));
             return SUCCESS;
 
         case IS_LONG:
-            ZVAL_LONG(result, php_decimal_to_long(Z_MPD_P(obj)));
+            ZVAL_LONG(result, php_decimal_mpd_to_long(Z_MPD_P(obj)));
             return SUCCESS;
 
         case IS_DOUBLE:
-            ZVAL_DOUBLE(result, php_decimal_to_double(Z_MPD_P(obj)));
+            ZVAL_DOUBLE(result, php_decimal_mpd_to_double(Z_MPD_P(obj)));
             return SUCCESS;
 
         case _IS_BOOL:
@@ -389,7 +388,7 @@ static php_decimal_success_t php_decimal_cast_object(zval *obj, zval *result, in
  *
  * We don't know which of op1 and op2 is a decimal object (if not both).
  */
-static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *result, zval *op1, zval *op2)
+static php_decimal_success_t php_decimal_do_operation_handler(zend_uchar opcode, zval *result, zval *op1, zval *op2)
 {
     zval op1_copy;
     php_decimal_t *res;
@@ -429,7 +428,7 @@ static php_decimal_success_t php_decimal_do_operation(zend_uchar opcode, zval *r
 
     /* Operation failed - return success to avoid casting. */
     if (UNEXPECTED(EG(exception))) {
-        php_decimal_set_nan(PHP_DECIMAL_MPD(res));
+        php_decimal_mpd_set_nan(PHP_DECIMAL_MPD(res));
         return SUCCESS;
     }
 
@@ -511,7 +510,7 @@ PHP_DECIMAL_METHOD(Decimal, valueOf)
     PHP_DECIMAL_PARSE_PARAMS(1, 2)
         Z_PARAM_ZVAL(val)
         Z_PARAM_OPTIONAL
-        Z_PARAM_LONG(prec)
+        Z_PARAM_STRICT_LONG(prec)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     if (ZEND_NUM_ARGS() == 1) {
@@ -664,8 +663,8 @@ PHP_DECIMAL_METHOD(Decimal, round)
 
     PHP_DECIMAL_PARSE_PARAMS(0, 2)
         Z_PARAM_OPTIONAL
-        Z_PARAM_LONG(places)
-        Z_PARAM_LONG(mode)
+        Z_PARAM_STRICT_LONG(places)
+        Z_PARAM_STRICT_LONG(mode)
     PHP_DECIMAL_PARSE_PARAMS_END()
     {
         php_decimal_t *obj = THIS_DECIMAL();
@@ -783,37 +782,6 @@ PHP_DECIMAL_METHOD(Decimal, precision)
 {
     PHP_DECIMAL_PARSE_PARAMS_NONE();
     RETURN_LONG(php_decimal_get_prec(THIS_DECIMAL()));
-}
-
-/**
- * Decimal::signum
- */
-PHP_DECIMAL_ARGINFO_RETURN_TYPE(Decimal, signum, IS_LONG, 0)
-PHP_DECIMAL_ARGINFO_END()
-PHP_DECIMAL_METHOD(Decimal, signum)
-{
-    PHP_DECIMAL_PARSE_PARAMS_NONE();
-    RETURN_LONG(php_decimal_signum(THIS_DECIMAL_MPD()));
-}
-
-/**
- * Decimal::parity
- */
-PHP_DECIMAL_ARGINFO_RETURN_TYPE(Decimal, parity, IS_LONG, 0)
-PHP_DECIMAL_ARGINFO_END()
-PHP_DECIMAL_METHOD(Decimal, parity)
-{
-    PHP_DECIMAL_PARSE_PARAMS_NONE();
-
-    if (UNEXPECTED(mpd_isspecial(THIS_DECIMAL_MPD()))) {
-        RETURN_LONG(1);
-
-    } else {
-        PHP_DECIMAL_TEMP_MPD(tmp);
-        mpd_trunc(&tmp, THIS_DECIMAL_MPD(), SHARED_CONTEXT);
-        RETVAL_LONG(mpd_isodd(&tmp));
-        mpd_del(&tmp);
-    }
 }
 
 /**
@@ -944,12 +912,12 @@ PHP_DECIMAL_METHOD(Decimal, toFixed)
 
     PHP_DECIMAL_PARSE_PARAMS(0, 3)
         Z_PARAM_OPTIONAL
-        Z_PARAM_LONG(places)
+        Z_PARAM_STRICT_LONG(places)
         Z_PARAM_BOOL(commas)
-        Z_PARAM_LONG(mode)
+        Z_PARAM_STRICT_LONG(mode)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
-    RETURN_STR(php_decimal_to_fixed(THIS_DECIMAL_MPD(), places, commas, mode));
+    RETURN_STR(php_decimal_mpd_to_fixed(THIS_DECIMAL_MPD(), places, commas, mode));
 }
 
 /**
@@ -962,7 +930,19 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, toString)
 {
     PHP_DECIMAL_PARSE_PARAMS_NONE();
-    RETURN_STR(php_decimal_to_string(THIS_DECIMAL_MPD()));
+    RETURN_STR(php_decimal_mpd_to_string(THIS_DECIMAL_MPD()));
+}
+
+/**
+ * Decimal::toSci
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Decimal, toSci, IS_STRING, 0)
+PHP_DECIMAL_ARGINFO_OPTIONAL_LONG(precision)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Decimal, toSci)
+{
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+    RETURN_STR(php_decimal_mpd_to_sci(THIS_DECIMAL_MPD()));
 }
 
 /**
@@ -973,7 +953,7 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, toInt)
 {
     PHP_DECIMAL_PARSE_PARAMS_NONE();
-    RETURN_LONG(php_decimal_to_long(THIS_DECIMAL_MPD()));
+    RETURN_LONG(php_decimal_mpd_to_long(THIS_DECIMAL_MPD()));
 }
 
 /**
@@ -984,29 +964,28 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, toFloat)
 {
     PHP_DECIMAL_PARSE_PARAMS_NONE();
-    RETURN_DOUBLE(php_decimal_to_double(THIS_DECIMAL_MPD()));
+    RETURN_DOUBLE(php_decimal_mpd_to_double(THIS_DECIMAL_MPD()));
 }
 
 /**
  * Decimal::toDecimal
  */
 PHP_DECIMAL_ARGINFO_RETURN_DECIMAL(Decimal, toDecimal, 0)
-PHP_DECIMAL_ARGINFO_OPTIONAL_LONG(precision)
+PHP_DECIMAL_ARGINFO_LONG(precision)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Decimal, toDecimal)
 {
     zend_long prec;
 
-    PHP_DECIMAL_PARSE_PARAMS(0, 1)
-        Z_PARAM_OPTIONAL
-        Z_PARAM_LONG(prec)
+    PHP_DECIMAL_PARSE_PARAMS(1, 1)
+        Z_PARAM_STRICT_LONG(prec)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
-    ZVAL_COPY(return_value, getThis());
+    if (php_decimal_validate_prec(prec)) {
+        php_decimal_t *res = php_decimal_create_copy(THIS_DECIMAL());
 
-    /* */
-    if (ZEND_NUM_ARGS() == 1 && php_decimal_validate_prec(prec)) {
-        php_decimal_set_prec(Z_DECIMAL_P(return_value), prec);
+        php_decimal_set_prec(res, prec);
+        RETURN_DECIMAL(res);
     }
 }
 
@@ -1044,12 +1023,51 @@ PHP_DECIMAL_METHOD(Decimal, compareTo)
         Z_PARAM_ZVAL(op2)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
-    /* */
-    if (php_decimal_compare(return_value, getThis(), op2) == FAILURE) {
-        compare_function(return_value, getThis(), op2);
-    }
+    php_decimal_compare_handler(return_value, getThis(), op2);
 }
 
+/**
+ * Decimal::between
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Decimal, between, _IS_BOOL, 2)
+PHP_DECIMAL_ARGINFO_ZVAL(a)
+PHP_DECIMAL_ARGINFO_ZVAL(b)
+PHP_DECIMAL_ARGINFO_OPTIONAL_BOOL(inclusive)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Decimal, between)
+{
+    zval *a, *b;
+    zend_bool inclusive = PHP_DECIMAL_COMPARE_BETWEEN_INCLUSIVE_DEFAULT;
+
+    PHP_DECIMAL_PARSE_PARAMS(2, 3)
+        Z_PARAM_ZVAL(a)
+        Z_PARAM_ZVAL(b)
+        Z_PARAM_OPTIONAL
+        Z_PARAM_BOOL(inclusive)
+    PHP_DECIMAL_PARSE_PARAMS_END()
+
+    ZVAL_BOOL(return_value, php_decimal_between(THIS_DECIMAL(), a, b, inclusive));
+    zval_ptr_dtor(a);
+    zval_ptr_dtor(b);
+}
+
+/**
+ * Decimal::equals
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Decimal, equals, _IS_BOOL, 1)
+PHP_DECIMAL_ARGINFO_ZVAL(other)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Decimal, equals)
+{
+    zval *other;
+
+    PHP_DECIMAL_PARSE_PARAMS(1, 1)
+        Z_PARAM_ZVAL(other)
+    PHP_DECIMAL_PARSE_PARAMS_END()
+
+    ZVAL_BOOL(return_value, php_decimal_compare(THIS_DECIMAL(), other) == 0);
+    zval_ptr_dtor(other);
+}
 
 /******************************************************************************/
 /*                                 CLASS ENTRY                                */
@@ -1085,8 +1103,6 @@ static zend_function_entry decimal_methods[] = {
     PHP_DECIMAL_ME(Decimal, trim)
     PHP_DECIMAL_ME(Decimal, reduce)
 
-    PHP_DECIMAL_ME(Decimal, signum)
-    PHP_DECIMAL_ME(Decimal, parity)
     PHP_DECIMAL_ME(Decimal, precision)
 
     PHP_DECIMAL_ME(Decimal, abs)
@@ -1103,15 +1119,17 @@ static zend_function_entry decimal_methods[] = {
     PHP_DECIMAL_ME(Decimal, isInteger)
     PHP_DECIMAL_ME(Decimal, isZero)
 
-    PHP_DECIMAL_ME(Decimal, toFixed)
     PHP_DECIMAL_ME(Decimal, toString)
+    PHP_DECIMAL_ME(Decimal, toFixed)
+    PHP_DECIMAL_ME(Decimal, toSci)
     PHP_DECIMAL_ME(Decimal, toInt)
     PHP_DECIMAL_ME(Decimal, toFloat)
     PHP_DECIMAL_ME(Decimal, toDecimal)
     PHP_DECIMAL_ME(Decimal, toRational)
 
-    // PHP_DECIMAL_ME(Decimal, equals)
     PHP_DECIMAL_ME(Decimal, compareTo)
+    PHP_DECIMAL_ME(Decimal, between)
+    PHP_DECIMAL_ME(Decimal, equals)
     PHP_FE_END
 };
 
@@ -1150,12 +1168,40 @@ void php_decimal_register_decimal_class()
     php_decimal_handlers.offset           = 0;
     php_decimal_handlers.free_obj         = php_decimal_free_object;
     php_decimal_handlers.clone_obj        = php_decimal_clone_obj;
-    php_decimal_handlers.cast_object      = php_decimal_cast_object;
-    php_decimal_handlers.compare          = php_decimal_compare;
-    php_decimal_handlers.do_operation     = php_decimal_do_operation;
-    php_decimal_handlers.get_debug_info   = php_decimal_get_debug_info;
+    php_decimal_handlers.cast_object      = php_decimal_cast_object_handler;
+    php_decimal_handlers.compare          = php_decimal_compare_handler;
+    php_decimal_handlers.do_operation     = php_decimal_do_operation_handler;
+    php_decimal_handlers.get_debug_info   = php_decimal_get_debug_info_handler;
     php_decimal_handlers.read_property    = php_decimal_blocked_read_property;
     php_decimal_handlers.write_property   = php_decimal_blocked_write_property;
     php_decimal_handlers.has_property     = php_decimal_blocked_has_property;
     php_decimal_handlers.unset_property   = php_decimal_blocked_unset_property;
 }
+
+/**
+ *
+ */
+void php_decimal_init_decimal_constants()
+{
+    /* PI */
+    php_decimal_t *pi = php_decimal_with_prec(PHP_DECIMAL_DEFAULT_PREC);
+    php_decimal_mpd_set_charptr(PHP_DECIMAL_MPD(pi), PHP_DECIMAL_PI);
+    ZVAL_DECIMAL(&DECIMAL_GLOBALS(pi), pi);
+    PHP_DECIMAL_CONSTANT(php_decimal_decimal_ce, "PI", &DECIMAL_GLOBALS(pi));
+
+    /* Euler's number */
+    php_decimal_t *e = php_decimal_with_prec(PHP_DECIMAL_DEFAULT_PREC);
+    php_decimal_mpd_set_charptr(PHP_DECIMAL_MPD(e), PHP_DECIMAL_E);
+    ZVAL_DECIMAL(&DECIMAL_GLOBALS(e), e);
+    PHP_DECIMAL_CONSTANT(php_decimal_decimal_ce, "E", &DECIMAL_GLOBALS(e));
+}
+
+/**
+ *
+ */
+void php_decimal_dtor_decimal_constants()
+{
+    zval_ptr_dtor(&DECIMAL_GLOBALS(pi));
+    zval_ptr_dtor(&DECIMAL_GLOBALS(e));
+}
+

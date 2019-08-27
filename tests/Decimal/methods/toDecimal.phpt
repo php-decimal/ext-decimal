@@ -4,13 +4,13 @@ Decimal::toDecimal
 <?php
 use Decimal\Decimal;
 
-print_r(Decimal::valueOf(0)->toDecimal());
-print_r(Decimal::valueOf("1.234")->toDecimal());
-print_r(Decimal::valueOf("1.000")->toDecimal());
+print_r(Decimal::valueOf(0)->toDecimal(Decimal::DEFAULT_PRECISION));
+print_r(Decimal::valueOf("1.234")->toDecimal(Decimal::DEFAULT_PRECISION));
+print_r(Decimal::valueOf("1.000")->toDecimal(Decimal::DEFAULT_PRECISION));
 
-print_r(Decimal::valueOf(0, 10)->toDecimal());
-print_r(Decimal::valueOf("1.234", 10)->toDecimal());
-print_r(Decimal::valueOf("1.000", 10)->toDecimal());
+print_r(Decimal::valueOf(0, 2)->toDecimal(Decimal::DEFAULT_PRECISION));
+print_r(Decimal::valueOf("1.234", 2)->toDecimal(Decimal::DEFAULT_PRECISION));
+print_r(Decimal::valueOf("1.000", 2)->toDecimal(Decimal::DEFAULT_PRECISION));
 
 print_r(Decimal::valueOf(0, 10)->toDecimal(2));
 print_r(Decimal::valueOf("1.234", 10)->toDecimal(2));
@@ -47,17 +47,17 @@ Decimal\Decimal Object
 Decimal\Decimal Object
 (
     [value] => 0
-    [precision] => 10
+    [precision] => 34
 )
 Decimal\Decimal Object
 (
     [value] => 1.234
-    [precision] => 10
+    [precision] => 34
 )
 Decimal\Decimal Object
 (
     [value] => 1.000
-    [precision] => 10
+    [precision] => 34
 )
 Decimal\Decimal Object
 (

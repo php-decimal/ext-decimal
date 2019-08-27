@@ -25,84 +25,28 @@
 #include <ext/json/php_json.h>
 #include <mpdecimal.h>
 #include "arginfo.h"
+#include "compare.h"
 #include "context.h"
-#include "limits.h"
-#include "number.h"
-#include "round.h"
+#include "convert.h"
 #include "errors.h"
+#include "limits.h"
+#include "math.h"
+#include "number.h"
 #include "params.h"
+#include "parse.h"
+#include "round.h"
 
-/**
- * Class entry.
- */
 zend_class_entry *php_decimal_number_ce;
 
+
+/***************************************PHP_DECIMAL_EX***************************************/
+/*                              OBJECT HANDLERS                               */
+/******************************************************************************/
 
 /**
  *
  */
 static zend_object_handlers php_decimal_number_handlers;
-
-
-/**
- *
- */
-static php_decimal_success_t php_decimal_number_compare(zval *result, zval *op1, zval *op2)
-{
-    if (Z_IS_DECIMAL_NUMBER_P(op1)) {
-
-        zend_call_method_with_0_params(op1, Z_OBJCE_P(op1), NULL, "isnan", result);
-        if (UNEXPECTED(Z_TYPE_P(result) == IS_TRUE)) {
-            ZVAL_LONG(result, 1);
-            return SUCCESS;
-        }
-
-        if (Z_IS_DECIMAL_NUMBER_P(op2)) {
-
-            zend_call_method_with_0_params(op2, Z_OBJCE_P(op2), NULL, "isnan", result);
-            if (UNEXPECTED(Z_TYPE_P(result) == IS_TRUE)) {
-                ZVAL_LONG(result, 1);
-                return SUCCESS;
-            }
-        }
-
-        if (Z_TYPE_P(op2) == IS_DOUBLE) {
-            if (UNEXPECTED(zend_isnan(Z_DVAL_P(op2)))) {
-                ZVAL_LONG(result, 1);
-                return SUCCESS;
-            }
-        }
-
-        zend_call_method_with_1_params(op1, Z_OBJCE_P(op1), NULL, "compareto", result, op2);
-
-    } else {
-
-        zend_call_method_with_0_params(op2, Z_OBJCE_P(op2), NULL, "isnan", result);
-        if (UNEXPECTED(Z_TYPE_P(result) == IS_TRUE)) {
-            ZVAL_LONG(result, 1);
-            return SUCCESS;
-        }
-
-        if (Z_TYPE_P(op1) == IS_DOUBLE) {
-            if (UNEXPECTED(zend_isnan(Z_DVAL_P(op1)))) {
-                ZVAL_LONG(result, 1);
-                return SUCCESS;
-            }
-        }
-
-        zend_call_method_with_1_params(op2, Z_OBJCE_P(op2), NULL, "compareto", result, op1);
-        ZVAL_LONG(result, -1 * Z_LVAL_P(result));
-    }
-
-    /* */
-    if (UNEXPECTED(EG(exception))) {
-        ZVAL_LONG(result, 1);
-        return SUCCESS;
-    }
-
-    ZVAL_LONG(result, ZEND_NORMALIZE_BOOL(Z_LVAL_P(result)));
-    return SUCCESS;
-}
 
 /**
  * Cast to string, int, float or bool.
@@ -111,15 +55,15 @@ static php_decimal_success_t php_decimal_number_cast_object(zval *obj, zval *res
 {
     switch (type) {
         case IS_STRING:
-            zend_call_method_with_0_params(obj, Z_OBJCE_P(obj), NULL, "tostring", result);
+            php_decimal_number_to_string(result, obj);
             return SUCCESS;
 
         case IS_LONG:
-            zend_call_method_with_0_params(obj, Z_OBJCE_P(obj), NULL, "toint", result);
+            ZVAL_LONG(result, php_decimal_number_to_long(obj));
             return SUCCESS;
 
         case IS_DOUBLE:
-            zend_call_method_with_0_params(obj, Z_OBJCE_P(obj), NULL, "tofloat", result);
+            ZVAL_DOUBLE(result, php_decimal_number_to_double(obj));
             return SUCCESS;
 
         case _IS_BOOL:
@@ -180,6 +124,7 @@ static php_decimal_success_t php_decimal_number_do_operation(zend_uchar opcode, 
             return SUCCESS;
         }
 
+    /* */
     } else {
         zval tmp;
         zend_call_method_with_1_params(NULL, Z_OBJCE_P(op2), NULL, "valueof", &tmp, op1);
@@ -207,6 +152,38 @@ static php_decimal_success_t php_decimal_number_do_operation(zend_uchar opcode, 
 
     return SUCCESS;
 }
+
+/**
+ * Compares two zval's, one of which must be a decimal. This is the function
+ * used by the compare handler, as well as compareTo.
+ */
+static php_decimal_success_t php_decimal_number_compare_handler(zval *res, zval *op1, zval *op2)
+{
+    int result;
+    int invert;
+
+    if (Z_IS_DECIMAL_NUMBER_P(op1)) {
+        result = php_decimal_number_compare(op1, op2);
+        invert = 0;
+    } else {
+        result = php_decimal_number_compare(op2, op1);
+        invert = 1;
+    }
+
+    /* */
+    if (UNEXPECTED(result == PHP_DECIMAL_COMPARISON_UNDEFINED)) {
+        ZVAL_LONG(res, 1);
+    } else {
+        ZVAL_LONG(res, invert ? -result : result);
+    }
+
+    return SUCCESS;
+}
+
+
+/******************************************************************************/
+/*                              PHP CLASS METHODS                             */
+/******************************************************************************/
 
 /**
  * Number::valueOf
@@ -276,24 +253,6 @@ PHP_DECIMAL_ARGINFO_ZVAL(places)
 PHP_DECIMAL_ARGINFO_END()
 
 /**
- * Number::floor
- */
-PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Number, floor, 0)
-PHP_DECIMAL_ARGINFO_END()
-
-/**
- * Number::ceil
- */
-PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Number, ceil, 0)
-PHP_DECIMAL_ARGINFO_END()
-
-/**
- * Number::trunc
- */
-PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Number, trunc, 0)
-PHP_DECIMAL_ARGINFO_END()
-
-/**
  * Number::round
  */
 PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Number, round, 0)
@@ -302,52 +261,202 @@ PHP_DECIMAL_ARGINFO_OPTIONAL_LONG(mode)
 PHP_DECIMAL_ARGINFO_END()
 
 /**
+ * Number::floor
+ */
+PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Number, floor, 0)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, floor)
+{
+    zval places;
+    zval mode;
+
+    zval *obj = getThis();
+
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+    
+    ZVAL_LONG(&places, 0);
+    ZVAL_LONG(&mode, PHP_DECIMAL_ROUND_FLOOR);
+
+    zend_call_method_with_2_params(obj, Z_OBJCE_P(obj), NULL, "round", return_value, &places, &mode);
+}
+
+/**
+ * Number::ceil
+ */
+PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Number, ceil, 0)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, ceil)
+{
+    zval places;
+    zval mode;
+
+    zval *obj = getThis();
+    
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+    
+    ZVAL_LONG(&places, 0);
+    ZVAL_LONG(&mode, PHP_DECIMAL_ROUND_CEILING);
+ 
+    zend_call_method_with_2_params(obj, Z_OBJCE_P(obj), NULL, "round", return_value, &places, &mode);
+}
+
+/**
+ * Number::trunc
+ */
+PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Number, trunc, 0)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, trunc)
+{
+    zval places;
+    zval mode;
+
+    zval *obj = getThis();
+    
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+    
+    ZVAL_LONG(&places, 0);
+    ZVAL_LONG(&mode, PHP_DECIMAL_ROUND_TRUNCATE);
+ 
+    zend_call_method_with_2_params(obj, Z_OBJCE_P(obj), NULL, "round", return_value, &places, &mode);
+}
+
+/**
  * Number::abs
  */
 PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Number, abs, 0)
 PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, abs)
+{
+    zval *obj = getThis();
+
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+
+    /* */
+    if (php_decimal_number_is_negative(obj)) {
+        zend_call_method_with_0_params(obj, Z_OBJCE_P(obj), NULL, "negate", return_value);
+    } else {
+        ZVAL_COPY(return_value, obj);
+    }
+}
 
 /**
  * Number::negate
  */
 PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Number, negate, 0)
 PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, negate)
+{
+    zval negative_one;
 
-/**
- * Number::signum
- */
-PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, signum, IS_LONG, 0)
-PHP_DECIMAL_ARGINFO_END()
+    zval *obj = getThis();
 
-/**
- * Number::parity
- */
-PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, parity, IS_LONG, 0)
-PHP_DECIMAL_ARGINFO_END()
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+
+    ZVAL_LONG(&negative_one, -1);
+    zend_call_method_with_1_params(obj, Z_OBJCE_P(obj), NULL, "mul", return_value, &negative_one);
+}
 
 /**
  * Number::isNaN
  */
 PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, isNaN, _IS_BOOL, 0)
 PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, isNaN)
+{
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+    RETURN_BOOL(php_decimal_number_is_nan(getThis()));
+}
 
 /**
  * Number::isInf
  */
 PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, isInf, _IS_BOOL, 0)
 PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, isInf)
+{
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+    RETURN_BOOL(php_decimal_number_is_inf(getThis()));
+}
 
 /**
  * Number::isInteger
  */
 PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, isInteger, _IS_BOOL, 0)
 PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, isInteger)
+{
+    PHP_DECIMAL_PARSE_PARAMS_NONE();   
+    RETURN_BOOL(php_decimal_number_is_integer(getThis()));
+}
 
 /**
  * Number::isZero
  */
 PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, isZero, _IS_BOOL, 0)
 PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, isZero)
+{
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+    RETURN_BOOL(php_decimal_number_is_zero(getThis())); 
+}
+
+/**
+ * Number::isEven
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, isEven, _IS_BOOL, 0)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, isEven)
+{
+    const zval *obj = getThis();
+
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+
+    RETURN_BOOL(
+        php_decimal_number_is_integer(obj) &&
+        php_decimal_number_parity(obj) == 0
+    );
+}
+
+/**
+ * Number::isOdd
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, isOdd, _IS_BOOL, 0)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, isOdd)
+{
+    const zval *obj = getThis();
+
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+
+    RETURN_BOOL(
+        php_decimal_number_is_integer(obj) &&
+        php_decimal_number_parity(obj) == 1
+    );
+}
+
+
+/**
+ * Number::isPositive
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, isPositive, _IS_BOOL, 0)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, isPositive)
+{
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+    RETURN_BOOL(php_decimal_number_is_positive(getThis()));
+}
+
+
+/**
+ * Number::isNegative
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, isNegative, _IS_BOOL, 0)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, isNegative)
+{
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+    RETURN_BOOL(php_decimal_number_is_negative(getThis()));
+}
 
 /**
  * Number::toFixed
@@ -356,6 +465,12 @@ PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, toFixed, IS_STRING, 0)
 PHP_DECIMAL_ARGINFO_OPTIONAL_LONG(places)
 PHP_DECIMAL_ARGINFO_OPTIONAL_BOOL(commas)
 PHP_DECIMAL_ARGINFO_OPTIONAL_LONG(mode)
+PHP_DECIMAL_ARGINFO_END()
+
+/**
+ * Number::ToSci
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, toSci, IS_STRING, 0)
 PHP_DECIMAL_ARGINFO_END()
 
 /**
@@ -382,12 +497,38 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_ARGINFO_RETURN_DECIMAL(Number, toDecimal, 1)
 PHP_DECIMAL_ARGINFO_LONG(precision)
 PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, toDecimal)
+{
+    zval str;
+    zend_long prec;
+
+    PHP_DECIMAL_PARSE_PARAMS(1, 1)
+        Z_PARAM_STRICT_LONG(prec)
+    PHP_DECIMAL_PARSE_PARAMS_END()
+    {
+        if (EXPECTED(php_decimal_validate_prec(prec))) {
+            php_decimal_number_to_string(&str, getThis());
+            php_decimal_parse_decimal(return_value, &str, prec, false);
+            zval_ptr_dtor(&str);
+        }
+    }
+}
 
 /**
  * Number::toRational
  */
 PHP_DECIMAL_ARGINFO_RETURN_RATIONAL(Number, toRational, 0)
 PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, toRational)
+{
+    zval str;
+
+    PHP_DECIMAL_PARSE_PARAMS_NONE();
+ 
+    php_decimal_number_to_string(&str, getThis());
+    php_decimal_parse_rational(return_value, &str);
+    zval_ptr_dtor(&str);
+}
 
 /**
  * Number::compareTo
@@ -395,6 +536,49 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, compareTo, IS_LONG, 1)
 PHP_DECIMAL_ARGINFO_ZVAL(other)
 PHP_DECIMAL_ARGINFO_END()
+
+/**
+ * Number::between
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, between, _IS_BOOL, 2)
+PHP_DECIMAL_ARGINFO_ZVAL(a)
+PHP_DECIMAL_ARGINFO_ZVAL(b)
+PHP_DECIMAL_ARGINFO_OPTIONAL_BOOL(inclusive)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, between)
+{
+    zval *a, *b;
+    zend_bool inclusive = PHP_DECIMAL_COMPARE_BETWEEN_INCLUSIVE_DEFAULT;
+
+    PHP_DECIMAL_PARSE_PARAMS(2, 3)
+        Z_PARAM_ZVAL(a)
+        Z_PARAM_ZVAL(b)
+        Z_PARAM_OPTIONAL
+        Z_PARAM_BOOL(inclusive)
+    PHP_DECIMAL_PARSE_PARAMS_END()
+
+    ZVAL_BOOL(return_value, php_decimal_number_between(getThis(), a, b, inclusive));
+    zval_ptr_dtor(a);
+    zval_ptr_dtor(b);
+}
+
+/**
+ * Number::equals
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, equals, _IS_BOOL, 1)
+PHP_DECIMAL_ARGINFO_ZVAL(other)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Number, equals)
+{
+    zval *other;
+
+    PHP_DECIMAL_PARSE_PARAMS(1, 1)
+        Z_PARAM_ZVAL(other)
+    PHP_DECIMAL_PARSE_PARAMS_END()
+
+    ZVAL_BOOL(return_value, php_decimal_number_equals(getThis(), other));
+    zval_ptr_dtor(other);
+}
 
 /**
  * Number::__toString
@@ -436,30 +620,36 @@ static zend_function_entry number_methods[] = {
     PHP_DECIMAL_ME_ABSTRACT(Number, shiftl)
     PHP_DECIMAL_ME_ABSTRACT(Number, shiftr)
 
-    PHP_DECIMAL_ME_ABSTRACT(Number, floor)
-    PHP_DECIMAL_ME_ABSTRACT(Number, ceil)
-    PHP_DECIMAL_ME_ABSTRACT(Number, trunc)
     PHP_DECIMAL_ME_ABSTRACT(Number, round)
+    PHP_DECIMAL_ME         (Number, floor)
+    PHP_DECIMAL_ME         (Number, ceil)
+    PHP_DECIMAL_ME         (Number, trunc)
 
-    PHP_DECIMAL_ME_ABSTRACT(Number, abs)
-    PHP_DECIMAL_ME_ABSTRACT(Number, negate)
-    PHP_DECIMAL_ME_ABSTRACT(Number, signum)
-    PHP_DECIMAL_ME_ABSTRACT(Number, parity)
+    PHP_DECIMAL_ME         (Number, abs)
+    PHP_DECIMAL_ME         (Number, negate)
 
-    PHP_DECIMAL_ME_ABSTRACT(Number, isNaN)
-    PHP_DECIMAL_ME_ABSTRACT(Number, isInf)
-    PHP_DECIMAL_ME_ABSTRACT(Number, isInteger)
-    PHP_DECIMAL_ME_ABSTRACT(Number, isZero)
+    PHP_DECIMAL_ME         (Number, isNaN)
+    PHP_DECIMAL_ME         (Number, isInf)
+    PHP_DECIMAL_ME         (Number, isInteger)
+    PHP_DECIMAL_ME         (Number, isZero)
 
-    PHP_DECIMAL_ME_ABSTRACT(Number, toFixed)
+    PHP_DECIMAL_ME         (Number, isEven)
+    PHP_DECIMAL_ME         (Number, isOdd)
+
+    PHP_DECIMAL_ME         (Number, isPositive)
+    PHP_DECIMAL_ME         (Number, isNegative)
+
     PHP_DECIMAL_ME_ABSTRACT(Number, toString)
+    PHP_DECIMAL_ME_ABSTRACT(Number, toFixed)
     PHP_DECIMAL_ME_ABSTRACT(Number, toInt)
     PHP_DECIMAL_ME_ABSTRACT(Number, toFloat)
-    PHP_DECIMAL_ME_ABSTRACT(Number, toDecimal)
-    PHP_DECIMAL_ME_ABSTRACT(Number, toRational)
+    PHP_DECIMAL_ME         (Number, toDecimal)
+    PHP_DECIMAL_ME         (Number, toRational)
 
     PHP_DECIMAL_ME_ABSTRACT(Number, compareTo)
-
+    PHP_DECIMAL_ME         (Number, between)
+    PHP_DECIMAL_ME         (Number, equals)
+ 
     /* Aliases */
     PHP_DECIMAL_ME(Number, __toString)
     PHP_DECIMAL_ME(Number, jsonSerialize)
@@ -481,11 +671,43 @@ static zend_object *php_decimal_number_create_object(zend_class_entry *ce)
     return obj;
 }
 
+/**
+ *
+ */
+static void php_decimal_register_scalar_constants(zend_class_entry *ce)
+{
+    /**
+     * Rounding
+     */
+    PHP_DECIMAL_LONG_CONSTANT(ce, "DEFAULT_ROUNDING",  PHP_DECIMAL_DEFAULT_ROUNDING);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "ROUND_UP",          PHP_DECIMAL_ROUND_UP);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "ROUND_DOWN",        PHP_DECIMAL_ROUND_DOWN);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "ROUND_CEILING",     PHP_DECIMAL_ROUND_CEILING);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "ROUND_FLOOR",       PHP_DECIMAL_ROUND_FLOOR);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "ROUND_HALF_UP",     PHP_DECIMAL_ROUND_HALF_UP);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "ROUND_HALF_DOWN",   PHP_DECIMAL_ROUND_HALF_DOWN);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "ROUND_HALF_EVEN",   PHP_DECIMAL_ROUND_HALF_EVEN);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "ROUND_HALF_ODD",    PHP_DECIMAL_ROUND_HALF_ODD);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "ROUND_TRUNCATE",    PHP_DECIMAL_ROUND_TRUNCATE);
+
+    /**
+     * Precision
+     */
+    PHP_DECIMAL_LONG_CONSTANT(ce, "DEFAULT_PRECISION", PHP_DECIMAL_DEFAULT_PREC);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "MIN_PRECISION",     PHP_DECIMAL_MIN_PREC);
+    PHP_DECIMAL_LONG_CONSTANT(ce, "MAX_PRECISION",     PHP_DECIMAL_MAX_PREC);
+}
+
 void php_decimal_register_number_class()
 {
     zend_class_entry ce;
     INIT_CLASS_ENTRY(ce, PHP_DECIMAL_NUMBER_FQCN, number_methods);
     php_decimal_number_ce = zend_register_internal_class(&ce);
+
+    /**
+     *
+     */
+    php_decimal_register_scalar_constants(php_decimal_number_ce);
 
     /**
      *
@@ -502,27 +724,7 @@ void php_decimal_register_number_class()
      */
     memcpy(&php_decimal_number_handlers, &std_object_handlers, sizeof(zend_object_handlers));
     php_decimal_number_handlers.do_operation = php_decimal_number_do_operation;
-    php_decimal_number_handlers.compare      = php_decimal_number_compare;
+    php_decimal_number_handlers.compare      = php_decimal_number_compare_handler;
     php_decimal_number_handlers.cast_object  = php_decimal_number_cast_object;
-
-    /**
-     * Rounding
-     */
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "DEFAULT_ROUNDING",  PHP_DECIMAL_DEFAULT_ROUNDING);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "ROUND_UP",          PHP_DECIMAL_ROUND_UP);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "ROUND_DOWN",        PHP_DECIMAL_ROUND_DOWN);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "ROUND_CEILING",     PHP_DECIMAL_ROUND_CEILING);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "ROUND_FLOOR",       PHP_DECIMAL_ROUND_FLOOR);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "ROUND_HALF_UP",     PHP_DECIMAL_ROUND_HALF_UP);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "ROUND_HALF_DOWN",   PHP_DECIMAL_ROUND_HALF_DOWN);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "ROUND_HALF_EVEN",   PHP_DECIMAL_ROUND_HALF_EVEN);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "ROUND_HALF_ODD",    PHP_DECIMAL_ROUND_HALF_ODD);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "ROUND_TRUNCATE",    PHP_DECIMAL_ROUND_TRUNCATE);
-
-    /**
-     * Precision
-     */
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "DEFAULT_PRECISION", PHP_DECIMAL_DEFAULT_PREC);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "MIN_PRECISION",     PHP_DECIMAL_MIN_PREC);
-    PHP_DECIMAL_LONG_CONSTANT(php_decimal_number_ce, "MAX_PRECISION",     PHP_DECIMAL_MAX_PREC);
 }
+

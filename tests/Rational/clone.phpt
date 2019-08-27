@@ -11,13 +11,13 @@ var_dump($a);
 var_dump($b);
 ?>
 --EXPECT--
-object(Decimal\Rational)#1 (2) {
+object(Decimal\Rational)#3 (2) {
   ["num"]=>
   string(3) "617"
   ["den"]=>
   string(3) "500"
 }
-object(Decimal\Rational)#2 (2) {
+object(Decimal\Rational)#4 (2) {
   ["num"]=>
   string(3) "617"
   ["den"]=>

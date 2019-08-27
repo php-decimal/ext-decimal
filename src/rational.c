@@ -44,10 +44,6 @@
 #include "rational.h"
 #include "round.h"
 
-/*
-CONSIDERATIONS
-- Support initialization like "1/2"
-
 /**
  * Class entry.
  */
@@ -142,7 +138,7 @@ static void php_decimal_rational_free_object(zend_object *obj)
  */
 static inline zend_bool php_decimal_rational_is_integer(const php_rational_t *obj)
 {
-    return !mpd_isspecial(PHP_RATIONAL_NUM(obj)) && php_decimal_is_one(PHP_RATIONAL_DEN(obj));
+    return !mpd_isspecial(PHP_RATIONAL_NUM(obj)) && php_decimal_mpd_is_one(PHP_RATIONAL_DEN(obj));
 }
 
 
@@ -154,16 +150,16 @@ static inline zend_bool php_decimal_rational_is_integer(const php_rational_t *ob
  * Compares two zval's, one of which must be a decimal. This is the function
  * used by the compare handler, as well as compareTo.
  */
-static php_decimal_success_t php_decimal_rational_compare(zval *res, zval *op1, zval *op2)
+static php_decimal_success_t php_decimal_rational_compare_handler(zval *res, zval *op1, zval *op2)
 {
     int result;
     int invert;
 
     if (Z_IS_RATIONAL_P(op1)) {
-        result = php_decimal_compare_rational_to_zval(Z_RATIONAL_P(op1), op2);
+        result = php_decimal_rational_compare(Z_RATIONAL_P(op1), op2);
         invert = 0;
     } else {
-        result = php_decimal_compare_rational_to_zval(Z_RATIONAL_P(op2), op1);
+        result = php_decimal_rational_compare(Z_RATIONAL_P(op2), op1);
         invert = 1;
     }
 
@@ -189,10 +185,10 @@ static HashTable *php_decimal_rational_get_debug_info(zval *obj, int *is_temp)
     ALLOC_HASHTABLE(debug_info);
     zend_hash_init(debug_info, 2, NULL, ZVAL_PTR_DTOR, 0);
 
-    ZVAL_STR(&num, php_decimal_to_string(PHP_RATIONAL_NUM(Z_RATIONAL_P(obj))));
+    ZVAL_STR(&num, php_decimal_mpd_to_string(PHP_RATIONAL_NUM(Z_RATIONAL_P(obj))));
     zend_hash_str_update(debug_info, "num", sizeof("num") - 1, &num);
 
-    ZVAL_STR(&den, php_decimal_to_string(PHP_RATIONAL_DEN(Z_RATIONAL_P(obj))));
+    ZVAL_STR(&den, php_decimal_mpd_to_string(PHP_RATIONAL_DEN(Z_RATIONAL_P(obj))));
     zend_hash_str_update(debug_info, "den", sizeof("den") - 1, &den);
 
     *is_temp = 1;
@@ -300,8 +296,8 @@ static void php_decimal_do_binary_rop(php_decimal_binary_rop_t rop, php_rational
     return;
 
 failure:
-    php_decimal_set_nan(rnum);
-    php_decimal_set_one(rden);
+    php_decimal_mpd_set_nan(rnum);
+    php_decimal_mpd_set_one(rden);
     mpd_del(&a);
     mpd_del(&b);
 }
@@ -351,8 +347,8 @@ static php_decimal_success_t php_decimal_rational_do_operation(zend_uchar opcode
 
     /* Operation failed - return success to avoid casting. */
     if (UNEXPECTED(EG(exception))) {
-        php_decimal_set_nan(PHP_RATIONAL_NUM(Z_RATIONAL_P(result)));
-        php_decimal_set_one(PHP_RATIONAL_DEN(Z_RATIONAL_P(result)));
+        php_decimal_mpd_set_nan(PHP_RATIONAL_NUM(Z_RATIONAL_P(result)));
+        php_decimal_mpd_set_one(PHP_RATIONAL_DEN(Z_RATIONAL_P(result)));
         return SUCCESS;
     }
 
@@ -381,12 +377,12 @@ static php_decimal_success_t php_decimal_rational_serialize(zval *object, unsign
     PHP_VAR_SERIALIZE_INIT(serialize_data);
 
     /* Serialize the numerator as a string. */
-    ZVAL_STR(&tmp, php_decimal_to_string(PHP_RATIONAL_NUM(obj)));
+    ZVAL_STR(&tmp, php_decimal_mpd_to_serialized(PHP_RATIONAL_NUM(obj)));
     php_var_serialize(&buf, &tmp, &serialize_data);
     zval_ptr_dtor(&tmp);
 
     /* Serialize the denominator as a string. */
-    ZVAL_STR(&tmp, php_decimal_to_string(PHP_RATIONAL_DEN(obj)));
+    ZVAL_STR(&tmp, php_decimal_mpd_to_serialized(PHP_RATIONAL_DEN(obj)));
     php_var_serialize(&buf, &tmp, &serialize_data);
     zval_ptr_dtor(&tmp);
 
@@ -437,23 +433,21 @@ static php_decimal_success_t php_decimal_rational_unserialize(zval *object, zend
     }
 
     /* Attempt to parse the unserialized numerator, quietly, delegate to local error. */
-    if (php_decimal_set_string(PHP_RATIONAL_NUM(res), Z_STR_P(num)) == FAILURE) {
+    if (php_decimal_mpd_set_string(PHP_RATIONAL_NUM(res), Z_STR_P(num)) == FAILURE) {
         goto error;
     }
 
     /* Attempt to parse the unserialized denominator, quietly, delegate to local error. */
-    if (php_decimal_set_string(PHP_RATIONAL_DEN(res), Z_STR_P(den)) == FAILURE) {
+    if (php_decimal_mpd_set_string(PHP_RATIONAL_DEN(res), Z_STR_P(den)) == FAILURE) {
         goto error;
     }
 
     /* Success! Set as zval and return. */
-    ZVAL_RATIONAL(object, res);
     PHP_VAR_UNSERIALIZE_DESTROY(unserialize_data);
     return SUCCESS;
 
 error:
     zval_ptr_dtor(object);
-    PHP_VAR_UNSERIALIZE_DESTROY(unserialize_data);
     php_decimal_unserialize_error();
     return FAILURE;
 }
@@ -507,8 +501,8 @@ static php_rational_t *php_decimal_get_result_store(zval *obj)
         if (EXPECTED(php_decimal_parse_num_den(num2, den2, op2) == SUCCESS)) { \
             rop(rnum, rden, num1, den1, num2, den2); \
         } else { \
-            php_decimal_set_nan(rnum); \
-            php_decimal_set_one(rden); \
+            php_decimal_mpd_set_nan(rnum); \
+            php_decimal_mpd_set_one(rden); \
         } \
         mpd_del(&a); \
         mpd_del(&b); \
@@ -725,28 +719,6 @@ PHP_DECIMAL_METHOD(Rational, shiftr)
 }
 
 /**
- * Rational::signum
- */
-PHP_DECIMAL_ARGINFO_RETURN_TYPE(Rational, signum, IS_LONG, 0)
-PHP_DECIMAL_ARGINFO_END()
-PHP_DECIMAL_METHOD(Rational, signum)
-{
-    PHP_DECIMAL_PARSE_PARAMS_NONE();
-    RETURN_LONG(php_decimal_signum(PHP_RATIONAL_NUM(THIS_RATIONAL())));
-}
-
-/**
- * Rational::parity
- */
-PHP_DECIMAL_ARGINFO_RETURN_TYPE(Rational, parity, IS_LONG, 0)
-PHP_DECIMAL_ARGINFO_END()
-PHP_DECIMAL_METHOD(Rational, parity)
-{
-    PHP_DECIMAL_PARSE_PARAMS_NONE();
-    RETURN_LONG(php_decimal_rational_parity(THIS_RATIONAL()));
-}
-
-/**
  * Rational::abs
  */
 PHP_DECIMAL_ARGINFO_RETURN_NUMBER(Rational, abs, 0)
@@ -883,6 +855,24 @@ PHP_DECIMAL_METHOD(Rational, toFixed)
 }
 
 /**
+ * Rational::toSci
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Rational, toSci, IS_STRING, 0)
+PHP_DECIMAL_ARGINFO_OPTIONAL_LONG(precision)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Rational, toSci)
+{
+    zend_long prec = PHP_DECIMAL_DEFAULT_PREC;
+
+    PHP_DECIMAL_PARSE_PARAMS(0, 1)
+        Z_PARAM_OPTIONAL
+        Z_PARAM_STRICT_LONG(prec)
+    PHP_DECIMAL_PARSE_PARAMS_END()
+
+    RETURN_STR(php_decimal_rational_to_sci(THIS_RATIONAL(), prec));
+}
+
+/**
  * Rational::__toString
  * Rational::toString
  * Rational::jsonSerialize
@@ -925,14 +915,13 @@ PHP_DECIMAL_ARGINFO_LONG(precision)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(Rational, toDecimal)
 {
-    zend_long prec = PHP_DECIMAL_DEFAULT_PREC;
+    zend_long prec;
 
-    PHP_DECIMAL_PARSE_PARAMS(0, 1)
-        Z_PARAM_OPTIONAL
+    PHP_DECIMAL_PARSE_PARAMS(1, 1)
         Z_PARAM_STRICT_LONG(prec)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
-    if (ZEND_NUM_ARGS() == 0 || php_decimal_validate_prec(prec)) {
+    if (php_decimal_validate_prec(prec)) {
         php_rational_t *obj = THIS_RATIONAL();
         php_decimal_t  *res = php_decimal_with_prec(prec);
 
@@ -966,7 +955,50 @@ PHP_DECIMAL_METHOD(Rational, compareTo)
         Z_PARAM_ZVAL(op2)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
-    php_decimal_rational_compare(return_value, getThis(), op2);
+    php_decimal_rational_compare_handler(return_value, getThis(), op2);
+}
+
+/**
+ * Rational::between
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Rational, between, _IS_BOOL, 2)
+PHP_DECIMAL_ARGINFO_ZVAL(a)
+PHP_DECIMAL_ARGINFO_ZVAL(b)
+PHP_DECIMAL_ARGINFO_OPTIONAL_BOOL(inclusive)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Rational, between)
+{
+    zval *a, *b;
+    zend_bool inclusive = PHP_DECIMAL_COMPARE_BETWEEN_INCLUSIVE_DEFAULT;
+
+    PHP_DECIMAL_PARSE_PARAMS(2, 3)
+        Z_PARAM_ZVAL(a)
+        Z_PARAM_ZVAL(b)
+        Z_PARAM_OPTIONAL
+        Z_PARAM_BOOL(inclusive)
+    PHP_DECIMAL_PARSE_PARAMS_END()
+
+    ZVAL_BOOL(return_value, php_decimal_rational_between(THIS_RATIONAL(), a, b, inclusive));
+    zval_ptr_dtor(a);
+    zval_ptr_dtor(b);
+}
+
+/**
+ * Rational::equals
+ */
+PHP_DECIMAL_ARGINFO_RETURN_TYPE(Rational, equals, _IS_BOOL, 1)
+PHP_DECIMAL_ARGINFO_ZVAL(other)
+PHP_DECIMAL_ARGINFO_END()
+PHP_DECIMAL_METHOD(Rational, equals)
+{
+    zval *other;
+
+    PHP_DECIMAL_PARSE_PARAMS(1, 1)
+        Z_PARAM_ZVAL(other)
+    PHP_DECIMAL_PARSE_PARAMS_END()
+
+    ZVAL_BOOL(return_value, php_decimal_rational_compare(THIS_RATIONAL(), other) == 0);
+    zval_ptr_dtor(other);
 }
 
 /******************************************************************************/
@@ -996,9 +1028,6 @@ static zend_function_entry rational_methods[] = {
     PHP_DECIMAL_ME(Rational, trunc)
     PHP_DECIMAL_ME(Rational, round)
 
-    PHP_DECIMAL_ME(Rational, signum)
-    PHP_DECIMAL_ME(Rational, parity)
-
     PHP_DECIMAL_ME(Rational, abs)
     PHP_DECIMAL_ME(Rational, negate)
 
@@ -1014,6 +1043,7 @@ static zend_function_entry rational_methods[] = {
     PHP_DECIMAL_ME(Rational, isZero)
 
     PHP_DECIMAL_ME(Rational, toFixed)
+    PHP_DECIMAL_ME(Rational, toSci)
     PHP_DECIMAL_ME(Rational, toString)
     PHP_DECIMAL_ME(Rational, toInt)
     PHP_DECIMAL_ME(Rational, toFloat)
@@ -1021,6 +1051,8 @@ static zend_function_entry rational_methods[] = {
     PHP_DECIMAL_ME(Rational, toRational)
 
     PHP_DECIMAL_ME(Rational, compareTo)
+    PHP_DECIMAL_ME(Rational, between)
+    PHP_DECIMAL_ME(Rational, equals)
     PHP_FE_END
 };
 
@@ -1060,7 +1092,7 @@ void php_decimal_register_rational_class()
     php_decimal_rational_handlers.free_obj         = php_decimal_rational_free_object;
     php_decimal_rational_handlers.clone_obj        = php_decimal_rational_clone_obj;
     php_decimal_rational_handlers.cast_object      = php_decimal_rational_cast_object;
-    php_decimal_rational_handlers.compare          = php_decimal_rational_compare;
+    php_decimal_rational_handlers.compare          = php_decimal_rational_compare_handler;
     php_decimal_rational_handlers.do_operation     = php_decimal_rational_do_operation;
     php_decimal_rational_handlers.get_debug_info   = php_decimal_rational_get_debug_info;
     php_decimal_rational_handlers.read_property    = php_decimal_blocked_read_property;

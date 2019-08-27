@@ -89,6 +89,7 @@
 
 
 
+
 // #define PHP_DECIMAL_ARGINFO_RETURN_TYPE(cls, name, type, required_num_args) \
 //     PHP_DECIMAL_ARGINFO_RETURN_TYPE_EX(cls, name, type, required_num_args)
 
@@ -123,6 +124,9 @@
 
 #define PHP_DECIMAL_ARGINFO_OPTIONAL_BOOL(name) \
     ZEND_ARG_TYPE_INFO(0, name, _IS_BOOL, 1)
+
+#define PHP_DECIMAL_ARGINFO_NUMBER(name) \
+    ZEND_ARG_OBJ_INFO(0, name, Decimal\\Number, 0)
 
 #define PHP_DECIMAL_ARGINFO_END() \
     ZEND_END_ARG_INFO()

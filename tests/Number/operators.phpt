@@ -1,5 +1,5 @@
 --TEST--
-Decimal operators
+Number operators
 --FILE--
 <?php
 /**

@@ -8,15 +8,16 @@ var_dump(Decimal::valueOf(0)->precision());
 var_dump(Decimal::valueOf(5)->precision());
 var_dump(Decimal::valueOf(5, 5)->precision());
 
-Decimal::valueOf(0, 0);
+try {
+	$x = Decimal::valueOf(0, 0)->precision();
+} catch (\OutOfRangeException $e) {
+	var_dump($x);
+}
 ?>
 --EXPECTF--
 int(34)
 int(34)
 int(5)
 
-Fatal error: Uncaught OutOfRangeException: Decimal precision out of range in %s:%d
-Stack trace:
-#0 %s(%d): Decimal\Decimal::valueOf(0, 0)
-#1 {main}
-  thrown in %s on line %d
+Notice: Undefined variable: x in %s on line %d
+NULL

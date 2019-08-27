@@ -34,9 +34,9 @@ $tests = [
     [Decimal::valueOf("-1", 10),   "-1", 10],
     [Decimal::valueOf( "1", 10),    "1", 10],
 
-    [Decimal::valueOf("-INF", 10), "-INF", 10],
-    [Decimal::valueOf( "INF", 10),  "INF", 10],
     [Decimal::valueOf( "NAN", 10),  "NAN", 10],
+    [Decimal::valueOf( "INF", 10),  "INF", 10],
+    [Decimal::valueOf("-INF", 10), "-INF", 10],
 ];
 
 foreach ($tests as $test) {

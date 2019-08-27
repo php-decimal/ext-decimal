@@ -7,25 +7,25 @@ use Decimal\Decimal;
 $tests = [
     /* decimal places, grouped, rounding mode, expected */
 
-    ["0",           5,     false,   Decimal::ROUND_HALF_UP,      "0.00000"],
+    ["0",           5,     false,   Decimal::ROUND_HALF_UP,     "0.00000"],
 
-    ["1.23456",     3,     false,   Decimal::ROUND_UP,           "1.235"],
-    ["1.23456",     3,     false,   Decimal::ROUND_DOWN,         "1.234"],
-    ["1.23456",     3,     false,   Decimal::ROUND_CEILING,      "1.235"],
+    ["1.23456",     3,     false,   Decimal::ROUND_UP,          "1.235"],
+    ["1.23456",     3,     false,   Decimal::ROUND_DOWN,        "1.234"],
+    ["1.23456",     3,     false,   Decimal::ROUND_CEILING,     "1.235"],
 
-    ["1.23456",     3,     false,   Decimal::ROUND_FLOOR,        "1.234"],
-    ["1.23456",     3,     false,   Decimal::ROUND_HALF_DOWN,    "1.235"],
-    ["1.23456",     3,     false,   Decimal::ROUND_HALF_EVEN,    "1.235"],
-    ["1.23456",     3,     false,   Decimal::ROUND_HALF_UP,      "1.235"],
+    ["1.23456",     3,     false,   Decimal::ROUND_FLOOR,       "1.234"],
+    ["1.23456",     3,     false,   Decimal::ROUND_HALF_DOWN,   "1.235"],
+    ["1.23456",     3,     false,   Decimal::ROUND_HALF_EVEN,   "1.235"],
+    ["1.23456",     3,     false,   Decimal::ROUND_HALF_UP,     "1.235"],
 
-    ["1000000",     0,     true,    Decimal::ROUND_UP,   "1,000,000"],
-    ["1000000",     2,     true,    Decimal::ROUND_UP,   "1,000,000.00"],
-    ["1000000",     0,     false,   Decimal::ROUND_UP,   "1000000"],
-    ["1000000",     2,     false,   Decimal::ROUND_UP,   "1000000.00"],
+    ["1000000",     0,     true,    Decimal::ROUND_UP,          "1,000,000"],
+    ["1000000",     2,     true,    Decimal::ROUND_UP,          "1,000,000.00"],
+    ["1000000",     0,     false,   Decimal::ROUND_UP,          "1000000"],
+    ["1000000",     2,     false,   Decimal::ROUND_UP,          "1000000.00"],
 
-    [ "NAN",        2,     false,   Decimal::ROUND_UP,   "NAN"],
-    [ "INF",        2,     false,   Decimal::ROUND_UP,   "INF"],
-    ["-INF",        2,     false,   Decimal::ROUND_UP,  "-INF"],
+    [ "NAN",        2,     false,   Decimal::ROUND_UP,          "NAN"],
+    [ "INF",        2,     false,   Decimal::ROUND_UP,          "INF"],
+    ["-INF",        2,     false,   Decimal::ROUND_UP,         "-INF"],
 ];
 
 foreach ($tests as $test) {

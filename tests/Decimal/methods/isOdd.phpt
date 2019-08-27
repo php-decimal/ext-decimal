@@ -22,7 +22,7 @@ $tests = [
     [2,         false],
     [3,         true],
 
-    [-1,         true],
+    [-1,        true],
     [-2,        false],
     [-3,        true],
 
@@ -30,9 +30,9 @@ $tests = [
     ["2.5",     false],
     ["3.5",     false],
 
+    [ "NAN",    false],
+    [ "INF",    false],
     ["-INF",    false],
-    ["INF",     false],
-    ["NAN",     false],
 ];
 
 foreach ($tests as $test) {

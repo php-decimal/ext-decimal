@@ -9,8 +9,8 @@ use Decimal\Decimal;
  */
 $tests = [
     [
-        Decimal::valueOf("1.2345678901234567890123456789" /* default */),
-        Decimal::valueOf("9.8765432109876543210987654321" /* default */),
+        Decimal::valueOf("1.2345678901234567890123456789"),
+        Decimal::valueOf("9.8765432109876543210987654321"),
                         "12.19326311370217952261850327336229", Decimal::DEFAULT_PRECISION
     ],
     [
@@ -29,13 +29,13 @@ $tests = [
                          "4",      1,
     ],
     [
-        Decimal::valueOf("0.3" /* default */),
-        Decimal::valueOf("0.1" /* default */),
+        Decimal::valueOf("0.3"),
+        Decimal::valueOf("0.1"),
                          "0.03", Decimal::DEFAULT_PRECISION
     ],
     [
-        Decimal::valueOf("-0.3" /* default */),
-        Decimal::valueOf( "0.1" /* default */),
+        Decimal::valueOf("-0.3"),
+        Decimal::valueOf( "0.1"),
                          "-0.03", Decimal::DEFAULT_PRECISION
     ],
     [

@@ -8,10 +8,36 @@ use Decimal\Decimal;
  * op1, op2, expected result, expected precision
  */
 $tests = [
-    [Decimal::valueOf(1)     / Decimal::valueOf(3),     "2.0", "0.1111111111111111111111111111111111",                      Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf(1)     / Decimal::valueOf(3),     "1.5", "0.1924500897298752548363829268339858",                      Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf(1)     / Decimal::valueOf(3),     "100", "1.940325217482632837588506028804631E-48",                   Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf(1, 50) / Decimal::valueOf(3, 50), "100", "1.9403252174826328375885060288046503812141166864962E-48",   50],
+    [   
+        Decimal::valueOf(1) / Decimal::valueOf(3),     
+        "2.0", 
+        "0.1111111111111111111111111111111111",                      
+        Decimal::DEFAULT_PRECISION
+    ],
+    [   
+        Decimal::valueOf(1) / Decimal::valueOf(3),     
+        "1.5", 
+        "0.1924500897298752548363829268339858",                      
+        Decimal::DEFAULT_PRECISION
+    ],
+    [   
+        Decimal::valueOf(1) / Decimal::valueOf(3),     
+        "100", 
+        "0.000000000000000000000000000000000000000000000001940325217482632837588506028804631",                   
+        Decimal::DEFAULT_PRECISION
+    ],
+    [   
+        Decimal::valueOf(1, 50) / Decimal::valueOf(3, 50), 
+        "100", 
+        "0.0000000000000000000000000000000000000000000000019403252174826328375885060288046503812141166864962",   
+        50
+    ],
+    [
+        Decimal::valueOf("0.7"), 
+        "1000", 
+        "0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001253256639965718318107554832382734", 
+        Decimal::DEFAULT_PRECISION
+    ],
 
     [Decimal::valueOf("0"),   "0",    pow(0, 0), Decimal::DEFAULT_PRECISION],
     [Decimal::valueOf("0"),   "1",    pow(0, 1), Decimal::DEFAULT_PRECISION],
@@ -27,8 +53,6 @@ $tests = [
     [Decimal::valueOf("-1"),  "0",    pow(-1,  0), Decimal::DEFAULT_PRECISION],
     [Decimal::valueOf("-1"),  "1",    pow(-1,  1), Decimal::DEFAULT_PRECISION],
     [Decimal::valueOf("-1"),  "2",    pow(-1,  2), Decimal::DEFAULT_PRECISION],
-
-    [Decimal::valueOf("0.7"), "1000", "1.253256639965718318107554832382734E-155", Decimal::DEFAULT_PRECISION],
 
     /* Test pow by self */
     [$a = Decimal::valueOf("1.2345678"), $a, "1.297123731240147537684763556982358", Decimal::DEFAULT_PRECISION],

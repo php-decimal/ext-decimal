@@ -106,6 +106,11 @@ void php_decimal_integer_from_special_is_not_defined();
 void php_decimal_sign_of_nan_is_not_defined();
 
 /**
+ * Called when attempting to compare a number to an unsupported type.
+ */
+void php_decimal_comparison_is_not_defined();
+
+/**
  * Called when an operation is attempted using an unsupported operator, like "|".
  */
 void php_decimal_operator_not_supported();

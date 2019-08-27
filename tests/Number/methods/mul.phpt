@@ -8,128 +8,124 @@ use \Decimal\Decimal;
 use \Decimal\Rational;
 
 /* Number multiplied by scalar using operator */
-var_dump(Number::valueOf(4) * "2.5");
+print_r(Number::valueOf(4) * "2.5");
 
 /* Scalar multiplied by Number using operator */
-var_dump("2.5" * Number::valueOf(4));
+print_r("2.5" * Number::valueOf(4));
 
 /* Number multiplied by Number using operator */
-var_dump(Number::valueOf(4) * Number::valueOf("2.5"));
+print_r(Number::valueOf(4) * Number::valueOf("2.5"));
 
 /* Number multiplied by Number using method */
-var_dump(Number::valueOf(4)->mul(Number::valueOf("2.5")));
+print_r(Number::valueOf(4)->mul(Number::valueOf("2.5")));
 
 /* Number multiplied by Decimal using operator */
-var_dump(Number::valueOf(4) * Decimal::valueOf("2.5"));
+print_r(Number::valueOf(4) * Decimal::valueOf("2.5"));
 
 /* Number multiplied by Decimal using method */
-var_dump(Number::valueOf(4)->mul(Decimal::valueOf("2.5")));
+print_r(Number::valueOf(4)->mul(Decimal::valueOf("2.5")));
 
 /* Number multiplied by Rational using operator */
-var_dump(Number::valueOf(4) * Rational::valueOf("2.5"));
+print_r(Number::valueOf(4) * Rational::valueOf("2.5"));
 
 /* Number multiplied by Rational using method */
-var_dump(Number::valueOf(4)->mul(Rational::valueOf("2.5")));
+print_r(Number::valueOf(4)->mul(Rational::valueOf("2.5")));
 
 /* Decimal multiplied by Number using operator */
-var_dump(Decimal::valueOf(4) * Number::valueOf("2.5"));
+print_r(Decimal::valueOf(4) * Number::valueOf("2.5"));
 
 /* Decimal multiplied by Number using method */
-var_dump(Decimal::valueOf(4)->mul(Number::valueOf("2.5")));
+print_r(Decimal::valueOf(4)->mul(Number::valueOf("2.5")));
 
 /* Rational multiplied by Number using operator */
-var_dump(Rational::valueOf(4) * Number::valueOf("2.5"));
+print_r(Rational::valueOf(4) * Number::valueOf("2.5"));
 
 /* Rational multiplied by Number using method */
-var_dump(Rational::valueOf(4)->mul(Number::valueOf("2.5")));
+print_r(Rational::valueOf(4)->mul(Number::valueOf("2.5")));
 
 ?>
 --EXPECTF--
 Number::mul
-object(Number)#%d (1) {
-  ["value":protected]=>
-  float(10)
-}
+Number Object
+(
+    [value:protected] => 10
+)
 Number::mul
-object(Number)#%d (1) {
-  ["value":protected]=>
-  float(10)
-}
+Number Object
+(
+    [value:protected] => 10
+)
 Number::mul
-object(Number)#%d (1) {
-  ["value":protected]=>
-  float(10)
-}
+Number Object
+(
+    [value:protected] => 10
+)
 Number::mul
-object(Number)#%d (1) {
-  ["value":protected]=>
-  float(10)
-}
+Number Object
+(
+    [value:protected] => 10
+)
 Number::mul
-object(Number)#%d (1) {
-  ["value":protected]=>
-  object(Decimal\Decimal)#4 (2) {
-    ["value"]=>
-    string(4) "10.0"
-    ["precision"]=>
-    int(34)
-  }
-}
+Number Object
+(
+    [value:protected] => Decimal\Decimal Object
+        (
+            [value] => 10.0
+            [precision] => 34
+        )
+
+)
 Number::mul
-object(Number)#%d (1) {
-  ["value":protected]=>
-  object(Decimal\Decimal)#%d (2) {
-    ["value"]=>
-    string(4) "10.0"
-    ["precision"]=>
-    int(34)
-  }
-}
+Number Object
+(
+    [value:protected] => Decimal\Decimal Object
+        (
+            [value] => 10.0
+            [precision] => 34
+        )
+
+)
 Number::mul
-object(Number)#%d (1) {
-  ["value":protected]=>
-  object(Decimal\Rational)#4 (2) {
-    ["num"]=>
-    string(2) "10"
-    ["den"]=>
-    string(1) "1"
-  }
-}
+Number Object
+(
+    [value:protected] => Decimal\Rational Object
+        (
+            [num] => 10
+            [den] => 1
+        )
+
+)
 Number::mul
-object(Number)#%d (1) {
-  ["value":protected]=>
-  object(Decimal\Rational)#%d (2) {
-    ["num"]=>
-    string(2) "10"
-    ["den"]=>
-    string(1) "1"
-  }
-}
+Number Object
+(
+    [value:protected] => Decimal\Rational Object
+        (
+            [num] => 10
+            [den] => 1
+        )
+
+)
 Number::toDecimal
-object(Decimal\Decimal)#%d (2) {
-  ["value"]=>
-  string(4) "10.0"
-  ["precision"]=>
-  int(34)
-}
+Decimal\Decimal Object
+(
+    [value] => 10.0
+    [precision] => 34
+)
 Number::toDecimal
-object(Decimal\Decimal)#%d (2) {
-  ["value"]=>
-  string(4) "10.0"
-  ["precision"]=>
-  int(34)
-}
+Decimal\Decimal Object
+(
+    [value] => 10.0
+    [precision] => 34
+)
 Number::toRational
-object(Decimal\Rational)#%d (2) {
-  ["num"]=>
-  string(2) "10"
-  ["den"]=>
-  string(1) "1"
-}
+Decimal\Rational Object
+(
+    [num] => 10
+    [den] => 1
+)
 Number::toRational
-object(Decimal\Rational)#%d (2) {
-  ["num"]=>
-  string(2) "10"
-  ["den"]=>
-  string(1) "1"
-}
+Decimal\Rational Object
+(
+    [num] => 10
+    [den] => 1
+)
