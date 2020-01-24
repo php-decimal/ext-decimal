@@ -1157,7 +1157,7 @@ static void php_decimal_shift(php_decimal_t *res, mpd_t *op1, zend_long places)
 static void php_decimal_abs(php_decimal_t *res, mpd_t *op1)
 {
     uint32_t status = 0;
-    mpd_qabs(PHP_DECIMAL_MPD(res), op1, php_decimal_context(), &status);
+    mpd_qcopy_abs(PHP_DECIMAL_MPD(res), op1, &status);
 }
 
 /**
