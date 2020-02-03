@@ -1,14 +1,14 @@
 language: php
 
 php:
-  - 7.0
-  - 7.1
   - 7.2
   - 7.3
   - 7.4
   - nightly
 
 env:
+  global:
+    - REPORT_EXIT_STATUS=1
   matrix:
     - ENABLE_OPCACHE=1
     - ENABLE_OPCACHE=0
@@ -41,4 +41,5 @@ before_script:
   - echo "opcache.enable_cli=$ENABLE_OPCACHE" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
-  - REPORT_EXIT_STATUS=1 php run-tests.php -P -q -g FAIL,XFAIL,SKIP,BORK,WARN,LEAK,REDIRECT --show-diff
+  - wget -q -O run-tests.php https://raw.githubusercontent.com/php/php-src/master/run-tests.php
+  - php run-tests.php -P -q --show-diff

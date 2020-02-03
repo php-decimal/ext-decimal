@@ -10,9 +10,9 @@ Correctly-rounded, arbitrary-precision decimal arithmetic for PHP 7
 
 See http://php-decimal.io
 
-## Dependencies
+## Requirements
 
-- PHP 7
+- PHP 7.2+
 - [libmpdec 2.4](http://www.bytereef.org/mpdecimal/download.html)
 
 ```bash
@@ -36,5 +36,3 @@ You can do this temporarily using `php -dextension=decimal.so` or by adding `ext
 ```
 php run-tests.php -P -q
 ```
-
-

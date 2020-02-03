@@ -57,7 +57,23 @@ if test "$PHP_DECIMAL" != "no"; then
       -L$LIBMPDEC_DIR -lm
     ])
 
-    PHP_NEW_EXTENSION(decimal, php_decimal.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+    PHP_NEW_EXTENSION(decimal, \
+      php_decimal.c \
+      src/common.c \
+      src/compare.c \
+      src/context.c \
+      src/convert.c \
+      src/decimal.c \
+      src/errors.c \
+      src/globals.c \
+      src/math.c \
+      src/number.c \
+      src/parse.c \
+      src/rational.c \
+      src/round.c \
+      , $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+
+    PHP_ADD_BUILD_DIR($ext_builddir/src, 1)
 
     PHP_ADD_EXTENSION_DEP(decimal, standard)
     PHP_ADD_EXTENSION_DEP(decimal, spl)

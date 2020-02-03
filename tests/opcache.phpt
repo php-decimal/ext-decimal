@@ -14,7 +14,7 @@ opcache.optimization_level=2
 /**
  * Test that opcache does not convert these constant strings to float.
  */
-$number = new \Decimal\Decimal(1);
+$number = \Decimal\Rational::valueOf(1);
 
 $number = $number *  "0.1";
 $number = $number *  "0.0000123456789";
@@ -31,9 +31,9 @@ var_dump($number);
 
 ?>
 --EXPECT--
-object(Decimal\Decimal)#1 (2) {
-  ["value"]=>
-  string(35) "0.000004263976243931729575375414851"
-  ["precision"]=>
-  int(28)
+object(Decimal\Rational)#3 (2) {
+  ["num"]=>
+  string(75) "426397624393172957537541485031321559583108704527981359123508334688202542589"
+  ["den"]=>
+  string(81) "100000000000000000000000000000000000000000000000000000000000000000000000000000000"
 }
