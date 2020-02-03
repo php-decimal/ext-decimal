@@ -10,8 +10,8 @@
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2018-11-20</date>
-    <time>11:56:52</time>
+    <date>2020-02-03</date>
+    <time>13:24:32</time>
     <version>
         <release>2.0.0</release>
         <api>2.0.0</api>
@@ -80,7 +80,6 @@
                     <file role="test" name="empty.phpt"/>
                     <file role="test" name="json.phpt"/>
                     <file role="test" name="operators.phpt"/>
-                    <file role="test" name="precision.sh"/>
                     <file role="test" name="properties.phpt"/>
                     <file role="test" name="serialize.phpt"/>
 
@@ -104,7 +103,6 @@
                         <file role="test" name="mod.phpt"/>
                         <file role="test" name="mul.phpt"/>
                         <file role="test" name="negate.phpt"/>
-                        <file role="test" name="parity.phpt"/>
                         <file role="test" name="pow.phpt"/>
                         <file role="test" name="precision.phpt"/>
                         <file role="test" name="reduce.phpt"/>
@@ -112,7 +110,6 @@
                         <file role="test" name="round.phpt"/>
                         <file role="test" name="shiftl.phpt"/>
                         <file role="test" name="shiftr.phpt"/>
-                        <file role="test" name="signum.phpt"/>
                         <file role="test" name="sqrt.phpt"/>
                         <file role="test" name="sub.phpt"/>
                         <file role="test" name="toDecimal.phpt"/>
@@ -135,7 +132,6 @@
                     <file role="test" name="json.phpt"/>
                     <file role="test" name="operators.phpt"/>
                     <file role="test" name="properties.phpt"/>
-                    <file role="test" name="serialize.phpt"/>
 
                     <dir name="methods">
                         <file role="test" name="add.phpt"/>
@@ -157,10 +153,8 @@
                     <file role="test" name="clone.phpt"/>
                     <file role="test" name="constants.phpt"/>
                     <file role="test" name="empty.phpt"/>
-                    <file role="test" name="extend.phpt"/>
                     <file role="test" name="json.phpt"/>
                     <file role="test" name="operators.phpt"/>
-                    <file role="test" name="precision.sh"/>
                     <file role="test" name="properties.phpt"/>
                     <file role="test" name="serialize.phpt"/>
 
@@ -181,13 +175,11 @@
                         <file role="test" name="mod.phpt"/>
                         <file role="test" name="mul.phpt"/>
                         <file role="test" name="negate.phpt"/>
-                        <file role="test" name="parity.phpt"/>
                         <file role="test" name="pow.phpt"/>
                         <file role="test" name="rem.phpt"/>
                         <file role="test" name="round.phpt"/>
                         <file role="test" name="shiftl.phpt"/>
                         <file role="test" name="shiftr.phpt"/>
-                        <file role="test" name="signum.phpt"/>
                         <file role="test" name="sub.phpt"/>
                         <file role="test" name="toDecimal.phpt"/>
                         <file role="test" name="toFixed.phpt"/>
