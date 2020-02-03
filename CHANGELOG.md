@@ -10,6 +10,8 @@ This project follows [Semantic Versioning](http://semver.org/).
 - Added `Decimal\Number` abstract number class.
 - Added `Decimal\Precision` interface.
 - Added `Decimal\Decimal::reduce` method.
+- Remove `signum` methods.
+- Remove `parity` methods.
 - Better consistency around scientific notation when converting to string or JSON.
 - Precision is now applied on operations only (input is preserved).
 - Decimal constructors are now private - must use `\Decimal\Number::valueOf`.
