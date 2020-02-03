@@ -26,6 +26,8 @@
         - Decimal operations now use the **minimum** precision of all operands.
         - Added `Decimal\Rational` implementation for rational numbers (fractions).
         - Added `Decimal\Number` abstract class.
+        - Remove `signum` methods.
+        - Remove `parity` methods.
         - Performance improvements, reduced object allocations.
         - Private constructors, static initializers via `valueOf`.
     </notes>
