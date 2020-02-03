@@ -1,9 +1,12 @@
 # PHP Decimal Extension
 
-[![Build Status](https://travis-ci.org/php-decimal/ext-decimal.svg?branch=master)](https://travis-ci.org/php-decimal/ext-decimal)
+
+[![PECL](https://img.shields.io/static/v1?message=1.3.1&label=PECL&color=blue&style=flat&logo=php)](https://pecl.php.net/package/decimal/1.3.1)
+[![Build Status](https://travis-ci.org/php-decimal/ext-decimal.svg?branch=1.3)](https://travis-ci.org/php-decimal/ext-decimal)
+
+[![PECL](https://img.shields.io/static/v1?message=2.0.0-alpha&label=PECL&color=blue&style=flat&logo=php)](https://pecl.php.net/package/decimal/2.0.0)
+[![Build Status](https://travis-ci.org/php-decimal/ext-decimal.svg?branch=2.0&style=flat)](https://travis-ci.org/php-decimal/ext-decimal)
 [![Build status](https://ci.appveyor.com/api/projects/status/lg5nw5tqgpmv1c33?svg=true)](https://ci.appveyor.com/project/rtheunissen/php-decimal)
-[![PECL](https://img.shields.io/static/v1?message=1.3.1&label=PECL&color=blue&style=flat-square&logo=php)](https://pecl.php.net/package/decimal/1.3.1)
-[![PECL](https://img.shields.io/static/v1?message=2.0.0-alpha&label=PECL&color=blue&style=flat-square&logo=php)](https://pecl.php.net/package/decimal/2.0.0)
 
 Correctly-rounded, arbitrary-precision decimal arithmetic for PHP 7
 
