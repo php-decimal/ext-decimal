@@ -10,10 +10,10 @@
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2019-02-11</date>
-    <time>10:05:05</time>
+    <date>2020-02-03</date>
+    <time>13:11:02</time>
     <version>
-        <release>1.3.0</release>
+        <release>1.3.1</release>
         <api>1.3.0</api>
     </version>
     <stability>
@@ -22,8 +22,7 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        - Fixed sqrt of -INF returning -INF rather than NAN. #13
-        - Disable opcache pass 2 due to numeric string to float casts. Thanks @krakjoe
+        - Fixed abs affected by precision.
     </notes>
     <contents>
         <dir name="/">

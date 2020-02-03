@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](http://semver.org/).
 
+## [1.3.1] - 2020-02-03
+- Fixed `abs` affected by precision. #31 Thanks @bobvandevijver
+
 ## [1.3.0] - 2019-02-11
 - Fixed sqrt of -INF returning -INF rather than NAN. #13
 - Disable opcache pass 2 due to numeric string to float casts. Thanks @krakjoe

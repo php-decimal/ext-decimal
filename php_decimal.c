@@ -59,7 +59,7 @@ static void php_decimal_print(php_decimal_t *obj)
 {
     char *str;
     mpd_to_sci_size(&str, PHP_DECIMAL_MPD(obj), 1);
-    php_printf("{\n  repr: %s\n  prec: %ld\n}\n", str, obj->prec);
+    php_printf("{\n  repr: %s\n  prec: %ld\n}\n", str, (long) obj->prec);
     mpd_free(str);
 }
 
