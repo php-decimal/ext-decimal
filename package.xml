@@ -56,7 +56,6 @@
                 <file role="src" name="decimal.h"/>
                 <file role="src" name="errors.c"/>
                 <file role="src" name="errors.h"/>
-                <file role="src" name="fixed.l"T />
                 <file role="src" name="globals.c"/>
                 <file role="src" name="globals.h"/>
                 <file role="src" name="limits.h"/>
