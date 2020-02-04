@@ -87,7 +87,7 @@ Number Object
 )
 Number::pow
 
-Warning: Decimal arithmetic operand truncated to integer in /Users/rtheunissen/dev/decimal/ext-decimal/tests/Number/helpers/Number.php on line 63
+Warning: Decimal arithmetic operand truncated to integer in %sNumber.php on line 63
 Number Object
 (
     [value:protected] => Decimal\Rational Object
@@ -99,7 +99,7 @@ Number Object
 )
 Number::pow
 
-Warning: Decimal arithmetic operand truncated to integer in /Users/rtheunissen/dev/decimal/ext-decimal/tests/Number/helpers/Number.php on line 63
+Warning: Decimal arithmetic operand truncated to integer in %sNumber.php on line 63
 Number Object
 (
     [value:protected] => Decimal\Rational Object
@@ -123,7 +123,7 @@ Decimal\Decimal Object
 )
 Number::toRational
 
-Warning: Decimal arithmetic operand truncated to integer in /Users/rtheunissen/dev/decimal/ext-decimal/tests/Number/methods/pow.php on line 38
+Warning: Decimal arithmetic operand truncated to integer in %spow.php on line 38
 Decimal\Rational Object
 (
     [num] => 16
@@ -131,7 +131,7 @@ Decimal\Rational Object
 )
 Number::toRational
 
-Warning: Decimal arithmetic operand truncated to integer in /Users/rtheunissen/dev/decimal/ext-decimal/tests/Number/methods/pow.php on line 41
+Warning: Decimal arithmetic operand truncated to integer in %spow.php on line 41
 Decimal\Rational Object
 (
     [num] => 16
