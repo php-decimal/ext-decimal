@@ -2,7 +2,7 @@
 // vim:ft=javascript
 
 var DECIMAL_EXT_NAME        ="decimal";
-var DECIMAL_EXT_API         ="php_decimal.c";
+var DECIMAL_EXT_API         ="php_decimal.c src/common.c src/compare.c src/context.c src/convert.c src/decimal.c src/errors.c src/globals.c src/math.c src/number.c src/parse.c src/rational.c src/round.c";
 var DECIMAL_EXT_DEP_HEADER  ="mpdecimal.h";
 var DECIMAL_EXT_FLAGS       ="/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1";
 var DECIMAL_EXT_DEP_LIB_SHARED ="libmpdec.lib";
