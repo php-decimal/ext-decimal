@@ -51,6 +51,7 @@ install-sh
 libs
 libtool
 ltmain.sh
+ltmain.sh.backup
 Makefile
 Makefile.fragments
 Makefile.global
@@ -60,5 +61,6 @@ mkinstalldirs
 modules
 run-tests.php
 test
+tmp-php.ini
 vendor
 ~.tgz

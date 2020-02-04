@@ -56,7 +56,6 @@ php_decimal_success_t php_decimal_mpd_set_string(mpd_t *mpd, const zend_string *
 php_decimal_success_t php_decimal_mpd_set_charptr(mpd_t *mpd, const char *str);
 
 zend_string *php_decimal_mpd_to_serialized(const mpd_t *mpd);
-zend_string *php_decimal_mpd_to_eng(const mpd_t *mpd);
 zend_string *php_decimal_mpd_to_sci(const mpd_t *mpd);
 zend_string *php_decimal_mpd_to_string(const mpd_t *mpd);
 zend_string *php_decimal_mpd_to_fixed(const mpd_t *mpd, zend_long places, zend_bool commas, php_decimal_rounding_t mode);
@@ -69,7 +68,6 @@ void      php_decimal_rational_set_nan(php_rational_t *obj);
 void      php_decimal_rational_set_zero(php_rational_t *obj);
 
 zend_string *php_decimal_rational_to_sci(const php_rational_t *obj, zend_long prec);
-zend_string *php_decimal_rational_to_eng(const php_rational_t *obj, zend_long prec);
 zend_string *php_decimal_rational_to_string(const php_rational_t *obj);
 zend_string *php_decimal_rational_to_fixed(const php_rational_t *obj, zend_long places, zend_bool commas, php_decimal_rounding_t mode);
 zend_long    php_decimal_rational_to_long(const php_rational_t *obj);

@@ -444,19 +444,6 @@ zend_string *php_decimal_rational_to_sci(const php_rational_t *obj, zend_long pr
     return str;
 }
 
-zend_string *php_decimal_rational_to_eng(const php_rational_t *obj, zend_long prec)
-{
-    zend_string *str;
-
-    PHP_DECIMAL_TEMP_MPD(tmp);
-    php_decimal_rational_evaluate(&tmp, obj, prec);
-
-    str = php_decimal_mpd_to_eng(&tmp);
-    mpd_del(&tmp);
-
-    return str;
-}
-
 zend_string *php_decimal_rational_to_fixed(const php_rational_t *obj, zend_long places, zend_bool commas, php_decimal_rounding_t mode)
 {
     PHP_DECIMAL_TEMP_MPD(tmp);

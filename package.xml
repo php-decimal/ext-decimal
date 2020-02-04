@@ -146,6 +146,10 @@
                         <file role="test" name="toString.phpt"/>
                         <file role="test" name="valueOf.phpt"/>
                     </dir>
+
+                    <dir name="helpers">
+                        <file role="test" name="Number.php"/>
+                    </dir>
                 </dir>
 
                 <dir name="Rational">
