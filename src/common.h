@@ -73,8 +73,8 @@
 #define PHP_DECIMAL_LONG_CONSTANT(ce, name, value) \
     zend_declare_class_constant_long(ce, name, sizeof(name) - 1, value)
 
-#define PHP_DECIMAL_CONSTANT(ce, name, value) \
-    zend_declare_class_constant(ce, name, sizeof(name) - 1, value)
+#define PHP_DECIMAL_STR_CONSTANT(ce, name, value) \
+    zend_declare_class_constant_string(ce, name, sizeof(name) - 1, value)
 
 /**
  * Custom definitions.

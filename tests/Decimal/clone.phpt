@@ -10,14 +10,14 @@ $b = clone $a;
 var_dump($a);
 var_dump($b);
 ?>
---EXPECT--
-object(Decimal\Decimal)#3 (2) {
+--EXPECTF--
+object(Decimal\Decimal)#%d (2) {
   ["value"]=>
   string(5) "1.234"
   ["precision"]=>
   int(16)
 }
-object(Decimal\Decimal)#4 (2) {
+object(Decimal\Decimal)#%d (2) {
   ["value"]=>
   string(5) "1.234"
   ["precision"]=>

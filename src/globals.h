@@ -59,9 +59,6 @@
 ZEND_BEGIN_MODULE_GLOBALS(decimal)
 mpd_context_t ctx;
 mpd_context_t max;
-
-zval pi;
-zval e;
 ZEND_END_MODULE_GLOBALS(decimal)
 
 ZEND_EXTERN_MODULE_GLOBALS(decimal)

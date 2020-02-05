@@ -13,7 +13,7 @@ var_dump(unserialize('C:15:"Decimal\Decimal":26:{s:13:"abc0000000000";i:42;}'));
 ?>
 --EXPECTF--
 string(54) "C:15:"Decimal\Decimal":26:{s:13:"1.2345678E+12";i:42;}"
-object(Decimal\Decimal)#4 (2) {
+object(Decimal\Decimal)#%d (2) {
   ["value"]=>
   string(13) "1234567800000"
   ["precision"]=>
