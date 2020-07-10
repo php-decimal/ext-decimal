@@ -1176,32 +1176,8 @@ void php_decimal_register_decimal_class()
     php_decimal_handlers.write_property   = php_decimal_blocked_write_property;
     php_decimal_handlers.has_property     = php_decimal_blocked_has_property;
     php_decimal_handlers.unset_property   = php_decimal_blocked_unset_property;
-}
 
-/**
- *
- */
-void php_decimal_init_decimal_constants()
-{
-    /* PI */
-    php_decimal_t *pi = php_decimal_with_prec(PHP_DECIMAL_DEFAULT_PREC);
-    php_decimal_mpd_set_charptr(PHP_DECIMAL_MPD(pi), PHP_DECIMAL_PI);
-    ZVAL_DECIMAL(&DECIMAL_GLOBALS(pi), pi);
-    PHP_DECIMAL_CONSTANT(php_decimal_decimal_ce, "PI", &DECIMAL_GLOBALS(pi));
-
-    /* Euler's number */
-    php_decimal_t *e = php_decimal_with_prec(PHP_DECIMAL_DEFAULT_PREC);
-    php_decimal_mpd_set_charptr(PHP_DECIMAL_MPD(e), PHP_DECIMAL_E);
-    ZVAL_DECIMAL(&DECIMAL_GLOBALS(e), e);
-    PHP_DECIMAL_CONSTANT(php_decimal_decimal_ce, "E", &DECIMAL_GLOBALS(e));
-}
-
-/**
- *
- */
-void php_decimal_dtor_decimal_constants()
-{
-    zval_ptr_dtor(&DECIMAL_GLOBALS(pi));
-    zval_ptr_dtor(&DECIMAL_GLOBALS(e));
+    PHP_DECIMAL_STR_CONSTANT(php_decimal_decimal_ce, "PI", PHP_DECIMAL_PI);
+    PHP_DECIMAL_STR_CONSTANT(php_decimal_decimal_ce, "E", PHP_DECIMAL_E);
 }
 

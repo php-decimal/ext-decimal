@@ -15,7 +15,7 @@ var_dump(unserialize('C:16:"Decimal\Rational":26:{s:13:"abc0000000000";i:42;}'))
 ?>
 --EXPECTF--
 string(53) "C:16:"Decimal\Rational":24:{s:6:"1.2E+1";s:4:"5E+0";}"
-object(Decimal\Rational)#4 (2) {
+object(Decimal\Rational)#%d (2) {
   ["num"]=>
   string(2) "12"
   ["den"]=>

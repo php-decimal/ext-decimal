@@ -96,8 +96,6 @@ PHP_MINFO_FUNCTION(decimal)
  */
 PHP_MINIT_FUNCTION(decimal)
 {
-    ZEND_INIT_MODULE_GLOBALS(decimal, php_decimal_init_globals, NULL);
-
     /* Set guaranteed minimum number of coefficient words based on default prec. */
     mpd_setminalloc(2 * ((PHP_DECIMAL_DEFAULT_PREC + MPD_RDIGITS - 1) / MPD_RDIGITS));
 
@@ -133,7 +131,6 @@ PHP_RINIT_FUNCTION(decimal)
 #endif
     php_decimal_disable_opcache_pass2();
     php_decimal_context_init();
-    php_decimal_init_decimal_constants();
 
     return SUCCESS;
 }
@@ -144,9 +141,20 @@ PHP_RINIT_FUNCTION(decimal)
 PHP_RSHUTDOWN_FUNCTION(decimal)
 {
     php_decimal_context_dtor();
-    php_decimal_dtor_decimal_constants();
 
     return SUCCESS;
+}
+
+
+/**
+ * globals init
+ */
+static PHP_GINIT_FUNCTION(decimal)
+{
+#if defined(COMPILE_DL_DECIMAL) && defined(ZTS)
+    ZEND_TSRMLS_CACHE_UPDATE();
+#endif
+    php_decimal_init_globals(decimal_globals);
 }
 
 /**
@@ -162,7 +170,11 @@ zend_module_entry decimal_module_entry = {
     PHP_RSHUTDOWN(decimal),
     PHP_MINFO(decimal),
     PHP_DECIMAL_VERSION,
-    STANDARD_MODULE_PROPERTIES
+    PHP_MODULE_GLOBALS(decimal),
+    PHP_GINIT(decimal),
+    NULL, // GSHUTDOWN
+    NULL,
+    STANDARD_MODULE_PROPERTIES_EX
 };
 
 #ifdef COMPILE_DL_DECIMAL

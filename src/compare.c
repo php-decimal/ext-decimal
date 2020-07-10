@@ -65,11 +65,11 @@ static int php_decimal_compare_double_to_double(const double op1, const double o
 
 /**
  *
- */
 static int php_decimal_compare_long_to_long(const zend_long op1, const zend_long op2)
 {
     return PHP_DECIMAL_COMPARE(op1, op2);
 }
+ */
 
 
 

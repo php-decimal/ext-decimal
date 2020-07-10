@@ -466,7 +466,6 @@ zend_string *php_decimal_rational_to_string(const php_rational_t *obj)
         return php_decimal_mpd_to_string(num);
 
     } else {
-        zend_string *result = NULL;
         smart_str    buffer = {0};
 
         zend_string *snum = php_decimal_mpd_to_string(num);

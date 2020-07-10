@@ -12,12 +12,12 @@ var_dump((string) Number::valueOf(4));
 var_dump(Number::valueOf(4) + "1");
 
 ?>
---EXPECT--
+--EXPECTF--
 string(1) "4"
 string(1) "4"
 string(1) "4"
 Number::add
-object(Number)#4 (1) {
+object(Number)#%d (1) {
   ["value":protected]=>
   int(5)
 }

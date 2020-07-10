@@ -469,9 +469,9 @@ PHP_DECIMAL_ARGINFO_END()
 
 /**
  * Number::ToSci
- */
 PHP_DECIMAL_ARGINFO_RETURN_TYPE(Number, toSci, IS_STRING, 0)
 PHP_DECIMAL_ARGINFO_END()
+ */
 
 /**
  * Number::toString

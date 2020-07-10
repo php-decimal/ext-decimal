@@ -30,8 +30,8 @@ $number = $number * "-12345.6789";
 var_dump($number);
 
 ?>
---EXPECT--
-object(Decimal\Rational)#3 (2) {
+--EXPECTF--
+object(Decimal\Rational)#%d (2) {
   ["num"]=>
   string(75) "426397624393172957537541485031321559583108704527981359123508334688202542589"
   ["den"]=>
