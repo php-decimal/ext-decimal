@@ -69,7 +69,7 @@ static void php_decimal_disable_opcache_pass2()
 {
     zend_long level = INI_INT("opcache.optimization_level");
 
-    if (level) {
+    if (level & 2) {
         zend_string *key = zend_string_init(ZEND_STRL("opcache.optimization_level"), 1);
         zend_string *val = strpprintf(0, "0x%08X", (unsigned int) (level & ~2));
 
