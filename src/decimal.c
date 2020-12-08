@@ -510,7 +510,7 @@ PHP_DECIMAL_METHOD(Decimal, valueOf)
     PHP_DECIMAL_PARSE_PARAMS(1, 2)
         Z_PARAM_ZVAL(val)
         Z_PARAM_OPTIONAL
-        Z_PARAM_STRICT_LONG(prec)
+        Z_PARAM_LONG(prec)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     if (ZEND_NUM_ARGS() == 1) {
@@ -663,8 +663,8 @@ PHP_DECIMAL_METHOD(Decimal, round)
 
     PHP_DECIMAL_PARSE_PARAMS(0, 2)
         Z_PARAM_OPTIONAL
-        Z_PARAM_STRICT_LONG(places)
-        Z_PARAM_STRICT_LONG(mode)
+        Z_PARAM_LONG(places)
+        Z_PARAM_LONG(mode)
     PHP_DECIMAL_PARSE_PARAMS_END()
     {
         php_decimal_t *obj = THIS_DECIMAL();
@@ -912,9 +912,9 @@ PHP_DECIMAL_METHOD(Decimal, toFixed)
 
     PHP_DECIMAL_PARSE_PARAMS(0, 3)
         Z_PARAM_OPTIONAL
-        Z_PARAM_STRICT_LONG(places)
+        Z_PARAM_LONG(places)
         Z_PARAM_BOOL(commas)
-        Z_PARAM_STRICT_LONG(mode)
+        Z_PARAM_LONG(mode)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     RETURN_STR(php_decimal_mpd_to_fixed(THIS_DECIMAL_MPD(), places, commas, mode));
@@ -978,7 +978,7 @@ PHP_DECIMAL_METHOD(Decimal, toDecimal)
     zend_long prec;
 
     PHP_DECIMAL_PARSE_PARAMS(1, 1)
-        Z_PARAM_STRICT_LONG(prec)
+        Z_PARAM_LONG(prec)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     if (php_decimal_validate_prec(prec)) {
