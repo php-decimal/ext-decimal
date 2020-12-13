@@ -2,7 +2,7 @@
 Decimal::__construct
 --SKIPIF--
 <?php
-if (!extension_loaded("decimal") || PHP_VERSION_ID >= 80000) echo "skip";
+if (!extension_loaded("decimal") || PHP_VERSION_ID < 80000) echo "skip";
 ?>
 --FILE--
 <?php
@@ -97,7 +97,7 @@ try {
 
 try {
     new Decimal(0, null);
-} catch (TypeError $e) {
+} catch (OutOfRangeException $e) {
     printf("F %s\n", $e->getMessage());
 }
 
@@ -135,8 +135,8 @@ A Failed to parse string as decimal: " 1"
 B Failed to parse string as decimal: "1 "
 C Decimal\Decimal::__construct() expected parameter 1 to be a string, integer, or decimal, float given
 D Decimal\Decimal::__construct() expected parameter 1 to be a string, integer, or decimal, null given
-E Argument 2 passed to Decimal\Decimal::__construct() must be of the type int%s string given
-F Argument 2 passed to Decimal\Decimal::__construct() must be of the type int%s null given
+E Decimal\Decimal::__construct(): Argument #2 ($precision) must be of type int, string given
+F Decimal precision out of range
 G Decimal precision out of range
 H Decimal precision out of range
 I Decimal precision out of range
