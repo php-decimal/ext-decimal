@@ -2,7 +2,7 @@
 Decimal object reflection
 --SKIPIF--
 <?php
-if (!extension_loaded("decimal")) echo "skip";
+if (!extension_loaded("decimal") || PHP_VERSION_ID < 80000) echo "skip";
 ?>
 --FILE--
 <?php
@@ -130,7 +130,7 @@ Parameters:
 Name: value
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? yes
 Name: precision
 Type: int
@@ -156,7 +156,7 @@ Parameters:
 Name: value
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 
 sub
@@ -169,7 +169,7 @@ Parameters:
 Name: value
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 
 mul
@@ -182,7 +182,7 @@ Parameters:
 Name: value
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 
 div
@@ -195,7 +195,7 @@ Parameters:
 Name: value
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 
 rem
@@ -208,7 +208,7 @@ Parameters:
 Name: value
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 
 mod
@@ -221,7 +221,7 @@ Parameters:
 Name: value
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 
 pow
@@ -234,7 +234,7 @@ Parameters:
 Name: value
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 
 ln
@@ -485,7 +485,7 @@ Parameters:
 Name: other
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 
 compareTo
@@ -498,7 +498,7 @@ Parameters:
 Name: other
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 
 sum
@@ -511,7 +511,7 @@ Parameters:
 Name: values
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 Name: precision
 Type: int
@@ -529,7 +529,7 @@ Parameters:
 Name: values
 Type: mixed
 Reference? no
-Allows null? no
+Allows null? yes
 Optional? no
 Name: precision
 Type: int
