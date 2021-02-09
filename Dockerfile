@@ -1,4 +1,4 @@
-FROM php:7.4-cli-buster AS build
+FROM php:8.0-cli-buster AS build
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

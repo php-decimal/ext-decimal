@@ -1881,6 +1881,7 @@ static zval *php_decimal_read_property(zend_object *object, zend_string *member,
 static zval* php_decimal_write_property(zend_object *object, zend_string *member, zval *value, void **cache_slot)
 {
     php_decimal_object_properties_not_supported();
+    return &EG(uninitialized_zval);
 }
 
 /**
@@ -1910,11 +1911,12 @@ static zval *php_decimal_read_property(zval *object, zval *member, int type, voi
 }
 
 /**
- *   Object property write - not supported.
+ * Object property write - not supported.
  */
-static void php_decimal_write_property(zval *object, zval *member, zval *value, void **cache_slot)
+static zval *php_decimal_write_property(zval *object, zval *member, zval *value, void **cache_slot)
 {
     php_decimal_object_properties_not_supported();
+    return &EG(uninitialized_zval);
 }
 
 /**
@@ -2000,11 +2002,11 @@ PHP_DECIMAL_METHOD(__construct)
     ZEND_PARSE_PARAMETERS_START(0, 2)
         Z_PARAM_OPTIONAL
         Z_PARAM_ZVAL(value)
-        #if PHP_VERSION_ID >= 80000
+#if PHP_VERSION_ID >= 80000
         Z_PARAM_LONG(prec)
-        #else
+#else
         Z_PARAM_STRICT_LONG(prec)
-        #endif
+#endif
     ZEND_PARSE_PARAMETERS_END();
     {
         php_decimal_t *obj = THIS_DECIMAL();
@@ -2526,8 +2528,8 @@ PHP_DECIMAL_METHOD(compareTo)
  * Decimal::between
  */
 PHP_DECIMAL_ARGINFO_RETURN_TYPE(between, _IS_BOOL, 1)
-PHP_DECIMAL_ARGINFO_ZVAL(other)
-PHP_DECIMAL_ARGINFO_ZVAL(other)
+PHP_DECIMAL_ARGINFO_ZVAL(op1)
+PHP_DECIMAL_ARGINFO_ZVAL(op2)
 PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(between)
 {
