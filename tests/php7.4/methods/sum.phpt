@@ -2,7 +2,7 @@
 Decimal::sum
 --SKIPIF--
 <?php
-if (!extension_loaded("decimal") || PHP_VERSION_ID <= 80000) echo "skip";
+if (!extension_loaded("decimal") || PHP_VERSION_ID >= 80000) echo "skip";
 ?>
 --FILE--
 <?php
