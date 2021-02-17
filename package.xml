@@ -91,12 +91,12 @@
                         <file role="test" name="truncate.phpt"/>
                     </dir>
                 </dir>
-            </dir>
-            <dir name="php8">
-                <file role="test" name="reflection.phpt"/>
-                <dir name="methods">
-                    <file role="test" name="__construct.phpt"/>
-                    <file role="test" name="sum.phpt"/>
+                <dir name="php8">
+                    <file role="test" name="reflection.phpt"/>
+                    <dir name="methods">
+                        <file role="test" name="__construct.phpt"/>
+                        <file role="test" name="sum.phpt"/>
+                    </dir>
                 </dir>
             </dir>
         </dir>
