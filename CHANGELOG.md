@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](http://semver.org/).
 
+## [1.4.0] - 2021-02-16
+- Added support for PHP 8 (thank you @zlodes)
+- Added support for mpdecimal 2.5+ #48
+- Fixed internal exception when passing negative decimal places to toFixed. #52
+
 ## [1.3.0] - 2019-02-11
 - Fixed sqrt of -INF returning -INF rather than NAN. #13
 - Disable opcache pass 2 due to numeric string to float casts. Thanks @krakjoe
