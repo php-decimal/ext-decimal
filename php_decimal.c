@@ -1118,6 +1118,10 @@ static void php_decimal_sqrt(php_decimal_t *res, mpd_t *op1)
 static void php_decimal_floor(php_decimal_t *res, mpd_t *op1)
 {
     uint32_t status = 0;
+    if (mpd_isspecial(op1)) {
+        mpd_qcopy(PHP_DECIMAL_MPD(res), op1, &status);
+        return;
+    }
     mpd_qfloor(PHP_DECIMAL_MPD(res), op1, php_decimal_context(), &status);
 }
 
@@ -1127,6 +1131,10 @@ static void php_decimal_floor(php_decimal_t *res, mpd_t *op1)
 static void php_decimal_ceil(php_decimal_t *res, mpd_t *op1)
 {
     uint32_t status = 0;
+    if (mpd_isspecial(op1)) {
+        mpd_qcopy(PHP_DECIMAL_MPD(res), op1, &status);
+        return;
+    }
     mpd_qceil(PHP_DECIMAL_MPD(res), op1, php_decimal_context(), &status);
 }
 
@@ -1138,6 +1146,10 @@ static void php_decimal_ceil(php_decimal_t *res, mpd_t *op1)
 static void php_decimal_truncate(php_decimal_t *res, mpd_t *op1)
 {
     uint32_t status = 0;
+    if (mpd_isspecial(op1)) {
+        mpd_qcopy(PHP_DECIMAL_MPD(res), op1, &status);
+        return;
+    }
     mpd_qtrunc(PHP_DECIMAL_MPD(res), op1, php_decimal_context(), &status);
 }
 
