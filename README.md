@@ -2,9 +2,9 @@
 
 [![Build Status](https://travis-ci.org/php-decimal/ext-decimal.svg?branch=master)](https://travis-ci.org/php-decimal/ext-decimal)
 [![Build status](https://ci.appveyor.com/api/projects/status/lg5nw5tqgpmv1c33?svg=true)](https://ci.appveyor.com/project/rtheunissen/php-decimal)
-[![PECL](https://img.shields.io/badge/PECL-1.3.0-blue.svg)](https://pecl.php.net/package/decimal)
+[![PECL](https://img.shields.io/badge/PECL-1.4.0-blue.svg)](https://pecl.php.net/package/decimal)
 
-Correctly-rounded, arbitrary-precision decimal arithmetic for PHP 7
+Correctly-rounded, arbitrary-precision decimal arithmetic for PHP
 
 ## Documentation
 
@@ -13,11 +13,7 @@ See http://php-decimal.io
 ## Dependencies
 
 - PHP 7
-- [libmpdec 2.4](http://www.bytereef.org/mpdecimal/download.html)
-
-```bash
-sudo apt-get install libmpdec-dev
-```
+- [mpdecimal](http://www.bytereef.org/mpdecimal/download.html)
 
 ## Install
 
