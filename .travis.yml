@@ -13,18 +13,6 @@ env:
     - ENABLE_OPCACHE=1
     - ENABLE_OPCACHE=0
 
-matrix:
-  allow_failures:
-    - php: nightly
-      env: ENABLE_OPCACHE=1
-    - php: nightly
-      env: ENABLE_OPCACHE=0
-    - php: 7.4
-      env: ENABLE_OPCACHE=1
-    - php: 7.4
-      env: ENABLE_OPCACHE=0
-
-
 before_install:
   - sudo apt-get update
   - sudo apt-get install -y libmpdec-dev
