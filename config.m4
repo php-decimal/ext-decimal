@@ -8,7 +8,7 @@ if test "$PHP_DECIMAL" != "no"; then
 
     MACHINE_INCLUDES=$($CC -dumpmachine)
     AC_MSG_CHECKING([for libmpdec library in default path])
-    for i in $PHP_LIBMPDEC_PATH /usr /usr/local/; do
+    for i in $PHP_LIBMPDEC_PATH /usr /usr/local; do
       if test -r $i/$PHP_LIBDIR/libmpdec.$SHLIB_SUFFIX_NAME || test -r $i/$PHP_LIBDIR/libmpdec.a; then
         LIBMPDEC_DIR=$i/$PHP_LIBDIR
         LIBMPDEC_INC=$i/include
@@ -35,7 +35,7 @@ if test "$PHP_DECIMAL" != "no"; then
 
     if test -z "$LIBMPDEC_DIR"; then
       AC_MSG_RESULT([Could not find libmpdec])
-      AC_MSG_ERROR([Please reinstall the libmpdec distribution from http://www.bytereef.org/mpdecimal/])
+      AC_MSG_ERROR([Please reinstall libmpdec])
 
     else
       AC_MSG_CHECKING([for libmpdec headers in default path])
@@ -52,7 +52,7 @@ if test "$PHP_DECIMAL" != "no"; then
       PHP_ADD_LIBRARY_WITH_PATH(mpdec, $LIBMPDEC_DIR, DECIMAL_SHARED_LIBADD)
       AC_DEFINE(HAVE_LIBMPDEC, 1, [ ])
     ],[
-      AC_MSG_ERROR([Please check your version of libmpdec (~2.4.0)])
+      AC_MSG_ERROR([Please check your version of libmpdec (2.4+)])
     ],[
       -L$LIBMPDEC_DIR -lm
     ])
