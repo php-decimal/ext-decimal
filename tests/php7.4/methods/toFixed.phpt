@@ -70,7 +70,7 @@ string(8) "1,125.00"
 string(7) "1125.00"
 string(1) "1"
 
-Warning: Uncaught InvalidArgumentException: The number of decimal places must be non-negative in /home/rudi/Projects/ext-decimal/tests/php7.4/methods/toFixed.php:57
+Warning: Uncaught InvalidArgumentException: The number of decimal places must be non-negative in %s:%d
 Stack trace:
 #0 %s(%d): Decimal\Decimal->toFixed(-1)
 #1 {main}
