@@ -8,7 +8,7 @@
 [![Build Status](https://travis-ci.org/php-decimal/ext-decimal.svg?branch=2.0&style=flat)](https://travis-ci.org/php-decimal/ext-decimal)
 [![Build status](https://ci.appveyor.com/api/projects/status/lg5nw5tqgpmv1c33?svg=true)](https://ci.appveyor.com/project/rtheunissen/php-decimal)
 
-Correctly-rounded, arbitrary-precision decimal arithmetic for PHP 7
+Correctly-rounded, arbitrary-precision decimal arithmetic for PHP
 
 ## Documentation
 
@@ -16,12 +16,8 @@ See http://php-decimal.io
 
 ## Requirements
 
-- PHP 7.2+
-- [libmpdec 2.4](http://www.bytereef.org/mpdecimal/download.html)
-
-```bash
-sudo apt-get install libmpdec-dev
-```
+- PHP >= 7.2
+- [libmpdec >= 2.4](http://www.bytereef.org/mpdecimal/download.html)
 
 ## Install
 
@@ -34,7 +30,6 @@ pecl install decimal
 ```
 pecl install decimal-alpha
 ```
-
 
 Windows users can find *.dll* files under [releases](https://github.com/php-decimal/ext-decimal/releases).
 
