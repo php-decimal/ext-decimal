@@ -1,7 +1,7 @@
 # PHP Decimal Extension
 
 
-[![PECL](https://img.shields.io/static/v1?message=1.3.1&label=PECL&color=blue&style=flat&logo=php)](https://pecl.php.net/package/decimal/1.3.1)
+[![PECL](https://img.shields.io/static/v1?message=1.4.0&label=PECL&color=blue&style=flat&logo=php)](https://pecl.php.net/package/decimal/1.3.1)
 [![Build Status](https://travis-ci.org/php-decimal/ext-decimal.svg?branch=1.3)](https://travis-ci.org/php-decimal/ext-decimal)
 
 [![PECL](https://img.shields.io/static/v1?message=2.0.0-alpha&label=PECL&color=blue&style=flat&logo=php)](https://pecl.php.net/package/decimal/2.0.0)
