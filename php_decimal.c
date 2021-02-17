@@ -119,7 +119,7 @@ static void php_decimal_memory_error()
  */
 static void php_decimal_unknown_error()
 {
-    zend_error(E_ERROR, "Failed to allocate memory for decimal");
+    zend_error(E_ERROR, "Unexpected error");
 }
 
 /**
@@ -214,7 +214,7 @@ static void php_decimal_integer_overflow()
 /**
  * Called when NaN or Inf is converted to integer.
  */
-void php_decimal_integer_from_special_is_not_defined()
+static void php_decimal_integer_from_special_is_not_defined()
 {
     zend_throw_exception(spl_ce_RuntimeException, "Converting NaN or Inf to integer is not defined", 0);
 }
@@ -222,7 +222,7 @@ void php_decimal_integer_from_special_is_not_defined()
 /**
  * Called when attempting to query the signum of NaN.
  */
-void php_decimal_sign_of_nan_is_not_defined()
+static void php_decimal_sign_of_nan_is_not_defined()
 {
     zend_throw_exception(spl_ce_RuntimeException, "Sign of NaN is not defined", 0);
 }
@@ -233,6 +233,14 @@ void php_decimal_sign_of_nan_is_not_defined()
 static void php_decimal_constructor_already_called()
 {
     zend_throw_exception(spl_ce_BadMethodCallException, "Decimal objects are immutable", 0);
+}
+
+/**
+ * Called when some given number of decimal places was not valid.
+ */
+static void php_decimal_negative_decimal_places_not_defined()
+{
+    zend_throw_exception(spl_ce_InvalidArgumentException, "The number of decimal places must be non-negative", 0);
 }
 
 /**
@@ -861,6 +869,10 @@ static zend_string *php_decimal_format_mpd(mpd_t *mpd, zend_long places, zend_bo
     char        *str;
     zend_string *res;
     smart_str    fmt = {0};
+
+    if (places < 0) {
+        php_decimal_negative_decimal_places_not_defined();
+    }
 
     PHP_DECIMAL_TEMP_MPD(tmp);
     PHP_DECIMAL_CHECK_SPECIAL_STRING_RETURN(mpd);

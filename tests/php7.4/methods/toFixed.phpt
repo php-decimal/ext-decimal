@@ -57,9 +57,24 @@ var_dump((new Decimal("1125"))->toFixed(2));
  * Test default places.
  */
 var_dump((new Decimal("1.125"))->toFixed());
+
+/**
+ * Test negative places.
+ */
+var_dump((new Decimal("1.125"))->toFixed(-1));
+
 ?>
---EXPECT--
+--EXPECTF--
 string(4) "1.12"
 string(8) "1,125.00"
 string(7) "1125.00"
 string(1) "1"
+
+Warning: Uncaught InvalidArgumentException: The number of decimal places must be non-negative in /home/rudi/Projects/ext-decimal/tests/php7.4/methods/toFixed.php:57
+Stack trace:
+#0 %s(%d): Decimal\Decimal->toFixed(-1)
+#1 {main}
+  thrown in %s on line %d
+
+Fatal error: Unexpected error in %s on line %d
+
