@@ -36,6 +36,8 @@ $tests = [
     [decimal(1), 1.0,    true],
     [decimal(1), "1",    true],
 
+    [decimal("-0"), 0,    true],
+
     [decimal("0.1"),        0.1,    true],
     [decimal("0.2"),        0.2,    true],
     [decimal("0.200"),      0.2,    true],

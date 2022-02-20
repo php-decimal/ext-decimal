@@ -19,6 +19,8 @@ function decimal(...$args) { return new Decimal(...$args); }
 $tests = [
     [decimal("0"),        "1",    0 %  1,    28],
     [decimal("0"),       "-1",    0 % -1,    28],
+    [decimal("-0"),       "1",    0 %  1,    28],
+    [decimal("-0"),      "-1",    0 % -1,    28],
 
     [decimal( "1"),       "3",    1 %  3,    28],
     [decimal( "1"),      "-3",    1 % -3,    28],

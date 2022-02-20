@@ -40,6 +40,7 @@ $tests = [
     [decimal( "NAN"), (string) log10( NAN), 28],
     [decimal( "INF"), (string) log10( INF), 28],
     [decimal(   "0"), (string) log10(   0), 28],
+    [decimal(  "-0"), (string) log10(   0), 28],
     [decimal(  "-1"), (string) log10(  -1), 28],
 ];
 

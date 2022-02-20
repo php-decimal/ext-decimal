@@ -34,9 +34,9 @@ var_dump((string) $obj);
 
 ?>
 --EXPECT--
-string(2) "-0"
 string(1) "0"
-string(2) "-0"
+string(1) "0"
+string(1) "0"
 string(2) "-1"
 string(1) "1"
 string(3) "NAN"

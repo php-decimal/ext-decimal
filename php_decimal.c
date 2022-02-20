@@ -593,6 +593,17 @@ static void php_decimal_set_nan(php_decimal_t *obj)
 }
 
 /**
+ * Sets the value to "0" in case it is "-0"
+ */
+static void php_decimal_prevent_negative_zero(mpd_t *mpd)
+{
+    if (mpd_iszero(mpd) && mpd_isnegative(mpd)) {
+        uint32_t status = 0;
+        mpd_qcopy_negate(mpd, mpd, &status);
+    }
+}
+
+/**
  * Parses a string to a given precision. Trailing zeroes are not preserved.
  */
 static php_success_t php_decimal_mpd_set_string(mpd_t *mpd, zend_string *str, zend_long prec, zend_bool quiet)
@@ -616,6 +627,8 @@ static php_success_t php_decimal_mpd_set_string(mpd_t *mpd, zend_string *str, ze
     if (status & MPD_Inexact) {
         php_decimal_loss_of_data_on_string_conversion();
     }
+
+    php_decimal_prevent_negative_zero(mpd);
 
     return SUCCESS;
 }
@@ -1157,12 +1170,16 @@ static void php_decimal_ceil(php_decimal_t *res, mpd_t *op1)
  */
 static void php_decimal_truncate(php_decimal_t *res, mpd_t *op1)
 {
+    mpd_t *mpd = PHP_DECIMAL_MPD(res);
     uint32_t status = 0;
+
     if (mpd_isspecial(op1)) {
-        mpd_qcopy(PHP_DECIMAL_MPD(res), op1, &status);
+        mpd_qcopy(mpd, op1, &status);
         return;
     }
-    mpd_qtrunc(PHP_DECIMAL_MPD(res), op1, php_decimal_context(), &status);
+
+    mpd_qtrunc(mpd, op1, php_decimal_context(), &status);
+    php_decimal_prevent_negative_zero(mpd);
 }
 
 /**
@@ -1197,6 +1214,12 @@ static void php_decimal_abs(php_decimal_t *res, mpd_t *op1)
 static void php_decimal_negate(php_decimal_t *res, mpd_t *op1)
 {
     uint32_t status = 0;
+
+    if (mpd_iszero(op1)) {
+        mpd_qcopy(PHP_DECIMAL_MPD(res), op1, &status);
+        return;
+    }
+
     mpd_qcopy_negate(PHP_DECIMAL_MPD(res), op1, &status);
 }
 
@@ -1433,6 +1456,8 @@ static void php_decimal_do_binary_op(php_decimal_binary_op_t op, php_decimal_t *
     php_decimal_set_precision(res, prec);
     op(res, mpd1, mpd2);
     mpd_del(&tmp);
+
+    php_decimal_prevent_negative_zero(PHP_DECIMAL_MPD(res));
 }
 
 
@@ -2201,7 +2226,10 @@ PHP_DECIMAL_METHOD(round)
         #endif
     ZEND_PARSE_PARAMETERS_END();
 
-    php_decimal_round_mpd(PHP_DECIMAL_MPD(res), PHP_DECIMAL_MPD(obj), places, rounding);
+    mpd_t *mpd = PHP_DECIMAL_MPD(res);
+    php_decimal_round_mpd(mpd, PHP_DECIMAL_MPD(obj), places, rounding);
+    php_decimal_prevent_negative_zero(mpd);
+
     RETURN_DECIMAL(res);
 }
 
@@ -2376,7 +2404,7 @@ PHP_DECIMAL_METHOD(isPositive)
 
     mpd_t *mpd = THIS_MPD();
 
-    RETURN_BOOL(!mpd_isnan(mpd) && mpd_ispositive(mpd));
+    RETURN_BOOL(!mpd_isnan(mpd) && !mpd_iszero(mpd) && mpd_ispositive(mpd));
 }
 
 /**
@@ -2390,7 +2418,7 @@ PHP_DECIMAL_METHOD(isNegative)
 
     mpd_t *mpd = THIS_MPD();
 
-    RETURN_BOOL(!mpd_isnan(mpd) && mpd_isnegative(mpd));
+    RETURN_BOOL(!mpd_isnan(mpd) && !mpd_iszero(mpd) && mpd_isnegative(mpd));
 }
 
 /**

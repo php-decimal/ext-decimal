@@ -9,9 +9,11 @@ if (!extension_loaded("json"))    echo 'skip';
 <?php
 use Decimal\Decimal;
 
+var_dump(json_encode(new Decimal("-0", 20)));
 var_dump(json_encode(new Decimal("1.2345", 20)));
 var_dump(json_encode(new Decimal("5.0000", 20)));
 ?>
 --EXPECT--
+string(3) ""0""
 string(8) ""1.2345""
 string(8) ""5.0000""

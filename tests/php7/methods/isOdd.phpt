@@ -20,6 +20,7 @@ $tests = [
     ["-3.000000000000000000000000001",   false], // not truncated
 
     [0,         false],
+    ["-0",      false],
     [1,         true],
     [2,         false],
     [3,         true],

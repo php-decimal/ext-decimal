@@ -12,6 +12,7 @@ $tests = [
     /* decimal places, grouped, rounding mode, expected */
 
     ["0",           5,     false,   Decimal::ROUND_HALF_UP,      "0.00000"],
+    ["-0",          5,     false,   Decimal::ROUND_HALF_UP,      "0.00000"],
 
     ["1.23456",     3,     false,   Decimal::ROUND_UP,           "1.235"],
     ["1.23456",     3,     false,   Decimal::ROUND_DOWN,         "1.234"],

@@ -23,6 +23,8 @@ $tests = [
 
     [decimal("0"),   "0",    pow(0, 0)],
     [decimal("0"),   "1",    pow(0, 1)],
+    [decimal("-0"),  "0",    pow(0, 0)],
+    [decimal("-0"),  "1",    pow(0, 1)],
 
     [decimal("1"),  "-2",    pow(1, -2)],
     [decimal("1"),  "-1",    pow(1, -1)],
