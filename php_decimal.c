@@ -2373,7 +2373,10 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(isPositive)
 {
     PHP_DECIMAL_PARAMS_PARSE_NONE();
-    RETURN_BOOL(mpd_ispositive(THIS_MPD()));
+
+    mpd_t *mpd = THIS_MPD();
+
+    RETURN_BOOL(!mpd_isnan(mpd) && mpd_ispositive(mpd));
 }
 
 /**
@@ -2384,7 +2387,10 @@ PHP_DECIMAL_ARGINFO_END()
 PHP_DECIMAL_METHOD(isNegative)
 {
     PHP_DECIMAL_PARAMS_PARSE_NONE();
-    RETURN_BOOL(mpd_isnegative(THIS_MPD()));
+
+    mpd_t *mpd = THIS_MPD();
+
+    RETURN_BOOL(!mpd_isnan(mpd) && mpd_isnegative(mpd));
 }
 
 /**
