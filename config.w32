@@ -11,18 +11,18 @@ var DECIMAL_EXT_DEP_LIB_STATIC ="libmpdec_a.lib";
 
 /* --------------------------------------------------------------------- */
 
-ARG_WITH("decimal", "for decimal support", "yes");
+ARG_WITH("decimal", "for decimal support", "no");
 
 if (PHP_DECIMAL == "yes") {
     var setup_ok = false;
     var libmpdec_shared = false;
 
     if (CHECK_HEADER_ADD_INCLUDE(DECIMAL_EXT_DEP_HEADER, "CFLAGS_DECIMAL")) {
-        if (PHP_DECIMAL_SHARED && CHECK_LIB(DECIMAL_EXT_DEP_LIB_SHARED, DECIMAL_EXT_NAME, PHP_DECIMAL)) {
+        if (CHECK_LIB(DECIMAL_EXT_DEP_LIB_STATIC, DECIMAL_EXT_NAME, PHP_DECIMAL)) {
+            setup_ok = true;
+        } else if (CHECK_LIB(DECIMAL_EXT_DEP_LIB_SHARED, DECIMAL_EXT_NAME, PHP_DECIMAL)) {
             setup_ok = true;
             libmpdec_shared = true;
-        } else if (CHECK_LIB(DECIMAL_EXT_DEP_LIB_STATIC, DECIMAL_EXT_NAME, PHP_DECIMAL)) {
-            setup_ok = true;
         }
     }
 
