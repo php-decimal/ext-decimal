@@ -12,7 +12,7 @@ Correctly-rounded, arbitrary-precision decimal arithmetic for PHP
 
 ## Documentation
 
-See http://php-decimal.io
+See https://php-decimal.github.io/#introduction
 
 ## Requirements
 
