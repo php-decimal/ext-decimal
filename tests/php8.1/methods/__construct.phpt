@@ -2,7 +2,7 @@
 Decimal::__construct
 --SKIPIF--
 <?php
-if (!extension_loaded("decimal") || PHP_VERSION_ID < 80000 || PHP_VERSION_ID >= 80100) echo "skip";
+if (!extension_loaded("decimal") || PHP_VERSION_ID < 81000) echo "skip";
 ?>
 --FILE--
 <?php
@@ -136,6 +136,8 @@ B Failed to parse string as decimal: "1 "
 C Decimal\Decimal::__construct() expected parameter 1 to be a string, integer, or decimal, float given
 D Decimal\Decimal::__construct() expected parameter 1 to be a string, integer, or decimal, null given
 E Decimal\Decimal::__construct(): Argument #2 ($precision) must be of type int, string given
+
+Deprecated: Decimal\Decimal::__construct(): Passing null to parameter #2 ($precision) of type int is deprecated in /work/php-decimal/ext-decimal/tests/php8/methods/__construct.php on line 92
 F Decimal precision out of range
 G Decimal precision out of range
 H Decimal precision out of range
