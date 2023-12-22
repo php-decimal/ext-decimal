@@ -358,7 +358,9 @@ static php_decimal_t *php_decimal_alloc()
     php_decimal_t *obj = ecalloc(1, sizeof(php_decimal_t));
 
     if (obj) {
+#if PHP_VERSION_ID < 80300
         obj->std.handlers = &php_decimal_handlers;
+#endif
         zend_object_std_init((zend_object *) obj, php_decimal_ce);
     } else {
         php_decimal_memory_error();
@@ -2745,6 +2747,10 @@ static void php_decimal_register_class_entry()
     php_decimal_ce->create_object  = php_decimal_create_object;
     php_decimal_ce->serialize      = php_decimal_serialize;
     php_decimal_ce->unserialize    = php_decimal_unserialize;
+
+#if PHP_VERSION_ID >= 80300
+    php_decimal_ce->default_object_handlers = &php_decimal_handlers;
+#endif
 
     zend_class_implements(php_decimal_ce, 1, php_json_serializable_ce);
 
