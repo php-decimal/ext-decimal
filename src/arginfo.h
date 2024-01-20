@@ -42,7 +42,7 @@
 #if PHP_VERSION_ID >= 70200
 #define PHP_DECIMAL_ARGINFO_RETURN_NUMBER(cls, name, required_num_args) \
     static const zend_internal_arg_info PHP_DECIMAL_ARGINFO_NAME(cls, name)[] = { \
-        {(const char*)(zend_uintptr_t)(required_num_args), ZEND_TYPE_ENCODE_CLASS_CONST(PHP_DECIMAL_NUMBER_FQCN, 0), 0, 0},
+        {(const char*)(zend_uintptr_t)(required_num_args), ZEND_TYPE_INIT_CLASS_CONST(PHP_DECIMAL_NUMBER_FQCN, 0, 0), 0},
 #else
 #define PHP_DECIMAL_ARGINFO_RETURN_NUMBER(cls, name, required_num_args) \
     static const zend_internal_arg_info PHP_DECIMAL_ARGINFO_NAME(cls, name)[] = { \
@@ -52,7 +52,7 @@
 #if PHP_VERSION_ID >= 70200
 #define PHP_DECIMAL_ARGINFO_RETURN_DECIMAL(cls, name, required_num_args) \
     const zend_internal_arg_info PHP_DECIMAL_ARGINFO_NAME(cls, name)[] = { \
-        {(const char*)(zend_uintptr_t)(required_num_args), ZEND_TYPE_ENCODE_CLASS_CONST(PHP_DECIMAL_DECIMAL_FQCN, 0), 0, 0},
+        {(const char*)(zend_uintptr_t)(required_num_args), ZEND_TYPE_INIT_CLASS_CONST(PHP_DECIMAL_DECIMAL_FQCN, 0, 0), 0},
 #else
 #define PHP_DECIMAL_ARGINFO_RETURN_DECIMAL(cls, name, required_num_args) \
     const zend_internal_arg_info PHP_DECIMAL_ARGINFO_NAME(cls, name)[] = { \
@@ -62,7 +62,7 @@
 #if PHP_VERSION_ID >= 70200
 #define PHP_DECIMAL_ARGINFO_RETURN_RATIONAL(cls, name, required_num_args) \
     const zend_internal_arg_info PHP_DECIMAL_ARGINFO_NAME(cls, name)[] = { \
-        {(const char*)(zend_uintptr_t)(required_num_args), ZEND_TYPE_ENCODE_CLASS_CONST(PHP_DECIMAL_RATIONAL_FQCN, 0), 0, 0},
+        {(const char*)(zend_uintptr_t)(required_num_args), ZEND_TYPE_INIT_CLASS_CONST(PHP_DECIMAL_RATIONAL_FQCN, 0, 0), 0},
 #else
 #define PHP_DECIMAL_ARGINFO_RETURN_RATIONAL(cls, name, required_num_args) \
     const zend_internal_arg_info PHP_DECIMAL_ARGINFO_NAME(cls, name)[] = { \
@@ -73,7 +73,7 @@
 #if PHP_VERSION_ID >= 70200
 #define PHP_DECIMAL_ARGINFO_RETURN_NUMBER(cls, name, required_num_args) \
     static const zend_internal_arg_info PHP_DECIMAL_ARGINFO_NAME(cls, name)[] = { \
-        {(const char*)(zend_uintptr_t)(required_num_args), ZEND_TYPE_ENCODE_CLASS_CONST(PHP_DECIMAL_RATIONAL_FQCN, 0), 0, 0},
+        {(const char*)(zend_uintptr_t)(required_num_args), ZEND_TYPE_INIT_CLASS_CONST(PHP_DECIMAL_RATIONAL_FQCN, 0, 0), 0},
 #else
 #define PHP_DECIMAL_ARGINFO_RETURN_NUMBER(cls, name, required_num_args) \
     static const zend_internal_arg_info PHP_DECIMAL_ARGINFO_NAME(cls, name)[] = { \

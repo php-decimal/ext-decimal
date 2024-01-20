@@ -503,7 +503,7 @@ PHP_DECIMAL_METHOD(Number, toDecimal)
     zend_long prec;
 
     PHP_DECIMAL_PARSE_PARAMS(1, 1)
-        Z_PARAM_STRICT_LONG(prec)
+        Z_PARAM_LONG(prec)
     PHP_DECIMAL_PARSE_PARAMS_END()
     {
         if (EXPECTED(php_decimal_validate_prec(prec))) {

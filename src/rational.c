@@ -674,8 +674,8 @@ PHP_DECIMAL_METHOD(Rational, round)
 
     PHP_DECIMAL_PARSE_PARAMS(0, 2)
         Z_PARAM_OPTIONAL
-        Z_PARAM_STRICT_LONG(places)
-        Z_PARAM_STRICT_LONG(mode)
+        Z_PARAM_LONG(places)
+        Z_PARAM_LONG(mode)
     PHP_DECIMAL_PARSE_PARAMS_END()
     {
         php_rational_t *res = php_rational();
@@ -846,9 +846,9 @@ PHP_DECIMAL_METHOD(Rational, toFixed)
 
     PHP_DECIMAL_PARSE_PARAMS(0, 3)
         Z_PARAM_OPTIONAL
-        Z_PARAM_STRICT_LONG(places)
+        Z_PARAM_LONG(places)
         Z_PARAM_BOOL(commas)
-        Z_PARAM_STRICT_LONG(mode)
+        Z_PARAM_LONG(mode)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     RETURN_STR(php_decimal_rational_to_fixed(THIS_RATIONAL(), places, commas, mode));
@@ -866,7 +866,7 @@ PHP_DECIMAL_METHOD(Rational, toSci)
 
     PHP_DECIMAL_PARSE_PARAMS(0, 1)
         Z_PARAM_OPTIONAL
-        Z_PARAM_STRICT_LONG(prec)
+        Z_PARAM_LONG(prec)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     RETURN_STR(php_decimal_rational_to_sci(THIS_RATIONAL(), prec));
@@ -918,7 +918,7 @@ PHP_DECIMAL_METHOD(Rational, toDecimal)
     zend_long prec;
 
     PHP_DECIMAL_PARSE_PARAMS(1, 1)
-        Z_PARAM_STRICT_LONG(prec)
+        Z_PARAM_LONG(prec)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     if (php_decimal_validate_prec(prec)) {
