@@ -1,0 +1,8 @@
+services:
+  dev:
+    build:
+      context: "."
+    volumes:
+      - ".:/ext-decimal"
+      - "./ext-decimal.ini:/usr/local/etc/php/conf.d/ext-decimal.ini"
+    working_dir: "/ext-decimal"

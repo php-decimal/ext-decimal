@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](http://semver.org/).
 
+## [1.5.0] - 2023-01-19
+- Fix object handlers to support PHP 8.3 (thank you @Majkl578)
+
 ## [1.4.0] - 2021-02-16
 - Added support for PHP 8 (thank you @zlodes)
 - Added support for mpdecimal 2.5+ #48

@@ -2,19 +2,19 @@
 <package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
     <name>decimal</name>
     <channel>pecl.php.net</channel>
-    <summary>Arbitrary precision floating-point decimal</summary>
-    <description>Adds support for correctly-rounded arbitrary precision decimal floating-point arithmetic in PHP 7</description>
+    <summary>Arbitrary precision decimal arithmetic</summary>
+    <description>Correctly-rounded arbitrary precision decimal floating-point arithmetic</description>
     <lead>
         <name>Rudi Theunissen</name>
         <user>rtheunissen</user>
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2021-02-16</date>
-    <time>20:26:11</time>
+    <date>2024-01-19</date>
+    <time>21:24:10</time>
     <version>
-        <release>1.4.0</release>
-        <api>1.4.0</api>
+        <release>1.5.0</release>
+        <api>1.5.0</api>
     </version>
     <stability>
         <release>stable</release>
@@ -22,9 +22,7 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        - Added support for PHP 8 (thank you @zlodes)
-        - Added support for mpdecimal 2.5+ 
-        - Fixed internal exception when passing negative decimal places to toFixed
+        - Fix object handlers for PHP 8.3 (thank you @Majkl578)
     </notes>
     <contents>
         <dir name="/">
