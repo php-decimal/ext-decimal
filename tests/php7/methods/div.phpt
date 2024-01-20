@@ -65,6 +65,17 @@ $tests = [
     [new Decimal("-INF"),  "NAN", (string) (-INF /  NAN), 28],
     [new Decimal("-INF"),  "INF", (string) (-INF /  INF), 28],
     [new Decimal("-INF"), "-INF", (string) (-INF / -INF), 28],
+
+    [
+        new Decimal("0"),
+        new Decimal("10"),
+                    "0",    28
+    ],
+    [
+        new Decimal("-0"),
+        new Decimal("10"),
+                    "0",    28
+    ],
 ];
 
 foreach ($tests as $index => $test) {

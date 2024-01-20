@@ -75,6 +75,9 @@ $tests = [
     [new Decimal( "NAN"), 0, "NAN", 28],
     [new Decimal( "INF"), 0, "NAN", 28],
     [new Decimal("-INF"), 0, "NAN", 28],
+
+    [new Decimal("0"),  2, "0", 28],
+    [new Decimal("-0"), 2, "0", 28],
 ];
 
 foreach ($tests as $index => $test) {
@@ -122,8 +125,8 @@ Warning: Loss of data on string conversion in %s on line 24
 
 Warning: Loss of data on string conversion in %s on line 25
 
-Warning: Loss of data on integer conversion in %s on line 77
-
-Warning: Loss of data on integer conversion in %s on line 79
-
 Warning: Loss of data on integer conversion in %s on line 80
+
+Warning: Loss of data on integer conversion in %s on line 82
+
+Warning: Loss of data on integer conversion in %s on line 83

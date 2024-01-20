@@ -11,6 +11,11 @@ $dst = $src->copy();
 
 var_dump($src, $dst);
 
+$src = new Decimal\Decimal("-0", 32);
+$dst = $src->copy();
+
+var_dump($src, $dst);
+
 ?>
 --EXPECT--
 object(Decimal\Decimal)#1 (2) {
@@ -22,6 +27,18 @@ object(Decimal\Decimal)#1 (2) {
 object(Decimal\Decimal)#2 (2) {
   ["value"]=>
   string(3) "123"
+  ["precision"]=>
+  int(32)
+}
+object(Decimal\Decimal)#3 (2) {
+  ["value"]=>
+  string(1) "0"
+  ["precision"]=>
+  int(32)
+}
+object(Decimal\Decimal)#1 (2) {
+  ["value"]=>
+  string(1) "0"
   ["precision"]=>
   int(32)
 }

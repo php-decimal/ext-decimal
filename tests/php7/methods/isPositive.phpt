@@ -19,7 +19,7 @@ $tests = [
     [ "1E-50",  true],
     ["-1E-50",  false],
 
-    ["0",       true],
+    ["0",       false],
     ["-0",      false],
     [1,         true],
     [2,         true],

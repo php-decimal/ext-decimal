@@ -23,6 +23,8 @@ var_dump((string) decimal( "NAN")->truncate());
 var_dump((string) decimal( "INF")->truncate());
 var_dump((string) decimal("-INF")->truncate());
 
+var_dump((string) decimal("-0.1")->truncate());
+
 /**
  * Check that truncate does not modify the original
  */
@@ -38,4 +40,5 @@ string(1) "0"
 string(3) "NAN"
 string(3) "INF"
 string(4) "-INF"
+string(1) "0"
 string(5) "1.234"

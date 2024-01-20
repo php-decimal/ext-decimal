@@ -29,6 +29,11 @@ $tests = [
     [decimal(),     false,  1],
     [decimal(),     0.0,    0],
 
+    [decimal("-0"), 0,      0],
+    [decimal("-0"), null,   1],
+    [decimal("-0"), false,  1],
+    [decimal("-0"), 0.0,    0],
+
     [decimal(1),    0,      1],
     [decimal(1),    null,   1],
     [decimal(1),    false,  1],

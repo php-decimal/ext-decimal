@@ -14,6 +14,9 @@ use Decimal\Decimal;
 function decimal(...$args) { return new Decimal(...$args); }
 
 $tests = [
+    ["0", "0"],
+    ["-0", "0"],
+
     ["-0.1", "0.1"],
     ["+0.1", "0.1"],
     [ "0.1", "0.1"],

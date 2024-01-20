@@ -298,6 +298,10 @@ $tests = [
     ["123.45",  10, [Decimal::ROUND_HALF_UP], "123.45"],
     ["1234.5",  10, [Decimal::ROUND_HALF_UP], "1234.5"],
     ["12345",   10, [Decimal::ROUND_HALF_UP], "12345"],
+
+    /* NEGATIVE VALUE TO ZERO */
+    ["-0.1", 0, [Decimal::ROUND_HALF_UP], "0"],
+    ["-0.000001", 3, [Decimal::ROUND_HALF_UP], "0.000"],
 ];
 
 foreach ($tests as $test) {

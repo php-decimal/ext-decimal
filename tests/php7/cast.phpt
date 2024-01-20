@@ -19,7 +19,7 @@ $tests = [
      * STRING
      */
     [(string) decimal(),                "0"],
-    [(string) decimal("-0"),           "-0"],
+    [(string) decimal("-0"),            "0"],
     [(string) decimal("5.2"),           "5.2"],
 
     [(string) decimal( "NAN"),          "NAN"],
