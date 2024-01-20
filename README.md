@@ -19,6 +19,13 @@ See [php-decimal.github.io](https://php-decimal.github.io)
 - PHP >= 7.2
 - [libmpdec >= 2.4](http://www.bytereef.org/mpdecimal/download.html)
 
+### Installing libmpdec header files
+
+For Fedora:
+```shell
+sudo dnf install mpdecimal-devel
+```
+
 ## Install
 
 ```
@@ -42,3 +49,22 @@ You can do this temporarily using `php -dextension=decimal.so` or by adding `ext
 ```
 php run-tests.php -P -q
 ```
+
+## Build from source
+
+Build a debug build of ``php-src`` with a prefix as follows:
+```shell
+./configure --disable-all --enable-debug --prefix /path/to/custom-php/
+```
+
+Within the folder of this extension first run ``phpize`` and then
+
+```shell
+./configure --with-php-config=/path/to/custom-php/bin/php-config CFLAGS="-Wfatal-errors -Wall -Wpedantic -Wextra -Wno-unused-parameter -Werror"
+```
+
+And finally:
+```shell
+make -jN
+```
+Where ``N`` is the number of cores available for compilation
