@@ -69,15 +69,15 @@ $tests = [
     ],
 
     /* Special numbers */
-    [new Decimal( "NAN"),  "NAN", (string)  (NAN +  NAN), 28],
-    [new Decimal( "NAN"),  "INF", (string)  (NAN +  INF), 28],
-    [new Decimal( "NAN"), "-INF", (string)  (NAN + -INF), 28],
-    [new Decimal( "INF"),  "NAN", (string)  (INF +  NAN), 28],
-    [new Decimal( "INF"),  "INF", (string)  (INF +  INF), 28],
-    [new Decimal( "INF"), "-INF", (string)  (INF + -INF), 28],
-    [new Decimal("-INF"),  "NAN", (string) (-INF +  NAN), 28],
-    [new Decimal("-INF"),  "INF", (string) (-INF +  INF), 28],
-    [new Decimal("-INF"), "-INF", (string) (-INF + -INF), 28],
+    [new Decimal( "NAN"),  "NAN", @(string)  (NAN +  NAN), 28],
+    [new Decimal( "NAN"),  "INF", @(string)  (NAN +  INF), 28],
+    [new Decimal( "NAN"), "-INF", @(string)  (NAN + -INF), 28],
+    [new Decimal( "INF"),  "NAN", @(string)  (INF +  NAN), 28],
+    [new Decimal( "INF"),  "INF", @(string)  (INF +  INF), 28],
+    [new Decimal( "INF"), "-INF", @(string)  (INF + -INF), 28],
+    [new Decimal("-INF"),  "NAN", @(string) (-INF +  NAN), 28],
+    [new Decimal("-INF"),  "INF", @(string) (-INF +  INF), 28],
+    [new Decimal("-INF"), "-INF", @(string) (-INF + -INF), 28],
 ];
 
 foreach ($tests as $index => $test) {

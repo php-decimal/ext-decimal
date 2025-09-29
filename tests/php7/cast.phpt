@@ -64,7 +64,7 @@ $tests = [
     [(float) decimal("1234.5678E+9"),           1.2345678E+12],
     [(float) decimal("1234.5678E+90"),          1.2345678E+93],
 
-    [(string) (float) decimal( "NAN"),          "NAN"],
+    [@(string) (float) decimal( "NAN"),          "NAN"],
     [(string) (float) decimal( "INF"),          "INF"],
     [(string) (float) decimal("-INF"),         "-INF"],
 

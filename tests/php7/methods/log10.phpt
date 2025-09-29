@@ -36,11 +36,11 @@ $tests = [
     [decimal("0.000123456"),       "-3.908487798372228318930600223",                       28],
     [decimal("0.000123456", 50),   "-3.9084877983722283189306002229320942053464158123113", 50],
 
-    [decimal("-INF"), (string) log10(-INF), 28],
-    [decimal( "NAN"), (string) log10( NAN), 28],
-    [decimal( "INF"), (string) log10( INF), 28],
-    [decimal(   "0"), (string) log10(   0), 28],
-    [decimal(  "-1"), (string) log10(  -1), 28],
+    [decimal("-INF"), @(string) log10(-INF), 28],
+    [decimal( "NAN"), @(string) log10( NAN), 28],
+    [decimal( "INF"), @(string) log10( INF), 28],
+    [decimal(   "0"), @(string) log10(   0), 28],
+    [decimal(  "-1"), @(string) log10(  -1), 28],
 ];
 
 foreach ($tests as $test) {
