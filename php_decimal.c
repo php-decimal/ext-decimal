@@ -1797,6 +1797,35 @@ static HashTable *php_decimal_get_debug_info(zval *obj, int *is_temp)
 #endif
 
 /**
+ * Exposes value and precision for (array) cast, foreach, get_object_vars().
+ */
+static HashTable *php_decimal_get_properties_for(zend_object *obj, zend_prop_purpose purpose)
+{
+    zval tmp;
+    HashTable *props;
+
+    switch (purpose) {
+        case ZEND_PROP_PURPOSE_DEBUG:
+        case ZEND_PROP_PURPOSE_ARRAY_CAST:
+        case ZEND_PROP_PURPOSE_VAR_EXPORT:
+            break;
+        default:
+            return NULL;
+    }
+
+    ALLOC_HASHTABLE(props);
+    zend_hash_init(props, 2, NULL, ZVAL_PTR_DTOR, 0);
+
+    ZVAL_STR(&tmp, php_decimal_to_string(O_DECIMAL_P(obj)));
+    zend_hash_str_update(props, "value", sizeof("value") - 1, &tmp);
+
+    ZVAL_LONG(&tmp, php_decimal_get_precision(O_DECIMAL_P(obj)));
+    zend_hash_str_update(props, "precision", sizeof("precision") - 1, &tmp);
+
+    return props;
+}
+
+/**
  * Cast to string, int, float or bool.
  */
 #if PHP_VERSION_ID >= 80000
@@ -2378,7 +2407,7 @@ PHP_DECIMAL_METHOD(isPositive)
 
     mpd_t *mpd = THIS_MPD();
 
-    RETURN_BOOL(!mpd_isnan(mpd) && mpd_ispositive(mpd));
+    RETURN_BOOL(!mpd_isnan(mpd) && !mpd_iszero(mpd) && mpd_ispositive(mpd));
 }
 
 /**
@@ -2392,7 +2421,7 @@ PHP_DECIMAL_METHOD(isNegative)
 
     mpd_t *mpd = THIS_MPD();
 
-    RETURN_BOOL(!mpd_isnan(mpd) && mpd_isnegative(mpd));
+    RETURN_BOOL(!mpd_isnan(mpd) && !mpd_iszero(mpd) && mpd_isnegative(mpd));
 }
 
 /**
@@ -2728,6 +2757,7 @@ static void php_decimal_register_class_handlers()
     php_decimal_handlers.compare          = php_decimal_compare_zval_to_zval;
     php_decimal_handlers.do_operation     = php_decimal_do_operation;
     php_decimal_handlers.get_debug_info   = php_decimal_get_debug_info;
+    php_decimal_handlers.get_properties_for = php_decimal_get_properties_for;
     php_decimal_handlers.read_property    = php_decimal_read_property;
     php_decimal_handlers.write_property   = php_decimal_write_property;
     php_decimal_handlers.has_property     = php_decimal_has_property;

@@ -1,7 +1,16 @@
-FROM php:8.3-alpine
+FROM php:8.2-cli
 
-RUN apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/main mpdecimal-dev
+RUN apt-get update && apt-get install -y \
+    libmpdec-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apk add --no-cache $PHPIZE_DEPS valgrind
+WORKDIR /ext-decimal
 
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY . .
+
+RUN phpize \
+    && ./configure \
+    && make -j$(nproc) \
+    && make install
+
+CMD ["make", "test", "TESTS=tests", "NO_INTERACTION=1"]

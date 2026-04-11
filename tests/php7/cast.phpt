@@ -74,7 +74,7 @@ $tests = [
     /**
      * ARRAY
      */
-    [(array) decimal(), []],
+    [(array) decimal(), ["value" => "0", "precision" => 28]],
 ];
 
 foreach ($tests as $test) {
