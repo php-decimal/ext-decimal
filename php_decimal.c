@@ -1796,7 +1796,7 @@ static HashTable *php_decimal_get_debug_info(zval *obj, int *is_temp)
 }
 #endif
 
-#if PHP_VERSION_ID >= 70400
+#if PHP_VERSION_ID >= 80000
 /**
  * Exposes value and precision for (array) cast, foreach, get_object_vars().
  */
@@ -1821,6 +1821,32 @@ static HashTable *php_decimal_get_properties_for(zend_object *obj, zend_prop_pur
     zend_hash_str_update(props, "value", sizeof("value") - 1, &tmp);
 
     ZVAL_LONG(&tmp, php_decimal_get_precision(O_DECIMAL_P(obj)));
+    zend_hash_str_update(props, "precision", sizeof("precision") - 1, &tmp);
+
+    return props;
+}
+#elif PHP_VERSION_ID >= 70400
+static HashTable *php_decimal_get_properties_for(zval *object, zend_prop_purpose purpose)
+{
+    zval tmp;
+    HashTable *props;
+
+    switch (purpose) {
+        case ZEND_PROP_PURPOSE_DEBUG:
+        case ZEND_PROP_PURPOSE_ARRAY_CAST:
+        case ZEND_PROP_PURPOSE_VAR_EXPORT:
+            break;
+        default:
+            return NULL;
+    }
+
+    ALLOC_HASHTABLE(props);
+    zend_hash_init(props, 2, NULL, ZVAL_PTR_DTOR, 0);
+
+    ZVAL_STR(&tmp, php_decimal_to_string(Z_DECIMAL_P(object)));
+    zend_hash_str_update(props, "value", sizeof("value") - 1, &tmp);
+
+    ZVAL_LONG(&tmp, php_decimal_get_precision(Z_DECIMAL_P(object)));
     zend_hash_str_update(props, "precision", sizeof("precision") - 1, &tmp);
 
     return props;

@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "Correctly-rounded, arbitrary precision decimal floating-point arithmetic in PHP",
     "require": {
-        "php": ">= 7.0.0"
+        "php": ">= 7.4.0"
     },
     "php-ext": {
         "extension-name": "decimal"
