@@ -10,10 +10,10 @@
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2024-01-19</date>
-    <time>21:24:10</time>
+    <date>2026-04-09</date>
+    <time>00:00:00</time>
     <version>
-        <release>1.5.0</release>
+        <release>1.5.1</release>
         <api>1.5.0</api>
     </version>
     <stability>
@@ -22,7 +22,9 @@
     </stability>
     <license uri="https://opensource.org/licenses/MIT">MIT License</license>
     <notes>
-        - Fix object handlers for PHP 8.3 (thank you @Majkl578)
+        - Fixed isPositive/isNegative to return false for zero values (per GDA spec).
+        - Added get_properties_for handler for array cast, var_export, and debug output.
+        - Version bump to 1.5.1.
     </notes>
     <contents>
         <dir name="/">

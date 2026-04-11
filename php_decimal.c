@@ -1796,6 +1796,7 @@ static HashTable *php_decimal_get_debug_info(zval *obj, int *is_temp)
 }
 #endif
 
+#if PHP_VERSION_ID >= 70400
 /**
  * Exposes value and precision for (array) cast, foreach, get_object_vars().
  */
@@ -1824,6 +1825,7 @@ static HashTable *php_decimal_get_properties_for(zend_object *obj, zend_prop_pur
 
     return props;
 }
+#endif
 
 /**
  * Cast to string, int, float or bool.
@@ -2757,7 +2759,9 @@ static void php_decimal_register_class_handlers()
     php_decimal_handlers.compare          = php_decimal_compare_zval_to_zval;
     php_decimal_handlers.do_operation     = php_decimal_do_operation;
     php_decimal_handlers.get_debug_info   = php_decimal_get_debug_info;
+#if PHP_VERSION_ID >= 70400
     php_decimal_handlers.get_properties_for = php_decimal_get_properties_for;
+#endif
     php_decimal_handlers.read_property    = php_decimal_read_property;
     php_decimal_handlers.write_property   = php_decimal_write_property;
     php_decimal_handlers.has_property     = php_decimal_has_property;
