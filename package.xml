@@ -10,10 +10,10 @@
         <email>rtheunissen@php.net</email>
         <active>yes</active>
     </lead>
-    <date>2026-04-09</date>
+    <date>2026-04-11</date>
     <time>00:00:00</time>
     <version>
-        <release>1.5.1</release>
+        <release>1.5.2</release>
         <api>1.5.0</api>
     </version>
     <stability>
@@ -24,7 +24,7 @@
     <notes>
         - Fixed isPositive/isNegative to return false for zero values (per GDA spec).
         - Added get_properties_for handler for array cast, var_export, and debug output.
-        - Version bump to 1.5.1.
+        - Added composer.json for PIE/Packagist support.
     </notes>
     <contents>
         <dir name="/">
