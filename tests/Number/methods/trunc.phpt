@@ -10,7 +10,7 @@ print_r(Number::valueOf("0")->trunc());
 print_r(Number::valueOf( "0.1")->trunc());
 print_r(Number::valueOf("-0.1")->trunc());
 
-print_r(Number::valueOf( NAN)->trunc());
+@print_r(Number::valueOf( NAN)->trunc());
 print_r(Number::valueOf( INF)->trunc());
 print_r(Number::valueOf(-INF)->trunc());
 

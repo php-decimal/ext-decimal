@@ -65,15 +65,15 @@ $tests = [
     ],
 
     /* Special numbers */
-    [Decimal::valueOf( "NAN"),  "NAN", (string)  (NAN +  NAN), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf( "NAN"),  "INF", (string)  (NAN +  INF), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf( "NAN"), "-INF", (string)  (NAN + -INF), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf( "INF"),  "NAN", (string)  (INF +  NAN), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf( "INF"),  "INF", (string)  (INF +  INF), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf( "INF"), "-INF", (string)  (INF + -INF), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf("-INF"),  "NAN", (string) (-INF +  NAN), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf("-INF"),  "INF", (string) (-INF +  INF), Decimal::DEFAULT_PRECISION],
-    [Decimal::valueOf("-INF"), "-INF", (string) (-INF + -INF), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "NAN"),  "NAN", @(string)  (NAN +  NAN), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "NAN"),  "INF", @(string)  (NAN +  INF), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "NAN"), "-INF", @(string)  (NAN + -INF), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"),  "NAN", @(string)  (INF +  NAN), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"),  "INF", @(string)  (INF +  INF), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf( "INF"), "-INF", @(string)  (INF + -INF), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-INF"),  "NAN", @(string) (-INF +  NAN), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-INF"),  "INF", @(string) (-INF +  INF), Decimal::DEFAULT_PRECISION],
+    [Decimal::valueOf("-INF"), "-INF", @(string) (-INF + -INF), Decimal::DEFAULT_PRECISION],
 ];
 
 foreach ($tests as $index => $test) {

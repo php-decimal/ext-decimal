@@ -55,7 +55,7 @@ $tests = [
     [(float) Decimal::valueOf("1234.5678E+9"),           1.2345678E+12],
     [(float) Decimal::valueOf("1234.5678E+90"),          1.2345678E+93],
 
-    [(string) (float) Decimal::valueOf( "NAN"),          "NAN"],
+    [@(string) (float) Decimal::valueOf( "NAN"),          "NAN"],
     [(string) (float) Decimal::valueOf( "INF"),          "INF"],
     [(string) (float) Decimal::valueOf("-INF"),         "-INF"],
 

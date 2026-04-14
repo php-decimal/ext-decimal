@@ -35,18 +35,18 @@ $tests = [
     ],
 
     /* Special numbers */
-    [Rational::valueOf(0),       "NAN", (string)  (0   /  NAN)],
-    [Rational::valueOf(0),       "INF", (string)  (0   /  INF)],
-    [Rational::valueOf(0),      "-INF", (string)  (0   / -INF)],
-    [Rational::valueOf( "NAN"),  "NAN", (string)  (NAN /  NAN)],
-    [Rational::valueOf( "NAN"),  "INF", (string)  (NAN /  INF)],
-    [Rational::valueOf( "NAN"), "-INF", (string)  (NAN / -INF)],
-    [Rational::valueOf( "INF"),  "NAN", (string)  (INF /  NAN)],
-    [Rational::valueOf( "INF"),  "INF", (string)  (INF /  INF)],
-    [Rational::valueOf( "INF"), "-INF", (string)  (INF / -INF)],
-    [Rational::valueOf("-INF"),  "NAN", (string) (-INF /  NAN)],
-    [Rational::valueOf("-INF"),  "INF", (string) (-INF /  INF)],
-    [Rational::valueOf("-INF"), "-INF", (string) (-INF / -INF)],
+    [Rational::valueOf(0),       "NAN", @(string)  (0   /  NAN)],
+    [Rational::valueOf(0),       "INF", @(string)  (0   /  INF)],
+    [Rational::valueOf(0),      "-INF", @(string)  (0   / -INF)],
+    [Rational::valueOf( "NAN"),  "NAN", @(string)  (NAN /  NAN)],
+    [Rational::valueOf( "NAN"),  "INF", @(string)  (NAN /  INF)],
+    [Rational::valueOf( "NAN"), "-INF", @(string)  (NAN / -INF)],
+    [Rational::valueOf( "INF"),  "NAN", @(string)  (INF /  NAN)],
+    [Rational::valueOf( "INF"),  "INF", @(string)  (INF /  INF)],
+    [Rational::valueOf( "INF"), "-INF", @(string)  (INF / -INF)],
+    [Rational::valueOf("-INF"),  "NAN", @(string) (-INF /  NAN)],
+    [Rational::valueOf("-INF"),  "INF", @(string) (-INF /  INF)],
+    [Rational::valueOf("-INF"), "-INF", @(string) (-INF / -INF)],
 ];
 
 foreach ($tests as $index => $test) {

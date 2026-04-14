@@ -10,7 +10,7 @@ print_r(Number::valueOf("0")->ceil());
 print_r(Number::valueOf( "0.1")->ceil());
 print_r(Number::valueOf("-0.1")->ceil());
 
-print_r(Number::valueOf( NAN)->ceil());
+@print_r(Number::valueOf( NAN)->ceil());
 print_r(Number::valueOf( INF)->ceil());
 print_r(Number::valueOf(-INF)->ceil());
 

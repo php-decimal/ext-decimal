@@ -110,7 +110,7 @@ class Number extends \Decimal\Number
 
     public function toString(): string
     {
-        return (string) $this->value;
+        return @(string) $this->value;
     }
 
     public function toInt(): int

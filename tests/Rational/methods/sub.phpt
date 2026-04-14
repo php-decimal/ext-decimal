@@ -53,7 +53,7 @@ foreach ($tests as $index => $test) {
     ];
 
     foreach ($results as $result) {
-        if ((string) $result !== (string) $expect) {
+        if ((string) $result !== @(string) $expect) {
             print_r(compact("index", "op1", "op2", "result", "expect"));
             break;
         }

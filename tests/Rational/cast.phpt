@@ -55,7 +55,7 @@ $tests = [
     [(float) Rational::valueOf("1234.5678E+9"),     1.2345678E+12],
     [(float) Rational::valueOf("1234.5678E+90"),    1.2345678E+93],
 
-    [(string) (float) Rational::valueOf( "NAN"),    "NAN"],
+    [@(string) (float) Rational::valueOf( "NAN"),    "NAN"],
     [(string) (float) Rational::valueOf( "INF"),    "INF"],
     [(string) (float) Rational::valueOf("-INF"),   "-INF"],
 

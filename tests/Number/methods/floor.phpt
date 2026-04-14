@@ -10,7 +10,7 @@ print_r(Number::valueOf("0")->floor());
 print_r(Number::valueOf( "0.1")->floor());
 print_r(Number::valueOf("-0.1")->floor());
 
-print_r(Number::valueOf( NAN)->floor());
+@print_r(Number::valueOf( NAN)->floor());
 print_r(Number::valueOf( INF)->floor());
 print_r(Number::valueOf(-INF)->floor());
 

@@ -13,7 +13,7 @@ print_r(Number::valueOf("-5")->abs());
 print_r(Number::valueOf( 5)->abs());
 print_r(Number::valueOf(-5)->abs());
 
-print_r(Number::valueOf( NAN)->abs());
+@print_r(Number::valueOf( NAN)->abs());
 print_r(Number::valueOf( INF)->abs());
 print_r(Number::valueOf(-INF)->abs());
 
