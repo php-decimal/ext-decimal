@@ -40,7 +40,7 @@
 #include "src/globals.h"
 
 #define PHP_DECIMAL_EXTNAME "decimal"
-#define PHP_DECIMAL_VERSION "2.0.1"
+#define PHP_DECIMAL_VERSION "2.0.2"
 
 /**
  * Module and class entry
