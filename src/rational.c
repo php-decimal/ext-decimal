@@ -933,8 +933,6 @@ PHP_DECIMAL_METHOD(Rational, between)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     ZVAL_BOOL(return_value, php_decimal_rational_between(THIS_RATIONAL(), a, b, inclusive));
-    zval_ptr_dtor(a);
-    zval_ptr_dtor(b);
 }
 
 /**
@@ -952,7 +950,6 @@ PHP_DECIMAL_METHOD(Rational, equals)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     ZVAL_BOOL(return_value, php_decimal_rational_compare(THIS_RATIONAL(), other) == 0);
-    zval_ptr_dtor(other);
 }
 
 /**
