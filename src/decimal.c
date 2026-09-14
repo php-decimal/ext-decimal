@@ -997,8 +997,6 @@ PHP_DECIMAL_METHOD(Decimal, between)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     ZVAL_BOOL(return_value, php_decimal_between(THIS_DECIMAL(), a, b, inclusive));
-    zval_ptr_dtor(a);
-    zval_ptr_dtor(b);
 }
 
 /**
@@ -1016,7 +1014,6 @@ PHP_DECIMAL_METHOD(Decimal, equals)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     ZVAL_BOOL(return_value, php_decimal_compare(THIS_DECIMAL(), other) == 0);
-    zval_ptr_dtor(other);
 }
 
 /**

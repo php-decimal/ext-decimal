@@ -559,8 +559,6 @@ PHP_DECIMAL_METHOD(Number, between)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     ZVAL_BOOL(return_value, php_decimal_number_between(getThis(), a, b, inclusive));
-    zval_ptr_dtor(a);
-    zval_ptr_dtor(b);
 }
 
 /**
@@ -578,7 +576,6 @@ PHP_DECIMAL_METHOD(Number, equals)
     PHP_DECIMAL_PARSE_PARAMS_END()
 
     ZVAL_BOOL(return_value, php_decimal_number_equals(getThis(), other));
-    zval_ptr_dtor(other);
 }
 
 /**
