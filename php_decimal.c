@@ -1942,7 +1942,7 @@ static php_success_t php_decimal_do_operation(zend_uchar opcode, zval *result, z
     }
 
     if (op1 == &op1_copy) {
-        zval_dtor(op1);
+        zval_ptr_dtor_nogc(op1);
     }
 
     return SUCCESS;
@@ -2912,7 +2912,7 @@ static void php_decimal_mpd_free(void *ptr)
  */
 static void php_decimal_disable_opcache_pass2()
 {
-    zend_long level = INI_INT("opcache.optimization_level");
+    zend_long level = zend_ini_long(ZEND_STRL("opcache.optimization_level"), 0);
 
     if (level) {
         zend_string *key = zend_string_init(ZEND_STRL("opcache.optimization_level"), 1);
