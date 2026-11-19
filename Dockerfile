@@ -1,4 +1,5 @@
-FROM php:8.2-cli
+ARG PHP_VERSION=8.2
+FROM php:${PHP_VERSION}-cli
 
 RUN apt-get update && apt-get install -y \
     libmpdec-dev \
