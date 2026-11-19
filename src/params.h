@@ -29,7 +29,7 @@
  * Start parameter parsing block, throwing exceptions for incorrect arg count.
  */
 #define PHP_DECIMAL_PARSE_PARAMS(min, max) \
-    ZEND_PARSE_PARAMETERS_START_EX(ZEND_PARSE_PARAMS_THROW, min, max)
+    ZEND_PARSE_PARAMETERS_START_EX(0, min, max)
 
 /**
  * End a parameter parse block. This exists to achieve consistent naming.

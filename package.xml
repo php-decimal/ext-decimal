@@ -90,6 +90,8 @@
                     <file role="test" name="properties.phpt"/>
                     <file role="test" name="refcount.phpt"/>
                     <file role="test" name="serialize.phpt"/>
+                    <file role="test" name="serialize_legacy.phpt"/>
+                    <file role="test" name="serialize_legacy_php86.phpt"/>
 
                     <dir name="methods">
                         <file role="test" name="__construct.phpt"/>
@@ -192,6 +194,8 @@
                     <file role="test" name="properties.phpt"/>
                     <file role="test" name="refcount.phpt"/>
                     <file role="test" name="serialize.phpt"/>
+                    <file role="test" name="serialize_legacy.phpt"/>
+                    <file role="test" name="serialize_legacy_php86.phpt"/>
 
                     <dir name="methods">
                         <file role="test" name="__construct.phpt"/>

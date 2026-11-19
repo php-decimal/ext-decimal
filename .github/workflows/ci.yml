@@ -20,8 +20,10 @@ jobs:
           - { php: '8.3', platform: alpine,  dockerfile: Dockerfile.alpine }
           - { php: '8.4', platform: debian,  dockerfile: Dockerfile }
           - { php: '8.4', platform: alpine,  dockerfile: Dockerfile.alpine }
-          - { php: '8.5', platform: debian,  dockerfile: Dockerfile,        tag: '8.5-rc' }
-          - { php: '8.5', platform: alpine,  dockerfile: Dockerfile.alpine, tag: '8.5-rc' }
+          - { php: '8.5', platform: debian,  dockerfile: Dockerfile }
+          - { php: '8.5', platform: alpine,  dockerfile: Dockerfile.alpine }
+          - { php: '8.6', platform: debian,  dockerfile: Dockerfile }
+          - { php: '8.6', platform: alpine,  dockerfile: Dockerfile.alpine }
     steps:
       - uses: actions/checkout@v4
 

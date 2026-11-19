@@ -9,9 +9,6 @@ $obj = Rational::valueOf("2.4");
 var_dump(serialize($obj));
 var_dump(unserialize(serialize($obj)));
 
-/* */
-var_dump(unserialize('C:16:"Decimal\Rational":26:{s:13:"abc0000000000";i:42;}'));
-
 ?>
 --EXPECTF--
 string(72) "O:16:"Decimal\Rational":2:{s:3:"num";s:6:"1.2E+1";s:3:"den";s:4:"5E+0";}"
@@ -20,8 +17,4 @@ object(Decimal\Rational)#%d (2) {
   string(2) "12"
   ["den"]=>
   string(1) "5"
-}
-
-Warning: Class Decimal\Rational has no unserializer in %s on line %d
-object(Decimal\Rational)#%d (0) {
 }
