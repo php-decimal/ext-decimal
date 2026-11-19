@@ -67,7 +67,7 @@ static void php_decimal_mpd_free(void *ptr)
  */
 static void php_decimal_disable_opcache_pass2()
 {
-    zend_long level = INI_INT("opcache.optimization_level");
+    zend_long level = zend_ini_long(ZEND_STRL("opcache.optimization_level"), 0);
 
     if (level & 2) {
         zend_string *key = zend_string_init(ZEND_STRL("opcache.optimization_level"), 1);

@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project follows [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+- PHP 8.5 and 8.6 compatibility.
+- Replaced `ZEND_PARSE_PARAMS_THROW` (removed in PHP 8.6, no-op since 8.0) with `0`.
+- Replaced `INI_INT()` (removed in PHP 8.6) with `zend_ini_long()`.
+- Split legacy `C:` unserialize tests by PHP version: since PHP 8.6, `unserialize()` returns `false` for classes without an unserializer.
+
 ## [2.0.1] - 2026-04-11
 - Default decimal precision changed from 28 to 34 to match [Decimal128](https://en.wikipedia.org/wiki/Decimal128_floating-point_format).
 - Decimal operations now use the **minimum** precision of all operands, rather than the maximum.
